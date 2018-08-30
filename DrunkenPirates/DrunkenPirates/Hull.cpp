@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Hull.h"
 
+using namespace std;
 
 Hull::Hull()
 {
@@ -10,6 +11,12 @@ Hull::Hull()
 
 Hull::~Hull()
 {
+}
+
+void Hull::DisplayStatus()
+{
+	cout << "Hull:\n" << endl;
+	cout << " -Integrity: " + to_string(myIntegrity) + "\n" << endl;
 }
 
 bool Hull::TakeDamage(float & tempDamage)

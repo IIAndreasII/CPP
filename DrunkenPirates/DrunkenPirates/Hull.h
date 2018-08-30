@@ -10,6 +10,8 @@ public:
 	Hull();
 	~Hull();
 
+	void DisplayStatus();
+
 	bool TakeDamage(float &tempDamage);
 
 

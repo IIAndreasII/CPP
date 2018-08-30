@@ -8,6 +8,8 @@ public:
 	Mast();
 	~Mast();
 
+	void DisplayStatus();
+
 	// Get
 	bool& GetAreSailsUp();
 

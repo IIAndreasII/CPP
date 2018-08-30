@@ -10,3 +10,8 @@ Player::Player()
 Player::~Player()
 {
 }
+
+Ship& Player::GetShip()
+{
+	return myShip;
+}
