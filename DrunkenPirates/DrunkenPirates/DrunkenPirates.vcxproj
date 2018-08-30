@@ -153,6 +153,10 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="AppstateEnum.h" />
+    <ClInclude Include="Cannons.h" />
+    <ClInclude Include="ConstDefinitions.h" />
+    <ClInclude Include="Hull.h" />
+    <ClInclude Include="Mast.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
@@ -161,7 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Cannons.cpp" />
     <ClCompile Include="DrunkenPirates.cpp" />
+    <ClCompile Include="Hull.cpp" />
+    <ClCompile Include="Mast.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

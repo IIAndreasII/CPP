@@ -5,8 +5,8 @@
 class ShipComponent
 {
 public:
-	ShipComponent();
-	~ShipComponent();
+	
+	void Repair();
 
 	// Get
 	float& GetIntegrity();

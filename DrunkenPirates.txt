@@ -25,14 +25,14 @@ Drunken Pirates
 		-/Integrity
 		-Strength
 			-Upgradeable
-				-Level 1
+				-Level 2
 					-100 Strength
 					-Cost: 50 doubloons
-				-Level 2
+				-Level 3
 					-150 Strength
 					-Cost 200 doubloons
 						-Requires Level 1
-				-Level 3
+				-Level 4
 					-250 Strength
 					-Cost 500 doubloons
 						-Requires Level 2
@@ -55,14 +55,14 @@ Drunken Pirates
 		-/Integrity
 		-Strength
 			-Upgradeable
-				-Level 1
+				-Level 2
 					-100 Strength
 					-Cost: 50 doubloons
-				-Level 2
+				-Level 3
 					-150 Strength
 					-Cost 200 doubloons
 					-Requires Level 1
-				-Level 3
+				-Level 4
 					-250 Strength
 					-Cost 500 doubloons
 					-Requires Level 2
@@ -74,14 +74,14 @@ Drunken Pirates
 			-Repairable
 		-Strength
 			-Upgradeable
-				-Level 1
+				-Level 2
 					-100 Strength
 					-Cost: 50 doubloons
-				-Level 2
+				-Level 3
 					-150 Strength
 					-Cost 200 doubloons
 					-Requires Level 1
-				-Level 3
+				-Level 4
 					-250 Strength
 					-Cost 500 doubloons
 					-Requires Level 2

@@ -1,4 +1,8 @@
 #pragma once
+
+#include "AppstateEnum.h"
+#include "pch.h"
+
 class App
 {
 public:
@@ -7,5 +11,11 @@ public:
 
 	void Run();
 	void Exit();
+
+private:
+
+	Appstate myAppState;
+
+	bool myShouldExit;
 };
 

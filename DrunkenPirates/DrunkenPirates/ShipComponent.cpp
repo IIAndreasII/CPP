@@ -2,13 +2,9 @@
 #include "ShipComponent.h"
 
 
-ShipComponent::ShipComponent()
+void ShipComponent::Repair()
 {
-}
-
-
-ShipComponent::~ShipComponent()
-{
+	myIntegrity = 100.0f;
 }
 
 float & ShipComponent::GetIntegrity()
@@ -28,12 +24,15 @@ int & ShipComponent::GetLevel()
 
 void ShipComponent::SetIntegrity(float tempIntegrity)
 {
+	myIntegrity = tempIntegrity;
 }
 
 void ShipComponent::SetStrength(const int tempStrength)
 {
+	myStrength = tempStrength;
 }
 
 void ShipComponent::SetLevel(const int tempLevel)
 {
+	myLevel = tempLevel;
 }
