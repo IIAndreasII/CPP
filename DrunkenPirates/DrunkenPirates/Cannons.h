@@ -1,5 +1,7 @@
 #pragma once
+
 #include "ShipComponent.h"
+
 class Cannons :
 	public ShipComponent
 {

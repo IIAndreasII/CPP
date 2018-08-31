@@ -6,12 +6,12 @@ class ShipComponent
 {
 public:
 	
-	void Repair();
+	void Repair(uint32_t& tempDoubloons);
 
 	// Get
 	float& GetIntegrity();
 	int& GetStrenght();
-	int& GetLevel();
+	uint8_t& GetLevel();
 
 	// Set
 	void SetIntegrity(float tempIntegrity);
@@ -22,6 +22,6 @@ protected:
 
 	float myIntegrity;
 	int myStrength;
-	int myLevel;
+	uint8_t myLevel;
 };
 

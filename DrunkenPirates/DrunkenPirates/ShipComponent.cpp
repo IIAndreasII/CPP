@@ -2,8 +2,9 @@
 #include "ShipComponent.h"
 
 
-void ShipComponent::Repair()
+void ShipComponent::Repair(uint32_t& tempDoubloons)
 {
+
 	myIntegrity = 100.0f;
 }
 
@@ -17,7 +18,7 @@ int & ShipComponent::GetStrenght()
 	return myStrength;
 }
 
-int & ShipComponent::GetLevel()
+uint8_t & ShipComponent::GetLevel()
 {
 	return myLevel;
 }

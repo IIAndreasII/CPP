@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "Hull.h"
+#include "ConstDefinitions.h"
 
 using namespace std;
 
 Hull::Hull()
 {
-	myIntegrity = MAX_INTERGRITY;
+	myIntegrity = INTEGRITY_MAX;
+	myStrength = STRENGTH_LEVEL_1;
 }
 
 

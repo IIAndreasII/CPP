@@ -1,6 +1,7 @@
 #pragma once
 
-#define MAX_INTERGRITY      100.0f
+#define INTEGRITY_MAX       100.0f
+#define INTEGRITY_MIN       0.0f
 
 #define STRENGTH_LEVEL_1    100
 #define STRENGTH_LEVEL_2    125
