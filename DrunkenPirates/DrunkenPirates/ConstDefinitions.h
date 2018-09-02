@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef CONSTDEFINITIONS_H
+#define CONSTDEFINITIONS_H
+
 #define INTEGRITY_MAX       100.0f
 #define INTEGRITY_MIN       0.0f
 
@@ -16,3 +19,5 @@
 #define REPAIRCOST_LEVEL_2  50
 #define REPAIRCOST_LEVEL_3  75
 #define REPAIRCOST_LEVEL_4  125
+
+#endif // !CONSTDEFINITIONS_H
