@@ -2,13 +2,18 @@
 #include "Player.h"
 
 
-Player::Player() : myDoubloons(0)
+Player::Player() : myDoubloons(0), myShip()
 {
 }
 
 
 Player::~Player()
 {
+}
+
+void Player::DisplayShipStatus()
+{
+	myShip.DisplayStatus();
 }
 
 Ship& Player::GetShip()

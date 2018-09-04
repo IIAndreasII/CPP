@@ -3,6 +3,7 @@
 
 #include "AppstateEnum.h"
 #include "pch.h"
+#include "Player.h"
 
 class App
 {
@@ -11,15 +12,26 @@ public:
 	~App();
 
 	void Run();
+
+	void Play();
 	void Exit();
 
-	bool Menu();
+	bool MainMenu();
+
+	void GameMenu();
+
+	Player& GetPlayer();
 
 private:
 
+
 	Appstate myAppState;
 
+	Player myPlayer;
+
 	bool myShouldExit;
+
+
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-App::App() : myAppState(Appstate::MENU), myShouldExit(false)
+App::App() : myAppState(Appstate::MENU), myShouldExit(false), myPlayer()
 {
 }
 
@@ -17,28 +17,31 @@ void App::Run()
 	// TODO: Add logic for different states
 
 	// Main loop
-
-		bool tempStillInMenu;
-
+	while (!myShouldExit)
+	{
 		switch (myAppState)
 		{
-			case Appstate::MENU:
+		case Appstate::MENU:
 
-				tempStillInMenu = Menu();
+			while (!MainMenu())
+			{
+				CLSUnsafe();
+			}
 
-				while (!tempStillInMenu) 
-				{
-					tempStillInMenu = Menu();
-				}
-				
+			break;
 
-				break;
+		case Appstate::PLAYING:
 
-			case Appstate::PLAYING:
+			GameMenu();
 
-				break;
+			break;
 		}
-	
+	}
+}
+
+void App::Play()
+{
+
 }
 
 void App::Exit()
@@ -46,26 +49,63 @@ void App::Exit()
 	myShouldExit = true;
 }
 
-bool App::Menu()
+bool App::MainMenu()
 {
-	CLS();
-	WriteLine("Drunken Pirates");
-	WriteLine("[1] Play");
-	WriteLine("[2] Quit");
+	WriteLine("Drunken Pirates\n[1] Play\n[2] Quit");
 	
-	string tempInput;
-	cin >> tempInput;
-
-
-	if (tempInput == "1")
+	switch (GetInput())
 	{
+	case 1:
+		myAppState = Appstate::PLAYING;
 		return true;
-	}
-	else if (tempInput == "2")
-	{
+
+	case 2:
 		Exit();
 		return true;
-	}
 
-	return false;
+	default:
+		return false;
+	}
 }
+
+void App::GameMenu()
+{
+	bool tempLoop = true;
+
+	while (tempLoop)
+	{
+		CLSUnsafe();
+		WriteLine("[1] Venture the seas\n[2] View ship\n[3]");
+
+		switch (GetInput())
+		{
+		case 1:
+
+			// Venture the seas
+
+			tempLoop = false;
+			break;
+
+		case 2:
+
+			myPlayer.DisplayShipStatus();
+
+			tempLoop = false;
+			break;
+
+		case 3:
+
+			tempLoop = false;
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
+Player & App::GetPlayer()
+{
+	return myPlayer;
+}
+

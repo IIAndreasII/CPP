@@ -155,6 +155,7 @@
     <ClInclude Include="AppstateEnum.h" />
     <ClInclude Include="Cannons.h" />
     <ClInclude Include="ConstDefinitions.h" />
+    <ClInclude Include="Crew.h" />
     <ClInclude Include="Hull.h" />
     <ClInclude Include="Mast.h" />
     <ClInclude Include="pch.h" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Cannons.cpp" />
+    <ClCompile Include="Crew.cpp" />
     <ClCompile Include="DrunkenPirates.cpp" />
     <ClCompile Include="Hull.cpp" />
     <ClCompile Include="Mast.cpp" />

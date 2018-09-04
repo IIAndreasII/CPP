@@ -10,7 +10,7 @@ public:
 	Mast();
 	~Mast();
 
-	void DisplayStatus();
+	inline virtual void DisplayStatus() override;
 
 	// Get
 	bool& GetAreSailsUp();

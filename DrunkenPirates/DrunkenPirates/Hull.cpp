@@ -17,8 +17,7 @@ Hull::~Hull()
 
 void Hull::DisplayStatus()
 {
-	WriteLine("Hull:");
-	WriteLine(" -Integrity: " + to_string(myIntegrity));
+	WriteLine(" -Hull:\n  -Integrity: " + to_string(myIntegrity));
 }
 
 bool Hull::TakeDamage(float & tempDamage)

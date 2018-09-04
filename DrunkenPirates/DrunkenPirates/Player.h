@@ -8,6 +8,12 @@ public:
 	Player();
 	~Player();
 
+
+
+    void DisplayShipStatus();
+
+
+
 	// Get
 	Ship& GetShip();
 	uint32_t& GetDoubloons();

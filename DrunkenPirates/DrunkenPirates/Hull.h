@@ -11,7 +11,7 @@ public:
 	Hull();
 	~Hull();
 
-	void DisplayStatus();
+    virtual void DisplayStatus() override;
 
 	bool TakeDamage(float &tempDamage);
 

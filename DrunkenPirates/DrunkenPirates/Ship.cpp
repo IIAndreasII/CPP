@@ -2,7 +2,7 @@
 #include "Ship.h"
 #include "ConstDefinitions.h"
 
-Ship::Ship()
+Ship::Ship() : myAccuracy(100.0f), myCannons(), myHitChance(100.0f), myHull(), myIsSinking(false), myMast()
 {
 }
 
@@ -13,10 +13,37 @@ Ship::~Ship()
 
 void Ship::DisplayStatus()
 {
-	WriteLine("Ship status:");
-	myHull.DisplayStatus();
-	myMast.DisplayStatus();
-	myCannons.DisplayStatus();
+
+	bool tempLoop = true;
+
+	while (tempLoop)
+	{
+		CLSUnsafe();
+		WriteLine("Ship status:");
+		myHull.DisplayStatus();
+		myMast.DisplayStatus();
+		myCannons.DisplayStatus();
+		
+		WriteLine("\n[1] Repair hull\n[2] Repair mast\n[3] Repair cannons\n[4] Back");
+		
+		switch (GetInput())
+		{
+		case 1:
+			
+			break;
+		case 2:
+
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			tempLoop = false;
+
+			break;
+		}
+	}
 }
 
 void Ship::UpdateStatus()

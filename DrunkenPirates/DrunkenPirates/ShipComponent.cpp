@@ -11,6 +11,10 @@ ShipComponent::~ShipComponent()
 {
 }
 
+void ShipComponent::DisplayStatus()
+{
+}
+
 void ShipComponent::Repair(uint32_t& tempDoubloons)
 {
 

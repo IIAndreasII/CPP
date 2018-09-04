@@ -2,8 +2,6 @@
 #include "Mast.h"
 #include "ConstDefinitions.h"
 
-using namespace std;
-
 Mast::Mast() : myAreSailsUp(false) 
 {
 	myIntegrity = INTEGRITY_MAX;
@@ -18,9 +16,6 @@ Mast::~Mast()
 
 void Mast::DisplayStatus()
 {
-	WriteLine("Mast status:");
-	WriteLine(" -Integrity: " + to_string(myIntegrity));
-
 	std::string tempSailState;
 	if(myAreSailsUp)
 	{
@@ -30,8 +25,7 @@ void Mast::DisplayStatus()
 	{
 		tempSailState = "Rolled down";
 	}
-
-	WriteLine(" -Sail-state: " + tempSailState);
+	WriteLine(" -Mast:\n  -Integrity: " + std::to_string(myIntegrity) + "\n  -Sail-state: " + tempSailState);
 }
 
 bool & Mast::GetAreSailsUp()

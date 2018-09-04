@@ -10,7 +10,7 @@ public:
 	Cannons();
 	~Cannons();
 
-    void DisplayStatus();
+	virtual void DisplayStatus() override;
 
 	void SetNrOfCannons(const uint8_t tempValue);
 

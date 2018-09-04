@@ -2,8 +2,6 @@
 #include "Cannons.h"
 #include "ConstDefinitions.h"
 
-using namespace std;
-
 Cannons::Cannons() : myNumberOfCannons(4)
 {
 	myIntegrity = INTEGRITY_MAX;
@@ -17,9 +15,7 @@ Cannons::~Cannons()
 
 void Cannons::DisplayStatus()
 {
-	WriteLine("Cannons:");
-	WriteLine(" -Integrity: " + to_string(myIntegrity));
-	WriteLine(" -Number of cannons: " + to_string(myNumberOfCannons));
+	WriteLine(" -Cannons:\n  -Integrity: " + std::to_string(myIntegrity) + "\n  -Number of cannons: " + std::to_string(myNumberOfCannons));
 }
 
 void Cannons::SetNrOfCannons(const uint8_t tempValue)

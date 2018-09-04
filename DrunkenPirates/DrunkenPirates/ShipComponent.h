@@ -10,6 +10,8 @@ public:
 	ShipComponent();
 	~ShipComponent();
 
+	virtual void DisplayStatus();
+
 	void Repair(uint32_t& tempDoubloons);
 	bool TakeDamage(uint32_t& tempDamage);
 

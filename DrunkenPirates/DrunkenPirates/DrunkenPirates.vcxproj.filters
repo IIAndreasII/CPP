@@ -56,6 +56,9 @@
     <ClInclude Include="ShipComponent.h">
       <Filter>Ship\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Crew.h">
+      <Filter>Ship</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrunkenPirates.cpp">
@@ -84,6 +87,9 @@
     </ClCompile>
     <ClCompile Include="ShipComponent.cpp">
       <Filter>Ship\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Crew.cpp">
+      <Filter>Ship</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
