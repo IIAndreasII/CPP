@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CANNONS_H
+#define CANNONS_H
 
 #include "ShipComponent.h"
 
@@ -11,8 +12,13 @@ public:
 
     void DisplayStatus();
 
+	void SetNrOfCannons(const uint8_t tempValue);
+
+	uint8_t GetNrOfCannons();
+
 private:
 
 	uint8_t myNumberOfCannons;
 };
 
+#endif

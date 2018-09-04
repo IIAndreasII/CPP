@@ -17,7 +17,17 @@ Cannons::~Cannons()
 
 void Cannons::DisplayStatus()
 {
-	cout << "Cannons:\n" << endl;
-	cout << " -Integrity: " + to_string(myIntegrity) + "\n" << endl;
-	cout << " -Number of cannons: " + to_string(myNumberOfCannons) + "\n" << endl;
+	WriteLine("Cannons:");
+	WriteLine(" -Integrity: " + to_string(myIntegrity));
+	WriteLine(" -Number of cannons: " + to_string(myNumberOfCannons));
+}
+
+void Cannons::SetNrOfCannons(const uint8_t tempValue)
+{
+	myNumberOfCannons = tempValue;
+}
+
+uint8_t Cannons::GetNrOfCannons()
+{
+	return myNumberOfCannons;
 }

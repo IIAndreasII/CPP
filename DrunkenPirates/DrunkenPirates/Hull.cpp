@@ -17,8 +17,8 @@ Hull::~Hull()
 
 void Hull::DisplayStatus()
 {
-	cout << "Hull:\n" << endl;
-	cout << " -Integrity: " + to_string(myIntegrity) + "\n" << endl;
+	WriteLine("Hull:");
+	WriteLine(" -Integrity: " + to_string(myIntegrity));
 }
 
 bool Hull::TakeDamage(float & tempDamage)

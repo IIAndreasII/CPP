@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MAST_H
+#define MAST_H
+
 #include "ShipComponent.h"
 
 class Mast :
@@ -21,3 +23,4 @@ private:
 	bool myAreSailsUp; // false = wind is blowing in the sails; true = wind is not blowing the sails
 };
 
+#endif

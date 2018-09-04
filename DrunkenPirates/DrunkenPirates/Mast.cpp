@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "Mast.h"
+#include "ConstDefinitions.h"
 
 using namespace std;
 
 Mast::Mast() : myAreSailsUp(false) 
 {
-	myIntegrity = 100.0f;
-	myStrength = 80;
+	myIntegrity = INTEGRITY_MAX;
+	myStrength = STRENGTH_LEVEL_1;
 	myLevel = 1;
 }
 
@@ -17,8 +18,8 @@ Mast::~Mast()
 
 void Mast::DisplayStatus()
 {
-	cout << "Mast:\n" << endl;
-	cout << " -Integrity: " + to_string(myIntegrity) + "\n" << endl;
+	WriteLine("Mast status:");
+	WriteLine(" -Integrity: " + to_string(myIntegrity));
 
 	std::string tempSailState;
 	if(myAreSailsUp)
@@ -30,7 +31,7 @@ void Mast::DisplayStatus()
 		tempSailState = "Rolled down";
 	}
 
-	cout << " -Sail-state: " + tempSailState + "\n" << endl;
+	WriteLine(" -Sail-state: " + tempSailState);
 }
 
 bool & Mast::GetAreSailsUp()

@@ -1,11 +1,31 @@
 #include "pch.h"
 #include "ShipComponent.h"
+#include "ConstDefinitions.h"
 
+
+ShipComponent::ShipComponent()
+{
+}
+
+ShipComponent::~ShipComponent()
+{
+}
 
 void ShipComponent::Repair(uint32_t& tempDoubloons)
 {
 
 	myIntegrity = 100.0f;
+}
+
+bool ShipComponent::TakeDamage(uint32_t & tempDamage)
+{
+	myIntegrity -= tempDamage;
+	if (myIntegrity <= INTEGRITY_MIN)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 float & ShipComponent::GetIntegrity()

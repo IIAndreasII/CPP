@@ -1,4 +1,5 @@
-#pragma once
+#ifndef APP_H
+#define APP_H
 
 #include "AppstateEnum.h"
 #include "pch.h"
@@ -12,6 +13,8 @@ public:
 	void Run();
 	void Exit();
 
+	bool Menu();
+
 private:
 
 	Appstate myAppState;
@@ -19,3 +22,4 @@ private:
 	bool myShouldExit;
 };
 
+#endif

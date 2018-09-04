@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef CONSTDEFINITIONS_H
 #define CONSTDEFINITIONS_H
 
