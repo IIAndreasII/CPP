@@ -156,6 +156,7 @@
     <ClInclude Include="Cannons.h" />
     <ClInclude Include="ConstDefinitions.h" />
     <ClInclude Include="Crew.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Hull.h" />
     <ClInclude Include="Mast.h" />
     <ClInclude Include="pch.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Cannons.cpp" />
     <ClCompile Include="Crew.cpp" />
     <ClCompile Include="DrunkenPirates.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hull.cpp" />
     <ClCompile Include="Mast.cpp" />
     <ClCompile Include="pch.cpp">

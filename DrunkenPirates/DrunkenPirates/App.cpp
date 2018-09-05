@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "App.h"
 
-using namespace std;
-
-App::App() : myAppState(Appstate::MENU), myShouldExit(false), myPlayer()
+App::App() : myAppState(Appstate::MENU), myShouldExit(false), myGame()
 {
 }
 
@@ -60,7 +58,10 @@ bool App::MainMenu()
 		return true;
 
 	case 2:
-		Exit();
+		if (Confirm())
+		{
+			Exit();
+		}
 		return true;
 
 	default:
@@ -68,44 +69,10 @@ bool App::MainMenu()
 	}
 }
 
-void App::GameMenu()
+
+
+Game& App::GetGame()
 {
-	bool tempLoop = true;
-
-	while (tempLoop)
-	{
-		CLSUnsafe();
-		WriteLine("[1] Venture the seas\n[2] View ship\n[3]");
-
-		switch (GetInput())
-		{
-		case 1:
-
-			// Venture the seas
-
-			tempLoop = false;
-			break;
-
-		case 2:
-
-			myPlayer.DisplayShipStatus();
-
-			tempLoop = false;
-			break;
-
-		case 3:
-
-			tempLoop = false;
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-
-Player & App::GetPlayer()
-{
-	return myPlayer;
+	return myGame;
 }
 

@@ -3,7 +3,7 @@
 
 #include "AppstateEnum.h"
 #include "pch.h"
-#include "Player.h"
+#include "Game.h"
 
 class App
 {
@@ -20,14 +20,14 @@ public:
 
 	void GameMenu();
 
-	Player& GetPlayer();
+	Game& GetGame();
 
 private:
 
 
 	Appstate myAppState;
 
-	Player myPlayer;
+	Game myGame;
 
 	bool myShouldExit;
 
