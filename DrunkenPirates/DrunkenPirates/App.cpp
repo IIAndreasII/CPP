@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "App.h"
 
-App::App() : myAppState(Appstate::MENU), myShouldExit(false), myGame()
+App::App() : myAppstate(Appstate::MENU), myShouldExit(false), myPlayer()
 {
 }
 
@@ -17,7 +17,7 @@ void App::Run()
 	// Main loop
 	while (!myShouldExit)
 	{
-		switch (myAppState)
+		switch (myAppstate)
 		{
 		case Appstate::MENU:
 
@@ -54,7 +54,7 @@ bool App::MainMenu()
 	switch (GetInput())
 	{
 	case 1:
-		myAppState = Appstate::PLAYING;
+		SetAppstate(Appstate::PLAYING);
 		return true;
 
 	case 2:
@@ -69,10 +69,52 @@ bool App::MainMenu()
 	}
 }
 
-
-
-Game& App::GetGame()
+void App::GameMenu()
 {
-	return myGame;
+	bool tempLoop = true;
+
+	while (tempLoop)
+	{
+		CLSUnsafe();
+		WriteLine("[1] Venture the seas\n[2] View ship\n[3] Back to menu");
+
+		switch (GetInput())
+		{
+		case 1:
+
+			// TODO: Venture the seas
+
+			tempLoop = false;
+			break;
+
+		case 2:
+
+			myPlayer.DisplayShipStatus();
+
+			tempLoop = false;
+			break;
+
+		case 3:
+
+			if (Confirm())
+			{
+				SetAppstate(Appstate::MENU);
+				tempLoop = false;
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
 }
 
+Player & App::GetPlayer()
+{
+	return myPlayer;
+}
+
+void App::SetAppstate(const Appstate newValue)
+{
+	myAppstate = newValue;
+}

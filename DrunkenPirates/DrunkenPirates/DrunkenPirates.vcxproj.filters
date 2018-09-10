@@ -59,7 +59,10 @@
     <ClInclude Include="Crew.h">
       <Filter>Ship</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Tileset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -94,7 +97,10 @@
     <ClCompile Include="Crew.cpp">
       <Filter>Ship</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Tileset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

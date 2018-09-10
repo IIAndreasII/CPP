@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "Ship.h"
 
@@ -8,11 +9,7 @@ public:
 	Player();
 	~Player();
 
-
-
     void DisplayShipStatus();
-
-
 
 	// Get
 	Ship& GetShip();
@@ -30,3 +27,4 @@ private:
 
 };
 
+#endif

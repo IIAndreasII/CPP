@@ -17,7 +17,6 @@ void ShipComponent::DisplayStatus()
 
 void ShipComponent::Repair(uint32_t& tempDoubloons)
 {
-
 	myIntegrity = 100.0f;
 }
 

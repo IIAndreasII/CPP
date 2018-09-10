@@ -156,7 +156,6 @@
     <ClInclude Include="Cannons.h" />
     <ClInclude Include="ConstDefinitions.h" />
     <ClInclude Include="Crew.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Hull.h" />
     <ClInclude Include="Mast.h" />
     <ClInclude Include="pch.h" />
@@ -164,13 +163,14 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="ShipComponent.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="Tileset.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Cannons.cpp" />
     <ClCompile Include="Crew.cpp" />
     <ClCompile Include="DrunkenPirates.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hull.cpp" />
     <ClCompile Include="Mast.cpp" />
     <ClCompile Include="pch.cpp">
@@ -182,6 +182,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="ShipComponent.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Tileset.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
