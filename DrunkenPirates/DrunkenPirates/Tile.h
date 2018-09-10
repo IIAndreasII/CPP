@@ -1,14 +1,18 @@
-#pragma once
+#ifndef TILE_H
+#define TILE_H
+
+//#include "pch.h"
+
+#include <vector>
 
 enum TileType
 {
-	WATER,
-	ISLAND,
-	ISLAND_W_SHOP,
-	ISLAND_W_ENEMIES
+	EMPTY,
+	ENEMY_CAMP,
+	SHOP
 };
 
-enum Direction
+enum Path
 {
 	NORTH,
 	EARTH,
@@ -20,18 +24,24 @@ class Tile
 {
 public:
 	Tile();
+	Tile(const Path tempPathToPush);
 	~Tile();
+
+	
 
 	// Get
 	TileType& GetTileType();
-	Direction& GetDirection();
+	std::vector<Path>& GetPaths();
 
 	// Set
 	void SetTileType(const TileType newVaule);
-	void SetDirection(const Direction newVaule);
+	void AddPath(const Path newVaule);
 
 private:
+
 	TileType myTileType;
-	Direction myDirection;
+
+	std::vector<Path> myPaths;
 };
 
+#endif

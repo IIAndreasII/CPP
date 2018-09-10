@@ -23,7 +23,7 @@ void App::Run()
 
 			while (!MainMenu())
 			{
-				CLSUnsafe();
+				CLSSlow();
 			}
 
 			break;
@@ -75,7 +75,7 @@ void App::GameMenu()
 
 	while (tempLoop)
 	{
-		CLSUnsafe();
+		CLS();
 		WriteLine("[1] Venture the seas\n[2] View ship\n[3] Back to menu");
 
 		switch (GetInput())

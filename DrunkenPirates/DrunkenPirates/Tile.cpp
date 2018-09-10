@@ -6,6 +6,11 @@ Tile::Tile()
 {
 }
 
+Tile::Tile(const Path tempPathToPush) : myPaths()
+{
+	myPaths.push_back(tempPathToPush);
+}
+
 
 Tile::~Tile()
 {
@@ -16,9 +21,9 @@ TileType & Tile::GetTileType()
 	return myTileType;
 }
 
-Direction & Tile::GetDirection()
+std::vector<Path>& Tile::GetPaths()
 {
-	return myDirection;
+	return myPaths;
 }
 
 void Tile::SetTileType(const TileType newValue)
@@ -26,7 +31,7 @@ void Tile::SetTileType(const TileType newValue)
 	myTileType = newValue;
 }
 
-void Tile::SetDirection(const Direction newValue)
+void Tile::AddPath(const Path tempPathToPush)
 {
-	myDirection = newValue;
+	myPaths.push_back(tempPathToPush);
 }

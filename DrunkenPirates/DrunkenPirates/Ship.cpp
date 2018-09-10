@@ -18,7 +18,7 @@ void Ship::DisplayStatus()
 
 	while (tempLoop)
 	{
-		CLSUnsafe();
+		CLSSlow();
 		WriteLine("Ship status:");
 		myHull.DisplayStatus();
 		myMast.DisplayStatus();
