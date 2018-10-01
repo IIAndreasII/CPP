@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "Util.h"
 
 
 Game::Game() : myGameState(EGameState::EMenu)
@@ -27,6 +28,8 @@ int Game::Play()
 			Play();
 			break;
 		
+		case EGameState::EQuitting:
+			return 0;
 		}
 	}
 
@@ -36,7 +39,7 @@ int Game::Play()
 
 void Game::MainMenu()
 {
-	CLSSlow();
+//	CLSSlow();
 	WriteLine("Diabloclone^2\n[1] Play\n[2] Quit");
 
 
@@ -44,6 +47,10 @@ void Game::MainMenu()
 	{
 	case 1:
 
+		break;
+
+	case 2:
+		myGameState = EGameState::EQuitting;
 		break;
 	}
 }

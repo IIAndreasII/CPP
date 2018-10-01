@@ -12,7 +12,7 @@ public:
 
 private:
 
-	Room myRooms[13][13];
+	Room myRooms[9][9];
 
 	void Generate(Room &aPreviousRoom, Door &aPreviousDoor, uint16_t &aDoorCount);
 

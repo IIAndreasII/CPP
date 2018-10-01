@@ -7,6 +7,11 @@ Room::Room()
 }
 
 
+Room::Room(const Door aDoor, uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY)
+{
+	AddDoor(aDoor);
+}
+
 Room::~Room()
 {
 }

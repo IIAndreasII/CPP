@@ -15,6 +15,7 @@ class Room
 {
 public:
 	Room();
+	Room(const Door aDoor, uint8_t anX, uint8_t aY);
 	~Room();
 
 

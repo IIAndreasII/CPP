@@ -4,6 +4,9 @@
 
 Dungeon::Dungeon()
 {
+	int tempX = 6, tempY = 6;
+
+
 }
 
 
@@ -17,7 +20,13 @@ void Dungeon::Generate(Room &aPreviousRoom, Door &aPreviousDoor, uint16_t &aDoor
 	{
 		return;
 	}
-	if (aPreviousRoom.GetXPos() < 1 || aPreviousRoom.GetXPos() > 12 ||)
+
+	if (aPreviousRoom.GetXPos() < 1 || aPreviousRoom.GetXPos() > 12 || aPreviousRoom.GetYPos() < 1 || aPreviousRoom.GetYPos() > 12)
+	{
+		return;
+	}
+
+
 }
 
 

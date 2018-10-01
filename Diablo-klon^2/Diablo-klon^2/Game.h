@@ -6,7 +6,8 @@
 enum EGameState 
 {
 	EMenu,
-	EPlaying
+	EPlaying,
+	EQuitting
 };
 
 class Game
