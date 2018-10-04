@@ -4,6 +4,9 @@
 #include "pch.h"
 #include <chrono>
 #include <random>
+#include "Game.h"
+
+extern Game s_Game;
 
 extern std::default_random_engine s_RandEng;
 

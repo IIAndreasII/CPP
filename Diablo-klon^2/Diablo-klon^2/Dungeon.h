@@ -7,14 +7,24 @@ class Dungeon
 {
 public:
 	Dungeon();
+	Dungeon(uint16_t aMaxNumberOfRooms);
 	~Dungeon();
 
+	void PrintMap();
+
+	uint16_t& GetNrDoors();
 
 private:
 
-	Room myRooms[9][9];
+	Room myRooms[21][21];
 
-	void Generate(Room &aPreviousRoom, Door &aPreviousDoor, uint16_t &aDoorCount);
+	void Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCount);
+
+	uint16_t myNumberOfDoors;
+
+	Room& myCurrentRoom;
+
+	Door GetRandomDoor();
 
 };
 

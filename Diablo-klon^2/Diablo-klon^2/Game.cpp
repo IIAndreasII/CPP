@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Util.h"
+#include "Dungeon.h"
 
 
-Game::Game() : myGameState(EGameState::EMenu)
+Game::Game() : myGameState(EGameState::EMenu), myPlayer()
 {
 }
 
@@ -40,6 +41,12 @@ int Game::Play()
 void Game::MainMenu()
 {
 //	CLSSlow();
+	Dungeon tempDung;
+
+	tempDung.PrintMap();
+
+	std::cout << tempDung.GetNrDoors() << std::endl;
+
 	WriteLine("Diabloclone^2\n[1] Play\n[2] Quit");
 
 
@@ -57,4 +64,9 @@ void Game::MainMenu()
 
 void Game::GameMenu()
 {
+}
+
+Player & Game::GetPlayer()
+{
+	return *myPlayer;
 }

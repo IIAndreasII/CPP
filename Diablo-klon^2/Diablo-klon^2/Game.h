@@ -10,6 +10,8 @@ enum EGameState
 	EQuitting
 };
 
+class Player;
+
 class Game
 {
 public:
@@ -21,8 +23,12 @@ public:
 	void MainMenu();
 	void GameMenu();
 
+	Player& GetPlayer();
+
 private:
 	EGameState myGameState;
+
+	Player* myPlayer;
 };
 
 #endif

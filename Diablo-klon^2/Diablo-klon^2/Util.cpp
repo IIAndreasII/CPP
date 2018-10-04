@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "Util.h"
+#include "Game.h"
 
 std::default_random_engine s_RandEng;
+
+Game s_Game;
 
 int RNG(int min, int max)
 {
