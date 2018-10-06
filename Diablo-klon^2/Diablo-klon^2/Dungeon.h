@@ -12,6 +12,8 @@ public:
 
 	void PrintMap();
 
+	void Navigate();
+
 	uint16_t& GetNrDoors();
 
 private:

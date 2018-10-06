@@ -2,7 +2,7 @@
 #include "Dungeon.h"
 #include "Util.h"
 
-Dungeon::Dungeon() : myNumberOfDoors(20), myCurrentRoom(myRooms[10][10]), myRooms()
+Dungeon::Dungeon() : myNumberOfDoors(10), myCurrentRoom(myRooms[10][10]), myRooms()
 {
 	Door tempDoorToAdd = GetRandomDoor();
 	for (size_t i = 0; i < 2; i++)
@@ -73,7 +73,6 @@ void Dungeon::PrintMap()
 				{
 					tempCharToAdd = 'O';
 				}
-				//tempCharToAdd = (myRooms[i][j].GetIsCurrentRoom() ? 'X' : '½');
 			}
 			else
 			{
@@ -94,6 +93,77 @@ void Dungeon::PrintMap()
 
 }
 
+void Dungeon::Navigate()
+{
+	std::string tempRows[4];
+
+	for (Door tempDoor : myCurrentRoom.GetDoors())
+	{
+		switch (tempDoor)
+		{
+		case Door::NORTH:
+			tempRows[0] = "[1] North";
+			break;
+		case Door::EAST:
+			tempRows[1] = "[2] East";
+			break;
+		case Door::SOUTH:
+			tempRows[2] = "[3] South";
+			break;
+		case::WEST:
+			tempRows[3] = "[4] West";
+			break;
+		}
+	}
+
+	bool tempLoop = true;
+	int tempX = myCurrentRoom.GetXPos();
+	int tempY = myCurrentRoom.GetYPos();
+
+	while (tempLoop)
+	{
+		CLSSlow();
+		WriteLine("__| Doors |__");
+		for (size_t i = 0; i < 4; i++)
+		{
+			WriteLine(tempRows[i]);
+		}
+
+		switch (GetInput())
+		{
+		case 1:
+			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::NORTH) != myCurrentRoom.GetDoors().end())
+			{
+				tempY -= 1;
+				tempLoop = false;
+			}
+			break;
+		case 2:
+			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::EAST) != myCurrentRoom.GetDoors().end())
+			{
+				tempX += 1;
+				tempLoop = false;
+			}
+			break;
+		case 3:
+			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::SOUTH) != myCurrentRoom.GetDoors().end())
+			{
+				tempY += 1;
+				tempLoop = false;
+			}
+			break;
+		case 4:
+			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::WEST) != myCurrentRoom.GetDoors().end())
+			{
+				tempX -= 1;
+				tempLoop = false;
+			}
+			break;
+		}
+	}
+	myCurrentRoom = myRooms[tempX][tempY];
+}
+
 uint16_t & Dungeon::GetNrDoors()
 {
 	return myNumberOfDoors;
@@ -112,9 +182,8 @@ void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCo
 
 	int tempNumberOfDoors = RNG(0, (aRoomCount > 2 ? 2 : aRoomCount));
 
-	int tempX = aPreviousRoom.GetXPos(), 
-		tempY = aPreviousRoom.GetYPos();
-
+	int tempX = aPreviousRoom.GetXPos();
+	int	tempY = aPreviousRoom.GetYPos();
 
 	if (tempNumberOfDoors <= 0)
 	{
@@ -138,15 +207,18 @@ void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCo
 			tempDoorToAdd = Door::EAST;
 			break;
 		}
-		myRooms[tempX][tempY].AddDoor(tempDoorToAdd);
-		myRooms[tempX][tempY].SetPos(tempX, tempY);
-		myRooms[tempX][tempY].SetIsTrueRoom(true);
+
+		if (!myRooms[tempX][tempY].GetIsTrueRoom())
+		{
+			myRooms[tempX][tempY].AddDoor(tempDoorToAdd);
+			myRooms[tempX][tempY].SetPos(tempX, tempY);
+			myRooms[tempX][tempY].SetIsTrueRoom(true);
+		}
 		return;
 	}
 	else
 	{
 		Door tempPrevDoor = FAULTY;
-
 		switch (aPreviousDoor)
 		{
 		case Door::NORTH:
@@ -166,9 +238,12 @@ void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCo
 			tempPrevDoor = Door::EAST;
 			break;
 		}
-		myRooms[tempX][tempY].AddDoor(tempPrevDoor);
-		myRooms[tempX][tempY].SetPos(tempX, tempY);
-		myRooms[tempX][tempY].SetIsTrueRoom(true);
+		if (!myRooms[tempX][tempY].GetIsTrueRoom())
+		{
+			myRooms[tempX][tempY].AddDoor(tempPrevDoor);
+			myRooms[tempX][tempY].SetPos(tempX, tempY);
+			myRooms[tempX][tempY].SetIsTrueRoom(true);
+		}
 
 		Door tempDoorToAdd = GetRandomDoor();
 		for (size_t i = 0; i < tempNumberOfDoors; i++)
@@ -194,66 +269,6 @@ void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCo
 		}
 		return;
 	}
-
-
-
-	/*int tempX = aPreviousRoom.GetXPos(), tempY = aPreviousRoom.GetYPos();
-
-	switch (aPreviousDoor)
-	{
-		case Door::EAST:
-			if (tempX < 8)
-			{
-				tempX += 1;
-			}
-			break;
-
-		case Door::NORTH:
-			if (tempY > 0)
-			{
-				tempY -= 1;
-			}
-			break;
-
-		case Door::SOUTH:
-			if (tempY < 8)
-			{
-				tempY += 1;
-			}
-			break;
-
-		case Door::WEST:
-			if (tempX > 0)
-			{
-				tempX -= 1;
-			}
-			break;
-	}
-
-	Room tempRoom(tempX, tempY);
-	tempRoom.AddDoor(aPreviousDoor);
-
-	int tempIterations = aDoorCount > 2 ? RNG(0, 2) : aDoorCount;
-	aDoorCount -= tempIterations;
-
-	for (size_t i = 0; i < tempIterations; i++)
-	{
-		tempRoom.AddDoorRandom();
-		
-	}
-
-	std::vector<Door> someDoors = tempRoom.GetDoors();
-
-	tempRoom.GetDoors().shrink_to_fit();
-
-
-
-	myRooms[tempX][tempY] = tempRoom;
-
-	for (Door tempDoor : someDoors)
-	{
-		Generate(tempRoom, tempDoor, aDoorCount);
-	}*/
 }
 
 Door Dungeon::GetRandomDoor()

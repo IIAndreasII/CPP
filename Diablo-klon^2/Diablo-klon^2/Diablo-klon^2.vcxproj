@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="DungeonManager.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="pch.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Diablo-klon^2.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="DungeonManager.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Player.cpp" />
