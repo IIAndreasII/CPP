@@ -26,6 +26,14 @@ int & Player::GetAttack()
 	return myAttack;
 }
 
+void Player::ShowInventory()
+{
+}
+
+void Player::LongRest()
+{
+}
+
 void Player::AddAttackType(EAttackTypes anAttack)
 {
 	if (!(std::find(myAttackTypes.begin(), myAttackTypes.end(), anAttack) != myAttackTypes.end()))

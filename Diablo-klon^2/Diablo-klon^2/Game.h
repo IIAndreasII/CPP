@@ -3,14 +3,15 @@
 
 #include "pch.h"
 
+class Dungeon;
+class Player;
+
 enum EGameState 
 {
 	EMenu,
 	EPlaying,
 	EQuitting
 };
-
-class Player;
 
 class Game
 {
@@ -27,6 +28,8 @@ public:
 
 private:
 	EGameState myGameState;
+
+	Dungeon* myDungeon;
 
 	Player* myPlayer;
 };

@@ -24,6 +24,9 @@ public:
 	int& GetArmour();
 	int& GetAttack();
 
+	void ShowInventory();
+	void LongRest();
+
 	void AddAttackType(EAttackTypes anAttack);
 
 private:
@@ -31,6 +34,8 @@ private:
 	int myHealth;
 	int myArmour;
 	int myAttack;
+	int myStrength;
+	int myIntelligence;
 
 	int myAttackMod;
 	int myArmourMod;

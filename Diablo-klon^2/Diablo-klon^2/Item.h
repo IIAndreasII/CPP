@@ -3,7 +3,10 @@
 
 enum EItemType
 {
-
+	SWORD,
+	STAFF,
+	ARMOUR
+	
 };
 
 class Item

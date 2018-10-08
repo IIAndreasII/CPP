@@ -8,8 +8,8 @@ Game s_Game;
 
 int RNG(int min, int max)
 {
-	std::uniform_int_distribution<int> tempDist(min, max);
-	return (tempDist(s_RandEng) % (max - min + 1)) + min;
+	//std::uniform_int_distribution<int> tempDist(min, max);
+	return (rand() % (max - min + 1)) + min;
 }
 
 inline void WriteLine(std::string tempValue)
@@ -62,8 +62,8 @@ inline bool Confirm()
 	}
 }
 
-template<typename T> void SafeDelete(T*& tempItemToDelete)
+template<typename T> void SafeDelete(T*& aPtrToDelete)
 {
-	delete tempItemToDelete;
-	tempItemToDelete = nullptr;
+	delete (aPtrToDelete);
+	aPtrToDelete = NULL;
 }

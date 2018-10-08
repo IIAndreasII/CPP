@@ -14,11 +14,13 @@ public:
 
 	void Navigate();
 
+	void Enter();
+
 	uint16_t& GetNrDoors();
 
 private:
 
-	Room myRooms[21][21];
+	Room *myRooms[21][21];
 
 	void Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCount);
 
