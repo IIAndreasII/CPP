@@ -48,6 +48,37 @@ inline int GetInput()
 	return tempValuetoReturn;
 }
 
+inline int GetInput(int& out)
+{
+	std::string tempStringToParse;
+	std::cin >> tempStringToParse;
+	out = 0;
+	try
+	{
+		out = std::stoi(tempStringToParse);
+	}
+	catch (...)
+	{
+	}
+	return out;
+}
+
+inline bool TryGetInput(int& out)
+{
+	std::string tempStringToParse;
+	std::cin >> tempStringToParse;
+	out = 0;
+	try
+	{
+		out = std::stoi(tempStringToParse);
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
+}
+
 inline bool Confirm()
 {
 	WriteLine("Are you sure?\n[1] Yes\n[2] No");

@@ -2,16 +2,8 @@
 #define PLAYER_H
 
 #include "pch.h"
-
-enum EAttackTypes
-{
-	SLASH,
-	SWEEP,
-	WHIRLWIND,
-	ICELANCE,
-	COC, // Cone of Cold
-	BLIZZARD
-};
+#include "Enums.h"
+#include "Item.h"
 
 class Player
 {
@@ -29,23 +21,30 @@ public:
 
 	void AddAttackType(EAttackTypes anAttack);
 
+	void LevelUp();
+
 private:
 
+	void ChangeEquipment(EItemType anItemType, bool isRight);
+
 	int myHealth;
-	int myArmour;
-	int myAttack;
+	int myHealthMax;
 	int myStrength;
 	int myIntelligence;
 
-	int myAttackMod;
-	int myArmourMod;
-	int myHealthMod;
-
 	unsigned myLevel;
 	unsigned myEXP;
+	unsigned myEXPRequired;
+	unsigned myGold;
+	unsigned myHPPotions;
 
+	Item& mySword;
+	Item& myStaff;
+	Item& myArmour;
+	Item& myRingRight;
+	Item& myRingLeft;
 
-
+	std::vector<Item> myItems;
 	std::vector<EAttackTypes> myAttackTypes;
 };
 
