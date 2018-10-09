@@ -25,7 +25,7 @@ public:
 
 private:
 
-	void ChangeEquipment(EItemType anItemType, bool isRight);
+	void ChangeEquipment(EItemType anItemType, bool &isRight);
 
 	int myHealth;
 	int myHealthMax;

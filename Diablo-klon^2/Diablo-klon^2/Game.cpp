@@ -5,7 +5,7 @@
 #include "Player.h"
 
 
-Game::Game() : myGameState(EGameState::EMenu), myPlayer()
+Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player())
 {
 }
 
