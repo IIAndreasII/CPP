@@ -8,8 +8,6 @@
 
 extern Game s_Game;
 
-extern std::default_random_engine s_RandEng;
-
 extern inline void WriteLine(std::string tempValue);
 
 extern inline void CLS();

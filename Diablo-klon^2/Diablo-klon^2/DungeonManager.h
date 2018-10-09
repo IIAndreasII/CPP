@@ -16,8 +16,6 @@ public:
 private:
 	Dungeon* myDungeon;
 
-	Player& myPlayer;
-
 };
 
 #endif

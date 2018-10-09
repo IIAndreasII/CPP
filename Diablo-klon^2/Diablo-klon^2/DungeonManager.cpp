@@ -5,7 +5,7 @@
 //#include "Game.h"
 
 
-DungeonManager::DungeonManager() : myDungeon(), myPlayer(s_Game.GetPlayer())
+DungeonManager::DungeonManager() : myDungeon()
 {
 }
 

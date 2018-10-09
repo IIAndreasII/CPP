@@ -2,13 +2,8 @@
 #include "Util.h"
 #include "Game.h"
 
-std::default_random_engine s_RandEng;
-
-Game s_Game;
-
 int RNG(int min, int max)
 {
-	//std::uniform_int_distribution<int> tempDist(min, max);
 	return (rand() % (max - min + 1)) + min;
 }
 
@@ -91,10 +86,4 @@ inline bool Confirm()
 		CLSSlow();
 		return false;
 	}
-}
-
-template<typename T> void SafeDelete(T*& aPtrToDelete)
-{
-	delete (aPtrToDelete);
-	aPtrToDelete = NULL;
 }

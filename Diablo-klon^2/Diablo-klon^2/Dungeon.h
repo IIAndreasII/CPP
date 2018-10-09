@@ -24,7 +24,7 @@ private:
 
 	void Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCount);
 
-	uint16_t myNumberOfDoors;
+	uint16_t myRoomMax;
 
 	Room& myCurrentRoom;
 

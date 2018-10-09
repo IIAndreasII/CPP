@@ -38,11 +38,11 @@ private:
 	unsigned myGold;
 	unsigned myHPPotions;
 
-	Item& mySword;
-	Item& myStaff;
-	Item& myArmour;
-	Item& myRingRight;
-	Item& myRingLeft;
+	uint16_t mySword;
+	uint16_t myStaff;
+	uint16_t myArmour;
+	uint16_t myRingRight;
+	uint16_t myRingLeft;
 
 	std::vector<Item> myItems;
 	std::vector<EAttackTypes> myAttackTypes;

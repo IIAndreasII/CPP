@@ -12,8 +12,8 @@ Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player())
 
 Game::~Game()
 {
-	delete myPlayer;
-	myPlayer = NULL;
+	SafeDelete(myPlayer);
+	SafeDelete(myDungeon);
 }
 
 int Game::Play()
@@ -43,7 +43,6 @@ void Game::MainMenu()
 {
 	CLSSlow();
 	WriteLine("Diabloclone^2\n[1] Play\n[2] Quit");
-
 
 	switch (GetInput())
 	{

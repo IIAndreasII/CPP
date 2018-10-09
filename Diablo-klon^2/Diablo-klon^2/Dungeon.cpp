@@ -2,7 +2,7 @@
 #include "Dungeon.h"
 #include "Util.h"
 
-Dungeon::Dungeon() : myNumberOfDoors(10), myCurrentRoom(*myRooms[10][10]), myRooms()
+Dungeon::Dungeon() : myRoomMax(10), myCurrentRoom(*myRooms[10][10]), myRooms()
 {
 	Door tempDoorToAdd = GetRandomDoor();
 	for (size_t i = 0; i < 2; i++)
@@ -21,13 +21,13 @@ Dungeon::Dungeon() : myNumberOfDoors(10), myCurrentRoom(*myRooms[10][10]), myRoo
 
 	for (Door tempDoor : myRooms[10][10]->GetDoors())
 	{
-		Generate(*myRooms[10][10], tempDoor, myNumberOfDoors);
+		Generate(*myRooms[10][10], tempDoor, myRoomMax);
 	}
 
 	myCurrentRoom = *myRooms[10][10];
 }
 
-Dungeon::Dungeon(uint16_t aNumberOfMaximumDoors) : myNumberOfDoors(aNumberOfMaximumDoors), myCurrentRoom(*myRooms[4][4]), myRooms()
+Dungeon::Dungeon(uint16_t aRoomMax) : myRoomMax(aRoomMax), myCurrentRoom(*myRooms[10][10]), myRooms()
 {
 	Door tempDoorToAdd = GetRandomDoor();
 	for (size_t i = 0; i < 2; i++)
@@ -41,7 +41,7 @@ Dungeon::Dungeon(uint16_t aNumberOfMaximumDoors) : myNumberOfDoors(aNumberOfMaxi
 
 	for (Door tempDoor : myRooms[10][10]->GetDoors())
 	{
-		Generate(*myRooms[10][10], tempDoor, myNumberOfDoors);
+		Generate(*myRooms[10][10], tempDoor, myRoomMax);
 	}
 
 	myCurrentRoom = *myRooms[10][10];
@@ -54,8 +54,7 @@ Dungeon::~Dungeon()
 	{
 		for (size_t j = 0; j < 21; j++)
 		{
-			delete (myRooms[i][j]);
-			myRooms[i][j] = NULL;
+			SafeDelete(myRooms[i][j]);
 		}
 	}
 }
@@ -178,7 +177,7 @@ void Dungeon::Enter()
 
 uint16_t & Dungeon::GetNrDoors()
 {
-	return myNumberOfDoors;
+	return myRoomMax;
 }
 
 void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCount)
