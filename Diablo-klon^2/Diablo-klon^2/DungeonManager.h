@@ -6,16 +6,16 @@ class Player;
 
 class DungeonManager
 {
-
 public:
 	DungeonManager();
 	~DungeonManager();
 
-	void ViewMap();
+	void Reset();
+
+	Dungeon& GetDungeon();
 
 private:
 	Dungeon* myDungeon;
-
 };
 
 #endif

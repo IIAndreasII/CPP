@@ -4,11 +4,8 @@
 #include "pch.h"
 #include <chrono>
 #include <random>
-#include "Game.h"
 
-extern Game s_Game;
-
-extern inline void WriteLine(std::string tempValue);
+extern inline void Print(std::string tempValue);
 
 extern inline void CLS();
 

@@ -2,12 +2,13 @@
 #include "Room.h"
 #include "Util.h"
 #include "Enemy.h"
+#include "Player.h"
+#include <thread>
 
 Room::Room() : myIsTrueRoom(false), myIsCurrentRoom(false), myEnemies(new std::vector<Enemy>())
 {
 	int tempEnemies = RNG(0, 5);
 }
-
 
 Room::Room(uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY), myIsTrueRoom(true), myIsCurrentRoom(false), myEnemies(new std::vector<Enemy>())
 {
@@ -66,4 +67,52 @@ void Room::SetPos(int X, int Y)
 void Room::SetIsTrueRoom(bool aValue)
 {
 	myIsTrueRoom = aValue;
+}
+
+void Room::Enter(Player & aPlayer)
+{
+	if (myEnemies->size() > 0)
+	{
+		Print("You have encountered " + std::to_string(myEnemies->size()) + "enemies!");
+		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+
+		bool tempEnemiesAreAlive = true;
+		while (tempEnemiesAreAlive && aPlayer.GetHealth())
+		{
+			Print("__| Make a choice |__\n[1] Attack\n[2] Flee\n[3] Suicide (confuses the enemy)");
+
+			bool tempLoop = true;
+			while (tempLoop)
+			{
+				switch (GetInput())
+				{
+				case 1:
+				{
+					Print("__| Available attacks |__");
+					unsigned tempIt = 0;
+					for (EAttackTypes tempAtkType : aPlayer.GetAttackTypes())
+					{
+						tempIt++;
+						Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
+					}
+
+					// TODO: Add damage enemy logic
+				}
+				break;
+
+				case 3:
+				{
+					aPlayer.TakeDamage(aPlayer.GetHealth());
+					Print("You killed yourself and confused the enemy in doing so");
+					std::this_thread::sleep_for(std::chrono::seconds(3));
+				}
+				}
+			}
+		}
+	}
+	else
+	{
+		Print("There are no enemies here");
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
 }

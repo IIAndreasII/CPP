@@ -3,7 +3,6 @@
 #include "Util.h"
 #include <thread>
 
-
 Player::Player() : myItems(new std::vector<Item>()), myAttackTypes(new std::vector<EAttackTypes>()), mySword(0), myStaff(1), myArmour(2), myRingRight(3), myRingLeft(4)
 {
 	myAttackTypes->push_back(EAttackTypes::SLASH);
@@ -24,7 +23,6 @@ Player::Player() : myItems(new std::vector<Item>()), myAttackTypes(new std::vect
 	Item tempSword2("Sharp potato", 10, EItemType::SWORD, false);
 
 	myItems->push_back(tempSword2);
-	
 }
 
 Player::~Player()
@@ -48,7 +46,7 @@ void Player::ShowInventory()
 	while (tempLoop)
 	{
 		CLSSlow();
-		WriteLine("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Health Potions: " + std::to_string(myHPPotions) +
+		Print("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Health Potions: " + std::to_string(myHPPotions) +
 			"\n\n___| Equipment |___\n[1] Sword: " + myItems->at(mySword).GetName() + " [Atk: " + std::to_string(myItems->at(mySword).GetStat()) +
 			"]\n[2] Staff: " + myItems->at(myStaff).GetName() + " [Atk: " + std::to_string(myItems->at(myStaff).GetStat()) +
 			"]\n[3] Armour: " + myItems->at(myArmour).GetName() + " [Def: " + std::to_string(myItems->at(myArmour).GetStat()) +
@@ -92,9 +90,9 @@ void Player::LongRest()
 {
 	CLSSlow();
 	myHealth = myHealthMax;
-	WriteLine("You take a nap beside the campfire");
+	Print("You take a nap beside the campfire");
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	WriteLine("Health restored!");
+	Print("Health restored!");
 	std::this_thread::sleep_for(std::chrono::milliseconds(750));
 }
 
@@ -104,6 +102,31 @@ void Player::AddAttackType(EAttackTypes anAttack)
 	{
 		myAttackTypes->push_back(anAttack);
 	}
+}
+
+std::vector<EAttackTypes>& Player::GetAttackTypes()
+{
+	return *myAttackTypes;
+}
+
+std::string Player::AtkTypeToString(EAttackTypes anAtkType)
+{
+	switch (anAtkType)
+	{
+	case EAttackTypes::SLASH:
+		return "Slash";
+	case EAttackTypes::SWEEP:
+		return "Sweep";
+	case EAttackTypes::WHIRLWIND:
+		return "Whirlwind";
+	case EAttackTypes::ICELANCE:
+		return "Icelance";
+	case EAttackTypes::COC:
+		return "Cone of Cold";
+	case EAttackTypes::BLIZZARD:
+		return "Blizzard";
+	}
+	return "";
 }
 
 void Player::LevelUp()
@@ -119,7 +142,7 @@ void Player::LevelUp()
 	}
 }
 
-void Player::TakeDamage(unsigned& aDamageToTake)
+void Player::TakeDamage(int& aDamageToTake)
 {
 	myHealth -= (aDamageToTake - GetArmour());
 }
@@ -128,7 +151,7 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 {
 	std::vector<int> tempIndexes;
 
-	WriteLine("__| Available items |__");
+	Print("__| Available items |__");
 
 	int tempIt = 0;
 	for (size_t i = 0; i < myItems->size(); i++)
@@ -137,13 +160,13 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 		{
 			tempIt++;
 			tempIndexes.push_back(i);
-			WriteLine("[" + std::to_string(tempIt) + "] " + myItems->at(i).GetName() + " [Lvl: " + std::to_string(myItems->at(i).GetLevel()) + " Stat: " + std::to_string(myItems->at(i).GetStat()) + "]");
+			Print("[" + std::to_string(tempIt) + "] " + myItems->at(i).GetName() + " [Lvl: " + std::to_string(myItems->at(i).GetLevel()) + " Stat: " + std::to_string(myItems->at(i).GetStat()) + "]");
 		}
 	}
 
 	if (tempIndexes.size() == 0)
 	{
-		WriteLine("No available items");
+		Print("No available items");
 	}
 	else
 	{
@@ -152,7 +175,7 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 
 		while (GetInput(tempInput) > tempIndexes.size());
 
-		WriteLine("[1] Equip [2] Cancel");
+		Print("[1] Equip [2] Cancel");
 
 		while (GetInput(tempConfirmInput) > 2);
 

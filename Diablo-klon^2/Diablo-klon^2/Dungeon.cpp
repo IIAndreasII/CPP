@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Dungeon.h"
 #include "Util.h"
+#include "Player.h"
+#include <thread>
 
 Dungeon::Dungeon() : myRoomMax(10), myCurrentRoom(*myRooms[10][10]), myRooms()
 {
@@ -11,7 +13,7 @@ Dungeon::Dungeon() : myRoomMax(10), myCurrentRoom(*myRooms[10][10]), myRooms()
 		{
 			tempDoorToAdd = GetRandomDoor();
 		}
-		
+
 		myRooms[10][10]->AddDoor(tempDoorToAdd);
 	}
 
@@ -47,7 +49,6 @@ Dungeon::Dungeon(uint16_t aRoomMax) : myRoomMax(aRoomMax), myCurrentRoom(*myRoom
 	myCurrentRoom = *myRooms[10][10];
 }
 
-
 Dungeon::~Dungeon()
 {
 	for (size_t i = 0; i < 21; i++)
@@ -59,7 +60,7 @@ Dungeon::~Dungeon()
 	}
 }
 
-void Dungeon::PrintMap()
+void Dungeon::ViewMap()
 {
 	std::string tempRows[21];
 
@@ -91,13 +92,23 @@ void Dungeon::PrintMap()
 		tempRows[i] += "|";
 	}
 
-	WriteLine("________| Map |________");
-	for (size_t i = 0; i < 21; i++)
+	bool tempLoop = true;
+	while (tempLoop)
 	{
-		WriteLine(tempRows[i]);
-	}
-	WriteLine("|_____________________|");
+		CLSSlow();
 
+		Print("________| Map |________");
+		for (size_t i = 0; i < 21; i++)
+		{
+			Print(tempRows[i]);
+		}
+		Print("|_____________________|\n[1] Back");
+
+		if (GetInput() == 1)
+		{
+			tempLoop = false;
+		}
+	}
 }
 
 void Dungeon::Navigate()
@@ -130,10 +141,10 @@ void Dungeon::Navigate()
 	while (tempLoop)
 	{
 		CLSSlow();
-		WriteLine("__| Doors |__");
+		Print("__| Doors |__");
 		for (size_t i = 0; i < 4; i++)
 		{
-			WriteLine(tempRows[i]);
+			Print(tempRows[i]);
 		}
 
 		switch (GetInput())
@@ -171,9 +182,14 @@ void Dungeon::Navigate()
 	myCurrentRoom = *myRooms[tempX][tempY];
 }
 
-void Dungeon::Enter()
+void Dungeon::Enter(Player &aPlayer)
 {
+	CLSSlow();
+	Print("You enter the nearest dungeon");
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	myCurrentRoom.Enter(aPlayer);
 
+	// TODO: Finish this
 }
 
 uint16_t & Dungeon::GetNrDoors()
@@ -298,5 +314,3 @@ Door Dungeon::GetRandomDoor()
 	}
 	return Door::SOUTH;
 }
-
-

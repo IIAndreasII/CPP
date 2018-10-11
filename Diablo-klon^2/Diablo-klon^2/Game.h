@@ -3,10 +3,10 @@
 
 #include "pch.h"
 
-class Dungeon;
 class Player;
+class DungeonManager;
 
-enum EGameState 
+enum EGameState
 {
 	EMenu,
 	EPlaying,
@@ -29,7 +29,7 @@ public:
 private:
 	EGameState myGameState;
 
-	Dungeon* myDungeon;
+	DungeonManager* myDM;
 
 	Player* myPlayer;
 };

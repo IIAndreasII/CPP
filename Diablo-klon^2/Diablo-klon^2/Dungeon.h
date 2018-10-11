@@ -3,6 +3,8 @@
 
 #include "Room.h"
 
+class Player;
+
 class Dungeon
 {
 public:
@@ -10,11 +12,11 @@ public:
 	Dungeon(uint16_t aMaxNumberOfRooms);
 	~Dungeon();
 
-	void PrintMap();
+	void ViewMap();
 
 	void Navigate();
 
-	void Enter();
+	void Enter(Player &aPlayer);
 
 	uint16_t& GetNrDoors();
 
@@ -29,7 +31,6 @@ private:
 	Room& myCurrentRoom;
 
 	Door GetRandomDoor();
-
 };
 
 #endif

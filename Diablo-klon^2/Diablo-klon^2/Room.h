@@ -4,6 +4,7 @@
 #include "pch.h"
 
 class Enemy;
+class Player;
 
 enum Door
 {
@@ -20,7 +21,6 @@ public:
 	Room();
 	Room(uint8_t anX, uint8_t aY);
 	~Room();
-
 
 	void AddDoor(const Door aDoor);
 	//void AddDoorRandom();
@@ -40,6 +40,8 @@ public:
 
 	void SetIsTrueRoom(bool aValue);
 
+	void Enter(Player &aPlayer);
+
 private:
 
 	std::vector<Door> myDoors;
@@ -49,7 +51,6 @@ private:
 	bool myIsTrueRoom, myIsCurrentRoom;
 
 	std::vector<Enemy>* myEnemies;
-
 };
 
 #endif

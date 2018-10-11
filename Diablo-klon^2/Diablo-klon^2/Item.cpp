@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Item.h"
 
-
 Item::Item() : myLevel(), myIsEquipped(false)
 {
 }
@@ -17,7 +16,6 @@ Item::Item(std::string aName, int aStat, EItemType anItemType) : myName(aName), 
 Item::Item(std::string aName, int aStat, EItemType anItemType, bool isEquipped) : myName(aName), myStat(aStat), myItemType(anItemType), myIsEquipped(isEquipped)
 {
 }
-
 
 Item::~Item()
 {

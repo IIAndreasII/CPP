@@ -1,13 +1,12 @@
 #include "stdafx.h"
 #include "Util.h"
-#include "Game.h"
 
 int RNG(int min, int max)
 {
 	return (rand() % (max - min + 1)) + min;
 }
 
-inline void WriteLine(std::string tempValue)
+inline void Print(std::string tempValue)
 {
 	std::cout << tempValue << std::endl;
 }
@@ -19,8 +18,7 @@ std::cout << tempValue << std::endl;
 
 inline void CLS()
 {
-	std::cout << std::string(29
-		, '\n');
+	std::cout << std::string(29, '\n');
 }
 
 inline void CLSSlow()
@@ -76,7 +74,7 @@ inline bool TryGetInput(int& out)
 
 inline bool Confirm()
 {
-	WriteLine("Are you sure?\n[1] Yes\n[2] No");
+	Print("Are you sure?\n[1] Yes\n[2] No");
 	switch (GetInput())
 	{
 	case 1:

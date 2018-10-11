@@ -4,28 +4,21 @@
 #include "Util.h"
 //#include "Game.h"
 
-
 DungeonManager::DungeonManager() : myDungeon()
 {
 }
-
 
 DungeonManager::~DungeonManager()
 {
 }
 
-void DungeonManager::ViewMap()
+void DungeonManager::Reset()
 {
-	bool tempLoop = true;
-	while (tempLoop)
-	{
-		CLSSlow();
-		myDungeon->PrintMap();
+	SafeDelete(myDungeon);
+	myDungeon = new Dungeon();
+}
 
-		WriteLine("[1] Back");
-		if (GetInput() == 1)
-		{
-			tempLoop = false;
-		}
-	}
+Dungeon & DungeonManager::GetDungeon()
+{
+	return *myDungeon;
 }

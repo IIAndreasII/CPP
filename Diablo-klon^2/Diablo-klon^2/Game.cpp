@@ -1,19 +1,18 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Util.h"
-#include "Dungeon.h"
 #include "Player.h"
-
+#include "DungeonManager.h"
+#include "Dungeon.h"
 
 Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player())
 {
 }
 
-
 Game::~Game()
 {
 	SafeDelete(myPlayer);
-	SafeDelete(myDungeon);
+	SafeDelete(myDM);
 }
 
 int Game::Play()
@@ -31,7 +30,7 @@ int Game::Play()
 		case EGameState::EPlaying:
 			Play();
 			break;
-		
+
 		default:
 			return 0;
 		}
@@ -42,7 +41,7 @@ int Game::Play()
 void Game::MainMenu()
 {
 	CLSSlow();
-	WriteLine("Diabloclone^2\n[1] Play\n[2] Quit");
+	Print("Diabloclone^2\n[1] Play\n[2] Quit");
 
 	switch (GetInput())
 	{
@@ -62,19 +61,19 @@ void Game::GameMenu()
 	while (tempLoop)
 	{
 		CLSSlow();
-		WriteLine("____| Select |____\n[1] Enter Dungeon\n[2] Inventory\n[3] Long rest\n[4] Shop\n[5] Quit game");
+		Print("____| Select |____\n[1] Enter Dungeon\n[2] Inventory\n[3] Long rest\n[4] Shop\n[5] Quit game");
 		switch (GetInput())
 		{
 		case 1:
 			//tempLoop = false;
-			myDungeon->Enter();
+			myDM->GetDungeon().Enter(*myPlayer);
 			break;
 		case 2:
 			//tempLoop = false;
 			myPlayer->ShowInventory();
 			break;
 		case 3:
-		//	tempLoop = false;
+			//	tempLoop = false;
 			myPlayer->LongRest();
 			break;
 		case 4:

@@ -18,10 +18,12 @@ public:
 	void LongRest();
 
 	void AddAttackType(EAttackTypes anAttack);
+	std::vector<EAttackTypes>& GetAttackTypes();
+	std::string AtkTypeToString(EAttackTypes anAtkType);
 
 	void LevelUp();
 
-	void TakeDamage(unsigned& aDamageToTake);
+	void TakeDamage(int& aDamageToTake);
 
 private:
 
@@ -38,11 +40,15 @@ private:
 	unsigned myGold;
 	unsigned myHPPotions;
 
+	unsigned mySpellArmour;
+
+	/* START Indexes for the respective items*/
 	unsigned mySword;
 	unsigned myStaff;
 	unsigned myArmour;
 	unsigned myRingRight;
 	unsigned myRingLeft;
+	/*END*/
 
 	unsigned myAttackMod;
 
