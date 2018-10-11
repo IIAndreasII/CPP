@@ -3,6 +3,8 @@
 
 #include "pch.h"
 
+class Enemy;
+
 enum Door
 {
 	NORTH,
@@ -39,13 +41,14 @@ public:
 	void SetIsTrueRoom(bool aValue);
 
 private:
+
 	std::vector<Door> myDoors;
 
 	uint8_t myX, myY;
 
 	bool myIsTrueRoom, myIsCurrentRoom;
 
-	
+	std::vector<Enemy>* myEnemies;
 
 };
 

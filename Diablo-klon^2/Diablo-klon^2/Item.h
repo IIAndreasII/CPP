@@ -16,7 +16,7 @@ public:
 	std::string& GetName();
 	EItemType& GetItemType();
 	std::string GetRingType();
-	int& GetLevel();
+	unsigned& GetLevel();
 	int& GetStat();
 
 	void SetIsEquipped(bool aValue);
@@ -26,7 +26,7 @@ private:
 
 	std::string myName;
 
-	int myLevel;
+	unsigned myLevel;
 	int myStat;
 
 	bool myIsEquipped;

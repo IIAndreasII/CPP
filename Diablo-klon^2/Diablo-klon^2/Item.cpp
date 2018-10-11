@@ -58,12 +58,12 @@ std::string Item::GetRingType()
 	return tempReturnValue;
 }
 
-int & Item::GetLevel()
+unsigned& Item::GetLevel()
 {
 	return myLevel;
 }
 
-int & Item::GetStat()
+int& Item::GetStat()
 {
 	return myStat;
 }
@@ -73,7 +73,7 @@ void Item::SetIsEquipped(bool aValue)
 	myIsEquipped = aValue;
 }
 
-bool & Item::GetIsEquipped()
+bool& Item::GetIsEquipped()
 {
 	return myIsEquipped;
 }

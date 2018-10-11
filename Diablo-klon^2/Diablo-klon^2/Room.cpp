@@ -1,19 +1,22 @@
 #include "stdafx.h"
 #include "Room.h"
 #include "Util.h"
+#include "Enemy.h"
 
-
-Room::Room() : myIsTrueRoom(false), myIsCurrentRoom(false)
+Room::Room() : myIsTrueRoom(false), myIsCurrentRoom(false), myEnemies(new std::vector<Enemy>())
 {
+	int tempEnemies = RNG(0, 5);
 }
 
 
-Room::Room(uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY), myIsTrueRoom(true), myIsCurrentRoom(false)
+Room::Room(uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY), myIsTrueRoom(true), myIsCurrentRoom(false), myEnemies(new std::vector<Enemy>())
 {
+	int tempEnemies = RNG(0, 5);
 }
 
 Room::~Room()
 {
+	SafeDelete(myEnemies);
 }
 
 void Room::AddDoor(const Door aDoor)
@@ -23,8 +26,6 @@ void Room::AddDoor(const Door aDoor)
 		myDoors.push_back(aDoor);
 	}
 }
-
-
 
 uint8_t & Room::GetXPos()
 {

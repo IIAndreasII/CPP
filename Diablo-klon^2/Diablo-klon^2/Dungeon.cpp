@@ -173,6 +173,7 @@ void Dungeon::Navigate()
 
 void Dungeon::Enter()
 {
+
 }
 
 uint16_t & Dungeon::GetNrDoors()

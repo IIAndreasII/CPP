@@ -11,10 +11,8 @@ public:
 	Player();
 	~Player();
 
-
 	int& GetHealth();
 	int& GetArmour();
-	int& GetAttack();
 
 	void ShowInventory();
 	void LongRest();
@@ -22,6 +20,8 @@ public:
 	void AddAttackType(EAttackTypes anAttack);
 
 	void LevelUp();
+
+	void TakeDamage(unsigned& aDamageToTake);
 
 private:
 
@@ -38,14 +38,16 @@ private:
 	unsigned myGold;
 	unsigned myHPPotions;
 
-	uint16_t mySword;
-	uint16_t myStaff;
-	uint16_t myArmour;
-	uint16_t myRingRight;
-	uint16_t myRingLeft;
+	unsigned mySword;
+	unsigned myStaff;
+	unsigned myArmour;
+	unsigned myRingRight;
+	unsigned myRingLeft;
 
-	std::vector<Item> myItems;
-	std::vector<EAttackTypes> myAttackTypes;
+	unsigned myAttackMod;
+
+	std::vector<Item>* myItems;
+	std::vector<EAttackTypes>* myAttackTypes;
 };
 
 #endif
