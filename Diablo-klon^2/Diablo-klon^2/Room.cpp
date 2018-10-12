@@ -86,26 +86,73 @@ void Room::Enter(Player & aPlayer)
 			{
 				switch (GetInput())
 				{
-				case 1:
-				{
-					Print("__| Available attacks |__");
-					unsigned tempIt = 0;
-					for (EAttackTypes tempAtkType : aPlayer.GetAttackTypes())
+					case 1:
 					{
-						tempIt++;
-						Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
-					}
+						Print("__| Available attacks |__");
+						unsigned tempIt = 0;
+						for (EAttackTypes tempAtkType : aPlayer.GetAttackTypes())
+						{
+							tempIt++;
+							Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
+						}
 
-					// TODO: Add damage enemy logic
-				}
+						int tempIndex = 0; 
+						while (GetInput(tempIndex) > aPlayer.GetAttackTypes().size() && tempIndex == 0);
+						tempIndex--; // Compensate
+
+
+						int tempDamageToDeal = 0;
+						unsigned tempEnemiesToHitAoE = 0;
+						bool tempIsAoE = true;
+						switch (aPlayer.GetAttackTypes().at(tempIndex))
+						{
+						case EAttackTypes::SLASH:
+							tempDamageToDeal = aPlayer.GetPhysDmg();
+							tempIsAoE = false;
+							break;
+						case EAttackTypes::SWEEP:
+							tempDamageToDeal = aPlayer.GetPhysDmg() / 2;
+							break;
+						case EAttackTypes::WHIRLWIND:
+							tempDamageToDeal = aPlayer.GetPhysDmg() / 3;
+							break;
+						case EAttackTypes::ICELANCE:
+							tempDamageToDeal = aPlayer.GetSpellDmg();
+							tempIsAoE = false;
+							break;
+						case EAttackTypes::COC:
+							tempDamageToDeal = aPlayer.GetSpellDmg();
+							break;
+						case EAttackTypes::BLIZZARD:
+							tempDamageToDeal = aPlayer.GetSpellDmg();
+							break;
+						}
+
+						tempIt = 0;
+						std::vector<unsigned> tempIndexes;
+						for (Enemy tempEnemy : *myEnemies)
+						{
+							tempIt++;
+							if (tempEnemy.GetHealth())
+							{
+								tempIndexes.push_back(tempIt);
+								Print("[" + std::to_string(tempIt) + "] " + tempEnemy.GetName() + "[HP: " + std::to_string(tempEnemy.GetHealth()) + " Def: " + std::to_string(tempEnemy.GetArmour()) + "]");
+							}
+						}
+
+
+						// TODO: Add damage enemy logic
+
+
+					}
 				break;
 
-				case 3:
-				{
-					aPlayer.TakeDamage(aPlayer.GetHealth());
-					Print("You killed yourself and confused the enemy in doing so");
-					std::this_thread::sleep_for(std::chrono::seconds(3));
-				}
+					case 3:
+					{
+						aPlayer.TakeDamage(aPlayer.GetHealth());
+						Print("You killed yourself and confused the enemy in doing so");
+						std::this_thread::sleep_for(std::chrono::seconds(3));
+					}
 				}
 			}
 		}

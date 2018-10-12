@@ -25,6 +25,9 @@ public:
 
 	void TakeDamage(int& aDamageToTake);
 
+	int& GetPhysDmg();
+	int& GetSpellDmg();
+
 private:
 
 	void ChangeEquipment(EItemType anItemType, bool &isRight);
@@ -33,6 +36,9 @@ private:
 	int myHealthMax;
 	int myStrength;
 	int myIntelligence;
+
+	int myPhysDmg;
+	int mySpellDmg;
 
 	unsigned myLevel;
 	unsigned myEXP;

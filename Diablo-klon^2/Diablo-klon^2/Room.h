@@ -23,7 +23,6 @@ public:
 	~Room();
 
 	void AddDoor(const Door aDoor);
-	//void AddDoorRandom();
 
 	uint8_t& GetXPos();
 	uint8_t& GetYPos();

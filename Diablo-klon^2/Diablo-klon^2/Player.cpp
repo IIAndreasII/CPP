@@ -3,25 +3,28 @@
 #include "Util.h"
 #include <thread>
 
-Player::Player() : myItems(new std::vector<Item>()), myAttackTypes(new std::vector<EAttackTypes>()), mySword(0), myStaff(1), myArmour(2), myRingRight(3), myRingLeft(4)
+Player::Player() : myItems(new std::vector<Item>()), myAttackTypes(new std::vector<EAttackTypes>()), mySword(0), myStaff(1), myArmour(2), myRingRight(3), myRingLeft(4), myGold(50)
 {
+	/* Basic attack types */
 	myAttackTypes->push_back(EAttackTypes::SLASH);
 	myAttackTypes->push_back(EAttackTypes::ICELANCE);
 
+	/* Starting items */
 	Item tempSword("Sharp thing", 10, EItemType::SWORD, true);
 	Item tempStaff("Wooden stick-thing", 10, EItemType::STAFF, true);
 	Item tempArmour("Flat thing", 10, EItemType::ARMOUR, true);
 	Item tempRing("Round thing", 0, EItemType::RING, true);
 	Item tempRing2("Circular thing", 0, EItemType::RING, true);
 
+	/* Add starting items */
 	myItems->push_back(tempSword);
 	myItems->push_back(tempStaff);
 	myItems->push_back(tempArmour);
 	myItems->push_back(tempRing);
 	myItems->push_back(tempRing2);
 
+	/* Test dummy */
 	Item tempSword2("Sharp potato", 10, EItemType::SWORD, false);
-
 	myItems->push_back(tempSword2);
 }
 
@@ -144,7 +147,29 @@ void Player::LevelUp()
 
 void Player::TakeDamage(int& aDamageToTake)
 {
-	myHealth -= (aDamageToTake - GetArmour());
+	int tempDamageTaken = aDamageToTake - GetArmour();
+	myHealth -= tempDamageTaken;
+	CLSSlow();
+	Print("You take " + std::to_string(tempDamageTaken) + " damage!");
+	std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+	if (myHealth <= 0)
+	{
+		CLSSlow();
+		Print("YOU DIED");
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+	}
+}
+
+int& Player::GetPhysDmg()
+{
+	myPhysDmg = myItems->at(mySword).GetStat() + myStrength;
+	return myPhysDmg;
+}
+
+int& Player::GetSpellDmg()
+{
+	mySpellDmg = myItems->at(myStaff).GetStat() + myIntelligence;
+	return mySpellDmg;
 }
 
 void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
