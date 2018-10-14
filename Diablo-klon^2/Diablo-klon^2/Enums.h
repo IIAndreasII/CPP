@@ -28,4 +28,12 @@ enum ERingType
 	INTELLIGENCE
 };
 
+enum ECharmType
+{
+	HEALTH,
+	PROTECTION,
+	STUN,
+	VENOM
+};
+
 #endif

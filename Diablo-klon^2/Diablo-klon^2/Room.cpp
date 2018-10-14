@@ -73,13 +73,16 @@ void Room::Enter(Player & aPlayer)
 {
 	if (myEnemies->size() > 0)
 	{
+		aPlayer.PrintUI();
 		Print("You have encountered " + std::to_string(myEnemies->size()) + "enemies!");
 		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
 		bool tempEnemiesAreAlive = true;
 		while (tempEnemiesAreAlive && aPlayer.GetHealth())
 		{
-			Print("__| Make a choice |__\n[1] Attack\n[2] Flee\n[3] Suicide (confuses the enemy)");
+			CLSSlow();
+			aPlayer.PrintUI();
+			Print("__| Make a choice |__\n[1] Attack\n[2] Drink potion (Available: " + std::to_string(aPlayer.GetHPPotions()) + ")\n[3] Suicide (confuses the enemy)");
 
 			bool tempLoop = true;
 			while (tempLoop)
@@ -88,6 +91,8 @@ void Room::Enter(Player & aPlayer)
 				{
 					case 1:
 					{
+						CLSSlow();
+						aPlayer.PrintUI();
 						Print("__| Available attacks |__");
 						unsigned tempIt = 0;
 						for (EAttackTypes tempAtkType : aPlayer.GetAttackTypes())
@@ -96,15 +101,15 @@ void Room::Enter(Player & aPlayer)
 							Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
 						}
 
-						int tempIndex = 0; 
-						while (GetInput(tempIndex) > aPlayer.GetAttackTypes().size() && tempIndex == 0);
-						tempIndex--; // Compensate
+						int tempInput = 0; 
+						while (GetInput(tempInput) > aPlayer.GetAttackTypes().size() && tempInput == 0);
+						tempInput--; // Compensate
 
 
 						int tempDamageToDeal = 0;
 						unsigned tempEnemiesToHitAoE = 0;
 						bool tempIsAoE = true;
-						switch (aPlayer.GetAttackTypes().at(tempIndex))
+						switch (aPlayer.GetAttackTypes().at(tempInput))
 						{
 						case EAttackTypes::SLASH:
 							tempDamageToDeal = aPlayer.GetPhysDmg();
@@ -128,17 +133,42 @@ void Room::Enter(Player & aPlayer)
 							break;
 						}
 
-						tempIt = 0;
-						std::vector<unsigned> tempIndexes;
-						for (Enemy tempEnemy : *myEnemies)
+						if (!tempIsAoE)
 						{
-							tempIt++;
-							if (tempEnemy.GetHealth())
+							CLSSlow();
+							aPlayer.PrintUI();
+							Print("__| Choose an enemy |__");
+							tempIt = 0;
+							std::vector<unsigned> tempIndexes;
+							for (Enemy tempEnemy : *myEnemies)
 							{
-								tempIndexes.push_back(tempIt);
-								Print("[" + std::to_string(tempIt) + "] " + tempEnemy.GetName() + "[HP: " + std::to_string(tempEnemy.GetHealth()) + " Def: " + std::to_string(tempEnemy.GetArmour()) + "]");
+								tempIt++;
+								if (tempEnemy.GetHealth() > 0)
+								{
+									tempIndexes.push_back(tempIt);
+									Print("[" + std::to_string(tempIt) + "] " + tempEnemy.GetName() + "[HP: " + std::to_string(tempEnemy.GetHealth()) + " Def: " + std::to_string(tempEnemy.GetArmour()) + "]");
+								}
 							}
+
+							tempInput = 0;
+							while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
+							tempInput--; // Compensate
+
+							myEnemies->at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal);
+							Print("The enemy takes " + std::to_string(tempDamageToDeal) + " damage");
 						}
+						else
+						{
+							for (Enemy tempEnemy : *myEnemies)
+							{
+								if (tempEnemy.GetHealth() > 0)
+								{
+									tempEnemy.TakeDamage(tempDamageToDeal);
+								}
+							}
+							Print("All enemies take " + std::to_string(tempDamageToDeal) + " damage");
+						}
+						std::this_thread::sleep_for(std::chrono::seconds(2));
 
 
 						// TODO: Add damage enemy logic
@@ -150,6 +180,8 @@ void Room::Enter(Player & aPlayer)
 					case 3:
 					{
 						aPlayer.TakeDamage(aPlayer.GetHealth());
+						CLSSlow();
+						aPlayer.PrintUI();
 						Print("You killed yourself and confused the enemy in doing so");
 						std::this_thread::sleep_for(std::chrono::seconds(3));
 					}

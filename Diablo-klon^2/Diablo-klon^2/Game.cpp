@@ -61,6 +61,7 @@ void Game::GameMenu()
 	while (tempLoop)
 	{
 		CLSSlow();
+		myPlayer->PrintUI();
 		Print("____| Select |____\n[1] Enter Dungeon\n[2] Inventory\n[3] Long rest\n[4] Shop\n[5] Quit game");
 		switch (GetInput())
 		{

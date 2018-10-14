@@ -2,8 +2,23 @@
 #include "Player.h"
 #include "Util.h"
 #include <thread>
+#include "Item.h"
 
-Player::Player() : myItems(new std::vector<Item>()), myAttackTypes(new std::vector<EAttackTypes>()), mySword(0), myStaff(1), myArmour(2), myRingRight(3), myRingLeft(4), myGold(50)
+int stuff;
+
+Player::Player() : 
+	myItems(new std::vector<Item>()), 
+	myAttackTypes(new std::vector<EAttackTypes>()), 
+	myCharms(new std::vector<ECharmType>()), 
+	mySword(0), 
+	myStaff(1), 
+	myArmour(2), 
+	myRingRight(3), 
+	myRingLeft(4), 
+	myGold(50), 
+	myHealthMax(100),
+	myHPPotions(0),
+	tate(stuff)
 {
 	/* Basic attack types */
 	myAttackTypes->push_back(EAttackTypes::SLASH);
@@ -26,10 +41,15 @@ Player::Player() : myItems(new std::vector<Item>()), myAttackTypes(new std::vect
 	/* Test dummy */
 	Item tempSword2("Sharp potato", 10, EItemType::SWORD, false);
 	myItems->push_back(tempSword2);
+
+	myHealth = myHealthMax;
 }
 
 Player::~Player()
 {
+	SafeDelete(myCharms);
+	SafeDelete(myItems);
+	SafeDelete(myAttackTypes);
 }
 
 int& Player::GetHealth()
@@ -45,14 +65,14 @@ int & Player::GetArmour()
 void Player::ShowInventory()
 {
 	bool tempLoop = true;
-
 	while (tempLoop)
 	{
 		CLSSlow();
+		PrintUI();
 		Print("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Health Potions: " + std::to_string(myHPPotions) +
 			"\n\n___| Equipment |___\n[1] Sword: " + myItems->at(mySword).GetName() + " [Atk: " + std::to_string(myItems->at(mySword).GetStat()) +
 			"]\n[2] Staff: " + myItems->at(myStaff).GetName() + " [Atk: " + std::to_string(myItems->at(myStaff).GetStat()) +
-			"]\n[3] Armour: " + myItems->at(myArmour).GetName() + " [Def: " + std::to_string(myItems->at(myArmour).GetStat()) +
+			"]\n[3] Armour: " + myItems->at(myArmour).GetName() + " [Def: " + std::to_string(GetArmour()) +
 			"]\n[4] Righthand Ring: " + myItems->at(myRingRight).GetName() + " [" + myItems->at(myRingRight).GetRingType() + ": " + std::to_string(myItems->at(myRingRight).GetStat()) +
 			"]\n[5] Lefthand Ring: " + myItems->at(myRingLeft).GetName() + " [" + myItems->at(myRingLeft).GetRingType() + ": " + std::to_string(myItems->at(myRingRight).GetStat()) +
 			"]\n[6] Back");
@@ -112,7 +132,7 @@ std::vector<EAttackTypes>& Player::GetAttackTypes()
 	return *myAttackTypes;
 }
 
-std::string Player::AtkTypeToString(EAttackTypes anAtkType)
+std::string Player::AtkTypeToString(EAttackTypes &anAtkType)
 {
 	switch (anAtkType)
 	{
@@ -129,7 +149,23 @@ std::string Player::AtkTypeToString(EAttackTypes anAtkType)
 	case EAttackTypes::BLIZZARD:
 		return "Blizzard";
 	}
-	return "";
+	return std::string();
+}
+
+std::string Player::CharmTypeToString(ECharmType &aCharmType)
+{
+	switch (aCharmType)
+	{
+	case ECharmType::HEALTH:
+		return "Vitality-charm";
+	case ECharmType::PROTECTION:
+		return "Protection-charm";
+	case ECharmType::STUN:
+		return "Stun-charm";
+	case ECharmType::VENOM:
+		return "Venom-charm";
+	}
+	return std::string();
 }
 
 void Player::LevelUp()
@@ -160,6 +196,26 @@ void Player::TakeDamage(int& aDamageToTake)
 	}
 }
 
+void Player::PrintUI()
+{
+	std::string tempStringToPrint = "Health: " + std::to_string(myHealth) + "  Armour: " + std::to_string(GetArmour()) + "  Strength: " + std::to_string(myStrength) + "  Intelligence: " + std::to_string(myIntelligence) + " |";
+	std::string tempUnderline;
+
+	for (size_t i = 0; i < tempStringToPrint.size(); i++)
+	{
+		if (i == tempStringToPrint.size() - 1)
+		{
+			tempUnderline += '|';
+		}
+		else
+		{
+			tempUnderline += '_';
+		}
+	}
+	Print(tempStringToPrint + "\n" + tempUnderline + "\n");
+
+}
+
 int& Player::GetPhysDmg()
 {
 	myPhysDmg = myItems->at(mySword).GetStat() + myStrength;
@@ -172,6 +228,20 @@ int& Player::GetSpellDmg()
 	return mySpellDmg;
 }
 
+unsigned & Player::GetHPPotions()
+{
+	return myHPPotions;
+}
+
+void Player::DrinkPotion()
+{
+	myHealth += myHealthMax / 3;
+	if (myHealth > myHealthMax)
+	{
+		myHealth = myHealthMax;
+	}
+}
+
 void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 {
 	std::vector<int> tempIndexes;
@@ -179,7 +249,7 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 	Print("__| Available items |__");
 
 	int tempIt = 0;
-	for (size_t i = 0; i < myItems->size(); i++)
+	for (int i = 0; i < myItems->size(); i++)
 	{
 		if (myItems->at(i).GetItemType() == anItemType && !myItems->at(i).GetIsEquipped())
 		{
@@ -198,11 +268,11 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 		int tempInput = 0,
 			tempConfirmInput = 0;
 
-		while (GetInput(tempInput) > tempIndexes.size());
+		while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
 
 		Print("[1] Equip [2] Cancel");
 
-		while (GetInput(tempConfirmInput) > 2);
+		while (GetInput(tempConfirmInput) > 2 && tempConfirmInput == 0);
 
 		switch (tempConfirmInput)
 		{

@@ -29,7 +29,7 @@ unsigned & Enemy::GetArmour()
 	return myArmour;
 }
 
-void Enemy::TakeDamage(unsigned & aDamageToTake)
+void Enemy::TakeDamage(int & aDamageToTake)
 {
 	myHealth -= (aDamageToTake - myArmour);
 }

@@ -17,7 +17,7 @@ public:
 	int& GetDamage();
 	unsigned& GetArmour();
 
-	void TakeDamage(unsigned& aDamageToTake);
+	void TakeDamage(int& aDamageToTake);
 
 private:
 
