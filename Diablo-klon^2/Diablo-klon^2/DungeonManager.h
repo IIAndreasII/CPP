@@ -1,8 +1,7 @@
 #ifndef DM_H
 #define DM_H
 
-class Dungeon;
-class Player;
+#include "Dungeon.h"
 
 class DungeonManager
 {
@@ -15,7 +14,7 @@ public:
 	Dungeon& GetDungeon();
 
 private:
-	Dungeon* myDungeon;
+	Dungeon myDungeon;
 };
 
 #endif

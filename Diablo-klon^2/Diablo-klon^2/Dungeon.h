@@ -14,7 +14,7 @@ public:
 
 	void ViewMap();
 
-	void Navigate();
+	bool Navigate(Player &aPlayer);
 
 	void Enter(Player &aPlayer);
 
@@ -22,13 +22,13 @@ public:
 
 private:
 
-	Room *myRooms[21][21];
+	Room myRooms[21][21];
 
-	void Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCount);
+	void Generate(Room &aPreviousRoom, Door &aPreviousDoor, uint16_t &aRoomCount);
 
 	uint16_t myRoomMax;
 
-	Room& myCurrentRoom;
+	Room* myCurrentRoom;
 
 	Door GetRandomDoor();
 };

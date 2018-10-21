@@ -3,7 +3,7 @@
 
 #include "pch.h"
 
-class Enemy;
+#include "Enemy.h"
 class Player;
 
 enum Door
@@ -49,7 +49,7 @@ private:
 
 	bool myIsTrueRoom, myIsCurrentRoom;
 
-	std::vector<Enemy>* myEnemies;
+	std::vector<Enemy> myEnemies;
 };
 
 #endif

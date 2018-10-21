@@ -4,7 +4,7 @@
 #include "pch.h"
 
 class Player;
-class DungeonManager;
+#include "Dungeon.h"
 
 enum EGameState
 {
@@ -29,7 +29,7 @@ public:
 private:
 	EGameState myGameState;
 
-	DungeonManager* myDM;
+	Dungeon myDungeon;
 
 	Player* myPlayer;
 };

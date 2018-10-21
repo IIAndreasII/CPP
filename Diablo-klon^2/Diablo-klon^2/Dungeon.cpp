@@ -4,60 +4,54 @@
 #include "Player.h"
 #include <thread>
 
-Dungeon::Dungeon() : myRoomMax(10), myCurrentRoom(*myRooms[10][10]), myRooms()
+Dungeon::Dungeon() : myRoomMax(10), myCurrentRoom(&myRooms[10][10]), myRooms()
 {
 	Door tempDoorToAdd = GetRandomDoor();
 	for (size_t i = 0; i < 2; i++)
 	{
-		while (std::find(myRooms[10][10]->GetDoors().begin(), myRooms[10][10]->GetDoors().end(), tempDoorToAdd) != myRooms[10][10]->GetDoors().end())
+		while (std::find(myRooms[10][10].GetDoors().begin(), myRooms[10][10].GetDoors().end(), tempDoorToAdd) != myRooms[10][10].GetDoors().end())
 		{
 			tempDoorToAdd = GetRandomDoor();
 		}
 
-		myRooms[10][10]->AddDoor(tempDoorToAdd);
+		myRooms[10][10].AddDoor(tempDoorToAdd);
 	}
 
-	myRooms[10][10]->SetPos(10, 10);
-	myRooms[10][10]->SetIsCurrentRoom(true);
-	myRooms[10][10]->SetIsTrueRoom(true);
+	myRooms[10][10].SetPos(10, 10);
+	myRooms[10][10].SetIsCurrentRoom(true);
+	myRooms[10][10].SetIsTrueRoom(true);
 
-	for (Door tempDoor : myRooms[10][10]->GetDoors())
+	for (Door tempDoor : myRooms[10][10].GetDoors())
 	{
-		Generate(*myRooms[10][10], tempDoor, myRoomMax);
+		Generate(myRooms[10][10], tempDoor, myRoomMax);
 	}
 
-	myCurrentRoom = *myRooms[10][10];
+	myCurrentRoom = &myRooms[10][10];
 }
 
-Dungeon::Dungeon(uint16_t aRoomMax) : myRoomMax(aRoomMax), myCurrentRoom(*myRooms[10][10]), myRooms()
+Dungeon::Dungeon(uint16_t aRoomMax) : myRoomMax(aRoomMax), myCurrentRoom(&myRooms[10][10]), myRooms()
 {
 	Door tempDoorToAdd = GetRandomDoor();
 	for (size_t i = 0; i < 2; i++)
 	{
-		while (std::find(myRooms[10][10]->GetDoors().begin(), myRooms[10][10]->GetDoors().end(), tempDoorToAdd) != myRooms[10][10]->GetDoors().end())
+		while (std::find(myRooms[10][10].GetDoors().begin(), myRooms[10][10].GetDoors().end(), tempDoorToAdd) != myRooms[10][10].GetDoors().end())
 		{
 			tempDoorToAdd = GetRandomDoor();
 		}
-		myRooms[10][10]->AddDoor(tempDoorToAdd);
+		myRooms[10][10].AddDoor(tempDoorToAdd);
 	}
 
-	for (Door tempDoor : myRooms[10][10]->GetDoors())
+	for (Door tempDoor : myRooms[10][10].GetDoors())
 	{
-		Generate(*myRooms[10][10], tempDoor, myRoomMax);
+		Generate(myRooms[10][10], tempDoor, myRoomMax);
 	}
 
-	myCurrentRoom = *myRooms[10][10];
+	myCurrentRoom = &myRooms[10][10];
 }
 
 Dungeon::~Dungeon()
 {
-	for (size_t i = 0; i < 21; i++)
-	{
-		for (size_t j = 0; j < 21; j++)
-		{
-			SafeDelete(myRooms[i][j]);
-		}
-	}
+	//SafeDelete(myCurrentRoom);
 }
 
 void Dungeon::ViewMap()
@@ -71,9 +65,9 @@ void Dungeon::ViewMap()
 		{
 			char tempCharToAdd;
 
-			if (myRooms[i][j]->GetIsTrueRoom())
+			if (myRooms[i][j].GetIsTrueRoom())
 			{
-				if (myRooms[i][j]->GetIsCurrentRoom())
+				if (myRooms[i][j].GetIsCurrentRoom())
 				{
 					tempCharToAdd = 'X';
 				}
@@ -111,11 +105,11 @@ void Dungeon::ViewMap()
 	}
 }
 
-void Dungeon::Navigate()
+bool Dungeon::Navigate(Player &aPlayer)
 {
-	std::string tempRows[4];
+	std::string tempRows[5];
 
-	for (Door tempDoor : myCurrentRoom.GetDoors())
+	for (Door tempDoor : myCurrentRoom->GetDoors())
 	{
 		switch (tempDoor)
 		{
@@ -134,15 +128,19 @@ void Dungeon::Navigate()
 		}
 	}
 
+	tempRows[4] = "[5] Exit dungeon";
+
 	bool tempLoop = true;
-	int tempX = myCurrentRoom.GetXPos();
-	int tempY = myCurrentRoom.GetYPos();
+	bool tempWantToExit = false;
+	int tempX = myCurrentRoom->GetXPos();
+	int tempY = myCurrentRoom->GetYPos();
 
 	while (tempLoop)
 	{
 		CLSSlow();
+		aPlayer.PrintUI();
 		Print("__| Doors |__");
-		for (size_t i = 0; i < 4; i++)
+		for (size_t i = 0; i < 5; i++)
 		{
 			Print(tempRows[i]);
 		}
@@ -150,44 +148,62 @@ void Dungeon::Navigate()
 		switch (GetInput())
 		{
 		case 1:
-			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::NORTH) != myCurrentRoom.GetDoors().end())
+			if (std::find(myCurrentRoom->GetDoors().begin(), myCurrentRoom->GetDoors().end(), Door::NORTH) != myCurrentRoom->GetDoors().end())
 			{
 				tempY -= 1;
 				tempLoop = false;
 			}
 			break;
 		case 2:
-			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::EAST) != myCurrentRoom.GetDoors().end())
+			if (std::find(myCurrentRoom->GetDoors().begin(), myCurrentRoom->GetDoors().end(), Door::EAST) != myCurrentRoom->GetDoors().end())
 			{
 				tempX += 1;
 				tempLoop = false;
 			}
 			break;
 		case 3:
-			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::SOUTH) != myCurrentRoom.GetDoors().end())
+			if (std::find(myCurrentRoom->GetDoors().begin(), myCurrentRoom->GetDoors().end(), Door::SOUTH) != myCurrentRoom->GetDoors().end())
 			{
 				tempY += 1;
 				tempLoop = false;
 			}
 			break;
 		case 4:
-			if (std::find(myCurrentRoom.GetDoors().begin(), myCurrentRoom.GetDoors().end(), Door::WEST) != myCurrentRoom.GetDoors().end())
+			if (std::find(myCurrentRoom->GetDoors().begin(), myCurrentRoom->GetDoors().end(), Door::WEST) != myCurrentRoom->GetDoors().end())
 			{
 				tempX -= 1;
 				tempLoop = false;
 			}
 			break;
+		case 5:
+			tempLoop = false;
+			tempWantToExit = true;
 		}
 	}
-	myCurrentRoom = *myRooms[tempX][tempY];
+	if (!tempWantToExit)
+	{
+		myCurrentRoom->SetIsCurrentRoom(false);
+		myCurrentRoom = &myRooms[tempX][tempY];
+		myCurrentRoom->SetIsCurrentRoom(true);
+		myCurrentRoom->Enter(aPlayer);
+	}
+
+	return !tempWantToExit;
 }
 
 void Dungeon::Enter(Player &aPlayer)
 {
 	CLSSlow();
+	aPlayer.PrintUI();
 	Print("You enter the nearest dungeon");
 	std::this_thread::sleep_for(std::chrono::seconds(2));
-	myCurrentRoom.Enter(aPlayer);
+
+	bool tempLoop = true;
+	myCurrentRoom->Enter(aPlayer);
+	while (tempLoop)
+	{
+		tempLoop = Navigate(aPlayer);
+	}
 
 	// TODO: Finish this
 }
@@ -197,7 +213,7 @@ uint16_t & Dungeon::GetNrDoors()
 	return myRoomMax;
 }
 
-void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCount)
+void Dungeon::Generate(Room &aPreviousRoom, Door &aPreviousDoor, uint16_t &aRoomCount)
 {
 	if (aRoomCount <= 0)
 	{
@@ -236,11 +252,11 @@ void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCo
 			break;
 		}
 
-		if (!myRooms[tempX][tempY]->GetIsTrueRoom())
+		//if (!myRooms[tempX][tempY].GetIsTrueRoom())
 		{
-			myRooms[tempX][tempY]->AddDoor(tempDoorToAdd);
-			myRooms[tempX][tempY]->SetPos(tempX, tempY);
-			myRooms[tempX][tempY]->SetIsTrueRoom(true);
+			myRooms[tempX][tempY].AddDoor(tempDoorToAdd);
+			myRooms[tempX][tempY].SetPos(tempX, tempY);
+			myRooms[tempX][tempY].SetIsTrueRoom(true);
 		}
 		return;
 	}
@@ -266,33 +282,33 @@ void Dungeon::Generate(Room aPreviousRoom, Door aPreviousDoor, uint16_t &aRoomCo
 			tempPrevDoor = Door::EAST;
 			break;
 		}
-		if (!myRooms[tempX][tempY]->GetIsTrueRoom())
+		//if (!myRooms[tempX][tempY].GetIsTrueRoom())
 		{
-			myRooms[tempX][tempY]->AddDoor(tempPrevDoor);
-			myRooms[tempX][tempY]->SetPos(tempX, tempY);
-			myRooms[tempX][tempY]->SetIsTrueRoom(true);
+			myRooms[tempX][tempY].AddDoor(tempPrevDoor);
+			myRooms[tempX][tempY].SetPos(tempX, tempY);
+			myRooms[tempX][tempY].SetIsTrueRoom(true);
 		}
 
 		Door tempDoorToAdd = GetRandomDoor();
 		for (int i = 0; i < tempNumberOfDoors; i++)
 		{
-			if (myRooms[tempX][tempY]->GetDoors().size() < 4)
+			if (myRooms[tempX][tempY].GetDoors().size() < 4)
 			{
-				while (std::find(myRooms[tempX][tempY]->GetDoors().begin(), myRooms[tempX][tempY]->GetDoors().end(), tempDoorToAdd) != myRooms[tempX][tempY]->GetDoors().end())
+				while (std::find(myRooms[tempX][tempY].GetDoors().begin(), myRooms[tempX][tempY].GetDoors().end(), tempDoorToAdd) != myRooms[tempX][tempY].GetDoors().end())
 				{
 					tempDoorToAdd = GetRandomDoor();
 				}
 
-				myRooms[tempX][tempY]->AddDoor(tempDoorToAdd);
+				myRooms[tempX][tempY].AddDoor(tempDoorToAdd);
 			}
 		}
 
-		for (Door tempDoor : myRooms[tempX][tempY]->GetDoors())
+		for (Door tempDoor : myRooms[tempX][tempY].GetDoors())
 		{
 			if (tempPrevDoor != tempDoor)
 			{
 				aRoomCount -= 1;
-				Generate(*myRooms[tempX][tempY], tempDoor, aRoomCount);
+				Generate(myRooms[tempX][tempY], tempDoor, aRoomCount);
 			}
 		}
 		return;

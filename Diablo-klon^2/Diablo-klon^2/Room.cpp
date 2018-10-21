@@ -5,19 +5,29 @@
 #include "Player.h"
 #include <thread>
 
-Room::Room() : myIsTrueRoom(false), myIsCurrentRoom(false), myEnemies(new std::vector<Enemy>())
+Room::Room() : myDoors(), myIsTrueRoom(false), myIsCurrentRoom(false), myEnemies()
 {
 	int tempEnemies = RNG(0, 5);
+	for (size_t i = 0; i < tempEnemies; i++)
+	{
+		Enemy tempEnemy;
+		myEnemies.push_back(tempEnemy);
+	}
 }
 
-Room::Room(uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY), myIsTrueRoom(true), myIsCurrentRoom(false), myEnemies(new std::vector<Enemy>())
+Room::Room(uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY), myIsTrueRoom(true), myIsCurrentRoom(false), myEnemies()
 {
 	int tempEnemies = RNG(0, 5);
+	for (size_t i = 0; i < tempEnemies; i++)
+	{
+		Enemy tempEnemy;
+		myEnemies.push_back(tempEnemy);
+	}
 }
 
 Room::~Room()
 {
-	SafeDelete(myEnemies);
+	//SafeDelete(myEnemies);
 }
 
 void Room::AddDoor(const Door aDoor)
@@ -71,10 +81,11 @@ void Room::SetIsTrueRoom(bool aValue)
 
 void Room::Enter(Player & aPlayer)
 {
-	if (myEnemies->size() > 0)
+	CLSSlow();
+	aPlayer.PrintUI();
+	if (myEnemies.size() > 0)
 	{
-		aPlayer.PrintUI();
-		Print("You have encountered " + std::to_string(myEnemies->size()) + "enemies!");
+		Print("You have encountered " + std::to_string(myEnemies.size()) + "enemies!");
 		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
 		bool tempEnemiesAreAlive = true;
@@ -140,7 +151,7 @@ void Room::Enter(Player & aPlayer)
 							Print("__| Choose an enemy |__");
 							tempIt = 0;
 							std::vector<unsigned> tempIndexes;
-							for (Enemy tempEnemy : *myEnemies)
+							for (Enemy tempEnemy : myEnemies)
 							{
 								tempIt++;
 								if (tempEnemy.GetHealth() > 0)
@@ -154,12 +165,12 @@ void Room::Enter(Player & aPlayer)
 							while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
 							tempInput--; // Compensate
 
-							myEnemies->at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal);
+							myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal);
 							Print("The enemy takes " + std::to_string(tempDamageToDeal) + " damage");
 						}
 						else
 						{
-							for (Enemy tempEnemy : *myEnemies)
+							for (Enemy tempEnemy : myEnemies)
 							{
 								if (tempEnemy.GetHealth() > 0)
 								{

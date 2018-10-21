@@ -5,14 +5,14 @@
 #include "DungeonManager.h"
 #include "Dungeon.h"
 
-Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player())
+Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player()), myDungeon()
 {
 }
 
 Game::~Game()
 {
 	SafeDelete(myPlayer);
-	SafeDelete(myDM);
+	//SafeDelete(myDM);
 }
 
 int Game::Play()
@@ -67,7 +67,7 @@ void Game::GameMenu()
 		{
 		case 1:
 			//tempLoop = false;
-			myDM->GetDungeon().Enter(*myPlayer);
+			myDungeon.Enter(*myPlayer);
 			break;
 		case 2:
 			//tempLoop = false;

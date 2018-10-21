@@ -69,7 +69,7 @@ private:
 	unsigned myAttackMod;
 
 	std::vector<ECharmType>* myCharms;
-	std::vector<Item>* myItems;
+	std::vector<Item*>* myItems;
 	std::vector<EAttackTypes>* myAttackTypes;
 };
 
