@@ -22,6 +22,8 @@ public:
 	void SetIsEquipped(bool aValue);
 	bool& GetIsEquipped();
 
+	bool operator == (Item);
+
 private:
 
 	std::string myName;
@@ -33,6 +35,7 @@ private:
 
 	EItemType myItemType;
 	ERingType myRingType;
+
 };
 
 #endif

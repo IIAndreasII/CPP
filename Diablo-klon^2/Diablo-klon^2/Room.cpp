@@ -1,82 +1,30 @@
 #include "stdafx.h"
 #include "Room.h"
 #include "Util.h"
-#include "Enemy.h"
 #include "Player.h"
 #include <thread>
 
-Room::Room() : myDoors(), myIsTrueRoom(false), myIsCurrentRoom(false), myEnemies()
+Room::Room() : myEnemies()
 {
-	int tempEnemies = RNG(0, 5);
-	for (size_t i = 0; i < tempEnemies; i++)
-	{
-		Enemy tempEnemy;
-		myEnemies.push_back(tempEnemy);
-	}
 }
 
-Room::Room(uint8_t anX, uint8_t aY) : myDoors(), myX(anX), myY(aY), myIsTrueRoom(true), myIsCurrentRoom(false), myEnemies()
+Room::Room(int aLevel)
 {
-	int tempEnemies = RNG(0, 5);
+	int tempEnemies = RNG(0, 4);
 	for (size_t i = 0; i < tempEnemies; i++)
 	{
-		Enemy tempEnemy;
+		Enemy tempEnemy(aLevel);
 		myEnemies.push_back(tempEnemy);
 	}
 }
 
 Room::~Room()
 {
-	//SafeDelete(myEnemies);
 }
 
-void Room::AddDoor(const Door aDoor)
+void Room::SetEnemies(int & aLevel)
 {
-	if (!(std::find(myDoors.begin(), myDoors.end(), aDoor) != myDoors.end()))
-	{
-		myDoors.push_back(aDoor);
-	}
-}
-
-uint8_t & Room::GetXPos()
-{
-	return myX;
-}
-
-uint8_t & Room::GetYPos()
-{
-	return myY;
-}
-
-std::vector<Door>& Room::GetDoors()
-{
-	return myDoors;
-}
-
-bool & Room::GetIsTrueRoom()
-{
-	return myIsTrueRoom;
-}
-
-bool & Room::GetIsCurrentRoom()
-{
-	return myIsCurrentRoom;
-}
-
-void Room::SetIsCurrentRoom(bool aValue)
-{
-	myIsCurrentRoom = aValue;
-}
-
-void Room::SetPos(int X, int Y)
-{
-	myX = X;
-	myY = Y;
-}
-
-void Room::SetIsTrueRoom(bool aValue)
-{
-	myIsTrueRoom = aValue;
+	
 }
 
 void Room::Enter(Player & aPlayer)
@@ -85,7 +33,7 @@ void Room::Enter(Player & aPlayer)
 	aPlayer.PrintUI();
 	if (myEnemies.size() > 0)
 	{
-		Print("You have encountered " + std::to_string(myEnemies.size()) + "enemies!");
+		Print("You have encountered " + std::to_string(myEnemies.size()) + " enemies!");
 		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
 		bool tempEnemiesAreAlive = true;
@@ -93,7 +41,7 @@ void Room::Enter(Player & aPlayer)
 		{
 			CLSSlow();
 			aPlayer.PrintUI();
-			Print("__| Make a choice |__\n[1] Attack\n[2] Drink potion (Available: " + std::to_string(aPlayer.GetHPPotions()) + ")\n[3] Suicide (confuses the enemy)");
+			Print("__| Make a choice |__\n[1] Attack\n[2] Drink potion (Available: " + std::to_string(aPlayer.GetHPPotions()) + ")\n[3] Suicide (confuses the enemy and ends the game)");
 
 			bool tempLoop = true;
 			while (tempLoop)
@@ -149,15 +97,15 @@ void Room::Enter(Player & aPlayer)
 							CLSSlow();
 							aPlayer.PrintUI();
 							Print("__| Choose an enemy |__");
-							tempIt = 0;
 							std::vector<unsigned> tempIndexes;
-							for (Enemy tempEnemy : myEnemies)
-							{
-								tempIt++;
-								if (tempEnemy.GetHealth() > 0)
+							int tempIt = 0;
+							for (size_t i = 0; i < myEnemies.size(); i++)
+							{			
+								if (myEnemies.at(i).GetHealth() > 0)
 								{
-									tempIndexes.push_back(tempIt);
-									Print("[" + std::to_string(tempIt) + "] " + tempEnemy.GetName() + "[HP: " + std::to_string(tempEnemy.GetHealth()) + " Def: " + std::to_string(tempEnemy.GetArmour()) + "]");
+									tempIndexes.push_back(i);
+									tempIt++;
+									Print("[" + std::to_string(tempIt) + "] " + myEnemies.at(i).GetName() + "[HP: " + std::to_string(myEnemies.at(i).GetHealth()) + " Def: " + std::to_string(myEnemies.at(i).GetArmour()) + "]");
 								}
 							}
 
@@ -166,7 +114,7 @@ void Room::Enter(Player & aPlayer)
 							tempInput--; // Compensate
 
 							myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal);
-							Print("The enemy takes " + std::to_string(tempDamageToDeal) + " damage");
+							Print("The enemy takes " + std::to_string(tempDamageToDeal - myEnemies.at(tempIndexes.at(tempInput)).GetArmour()) + " damage");
 						}
 						else
 						{
@@ -179,25 +127,41 @@ void Room::Enter(Player & aPlayer)
 							}
 							Print("All enemies take " + std::to_string(tempDamageToDeal) + " damage");
 						}
-						std::this_thread::sleep_for(std::chrono::seconds(2));
+						std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
+						// TODO: Damage player
 
-						// TODO: Add damage enemy logic
-
-
+						tempLoop = false;
 					}
 				break;
 
 					case 3:
 					{
-						aPlayer.TakeDamage(aPlayer.GetHealth());
+						aPlayer.TakeDamage(aPlayer.GetHealth() + aPlayer.GetArmour());
 						CLSSlow();
 						aPlayer.PrintUI();
 						Print("You killed yourself and confused the enemy in doing so");
 						std::this_thread::sleep_for(std::chrono::seconds(3));
+						tempLoop = false;
 					}
 				}
 			}
+
+			tempEnemiesAreAlive = false;
+			for (Enemy tempEnemy : myEnemies)
+			{
+				if (tempEnemy.GetHealth() > 0)
+				{
+					tempEnemiesAreAlive = true;
+				}
+			}
+		}
+
+		if (!tempEnemiesAreAlive)
+		{
+			myEnemies.clear();
+
+			// TODO: Reward player
 		}
 	}
 	else

@@ -12,7 +12,6 @@ Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player()), myDungeon
 Game::~Game()
 {
 	SafeDelete(myPlayer);
-	//SafeDelete(myDM);
 }
 
 int Game::Play()

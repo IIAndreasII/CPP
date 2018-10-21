@@ -75,3 +75,12 @@ bool& Item::GetIsEquipped()
 {
 	return myIsEquipped;
 }
+
+bool Item::operator== (Item anItem)
+{
+	if (myName == anItem.GetName()) // Eller något motsvarande som kollar ifall dem är likadana
+	{
+		return true;
+	}
+	return false;
+}

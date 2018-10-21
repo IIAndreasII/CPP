@@ -24,8 +24,10 @@ public:
 	std::string CharmTypeToString(ECharmType &aCharmType);
 
 	void LevelUp();
+	int& GetLevel();
 
 	void TakeDamage(int& aDamageToTake);
+	void TakeDamage(int aDamageToTake);
 
 	void PrintUI();
 
@@ -46,10 +48,7 @@ private:
 	int myPhysDmg;
 	int mySpellDmg;
 
-	
-	int& tate;
-
-	unsigned myLevel;
+	int myLevel;
 	unsigned myEXP;
 	unsigned myEXPRequired;
 	unsigned myGold;

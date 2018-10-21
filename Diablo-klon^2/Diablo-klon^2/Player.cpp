@@ -4,8 +4,6 @@
 #include <thread>
 #include "Item.h"
 
-int stuff;
-
 Player::Player() : 
 	myItems(new std::vector<Item*>()), 
 	myAttackTypes(new std::vector<EAttackTypes>()), 
@@ -18,7 +16,7 @@ Player::Player() :
 	myGold(50), 
 	myHealthMax(100),
 	myHPPotions(0),
-	tate(stuff)
+	myLevel(1)
 {
 	/* Basic attack types */
 	myAttackTypes->push_back(EAttackTypes::SLASH);
@@ -174,7 +172,27 @@ void Player::LevelUp()
 	}
 }
 
+int & Player::GetLevel()
+{
+	return myLevel;
+}
+
 void Player::TakeDamage(int& aDamageToTake)
+{
+	int tempDamageTaken = aDamageToTake - GetArmour();
+	myHealth -= tempDamageTaken;
+	CLSSlow();
+	Print("You take " + std::to_string(tempDamageTaken) + " damage!");
+	std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+	if (myHealth <= 0)
+	{
+		CLSSlow();
+		Print("YOU DIED");
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+	}
+}
+
+void Player::TakeDamage(int aDamageToTake)
 {
 	int tempDamageTaken = aDamageToTake - GetArmour();
 	myHealth -= tempDamageTaken;

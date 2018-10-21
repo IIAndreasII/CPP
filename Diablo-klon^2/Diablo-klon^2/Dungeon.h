@@ -2,6 +2,7 @@
 #define DUNGEON_H
 
 #include "Room.h"
+#include "pch.h"
 
 class Player;
 
@@ -9,7 +10,8 @@ class Dungeon
 {
 public:
 	Dungeon();
-	Dungeon(uint16_t aMaxNumberOfRooms);
+	Dungeon(int aLevel);
+
 	~Dungeon();
 
 	void ViewMap();
@@ -18,19 +20,15 @@ public:
 
 	void Enter(Player &aPlayer);
 
-	uint16_t& GetNrDoors();
-
 private:
 
-	Room myRooms[21][21];
-
-	void Generate(Room &aPreviousRoom, Door &aPreviousDoor, uint16_t &aRoomCount);
+	std::vector<Room> myRooms;
 
 	uint16_t myRoomMax;
 
 	Room* myCurrentRoom;
 
-	Door GetRandomDoor();
+	size_t myCurrentRoomIndex;
 };
 
 #endif

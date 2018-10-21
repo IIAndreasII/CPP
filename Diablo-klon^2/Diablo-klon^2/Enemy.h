@@ -9,6 +9,7 @@ class Enemy
 {
 public:
 	Enemy();
+	Enemy(int aLevel);
 	~Enemy();
 
 	std::string& GetName();
