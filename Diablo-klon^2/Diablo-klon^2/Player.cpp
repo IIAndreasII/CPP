@@ -227,6 +227,33 @@ void Player::PrintUI()
 
 }
 
+void Player::Reset()
+{
+	myHealthMax = 100;
+	myHealth = myHealthMax;
+	myStrength = 0;
+	myIntelligence = 0;
+	myLevel = 1;
+	myEXP = 0;
+	myEXPRequired = 20;
+	myGold = 50;
+	myHPPotions = 0;
+
+	myItems->clear();
+	myAttackTypes->clear();
+
+	/* Basic attack types */
+	myAttackTypes->push_back(EAttackTypes::SLASH);
+	myAttackTypes->push_back(EAttackTypes::ICELANCE);
+
+	/* Add starting items */
+	myItems->push_back(new Item("Sharp thing", 10, EItemType::SWORD, true));
+	myItems->push_back(new Item("Wooden stick-thing", 10, EItemType::STAFF, true));
+	myItems->push_back(new Item("Flat thing", 10, EItemType::ARMOUR, true));
+	myItems->push_back(new Item("Round thing", 0, EItemType::RING, true));
+	myItems->push_back(new Item("Circular thing", 0, EItemType::RING, true));
+}
+
 int& Player::GetPhysDmg()
 {
 	myPhysDmg = myItems->at(mySword)->GetStat() + myStrength;

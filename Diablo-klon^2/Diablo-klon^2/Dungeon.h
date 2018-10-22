@@ -15,7 +15,8 @@ public:
 	~Dungeon();
 
 	void ViewMap();
-
+	
+	void Reset();
 	bool Navigate(Player &aPlayer);
 
 	void Enter(Player &aPlayer);

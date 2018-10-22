@@ -21,6 +21,8 @@ public:
 
 	int Play();
 
+	void Reset();
+
 	void MainMenu();
 	void GameMenu();
 

@@ -15,7 +15,7 @@ public:
 
 	void SetEnemies(int &aLevel);
 
-	void Enter(Player &aPlayer);
+	bool Enter(Player &aPlayer);
 
 private:
 

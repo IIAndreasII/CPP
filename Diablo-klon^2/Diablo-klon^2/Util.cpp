@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Util.h"
+#include <random>
 
 int RNG(int min, int max)
 {

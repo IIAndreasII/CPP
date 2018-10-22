@@ -72,6 +72,13 @@ void Dungeon::ViewMap()
 	}*/
 }
 
+void Dungeon::Reset()
+{
+	myRooms.clear();
+	Room tempRoom(1);
+	myRooms.push_back(tempRoom);
+}
+
 bool Dungeon::Navigate(Player &aPlayer)
 {
 	Room tempRoom(aPlayer.GetLevel());
@@ -148,8 +155,13 @@ void Dungeon::Enter(Player &aPlayer)
 	bool tempLoop = true;
 	while (tempLoop)
 	{
-		myRooms.at(myCurrentRoomIndex).Enter(aPlayer);
-		tempLoop = Navigate(aPlayer);
+		if (myRooms.at(myCurrentRoomIndex).Enter(aPlayer))
+		{
+			tempLoop = Navigate(aPlayer);
+		}
+		else
+		{
+			tempLoop = false;
+		}
 	}
 }
-

@@ -27,7 +27,7 @@ void Room::SetEnemies(int & aLevel)
 	
 }
 
-void Room::Enter(Player & aPlayer)
+bool Room::Enter(Player & aPlayer)
 {
 	CLSSlow();
 	aPlayer.PrintUI();
@@ -37,7 +37,7 @@ void Room::Enter(Player & aPlayer)
 		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
 		bool tempEnemiesAreAlive = true;
-		while (tempEnemiesAreAlive && aPlayer.GetHealth())
+		while (tempEnemiesAreAlive && aPlayer.GetHealth() > 1)
 		{
 			CLSSlow();
 			aPlayer.PrintUI();
@@ -157,6 +157,11 @@ void Room::Enter(Player & aPlayer)
 			}
 		}
 
+		if (aPlayer.GetHealth() <= 0)
+		{
+			return false;
+		}
+
 		if (!tempEnemiesAreAlive)
 		{
 			myEnemies.clear();
@@ -169,4 +174,5 @@ void Room::Enter(Player & aPlayer)
 		Print("There are no enemies here");
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
+	return true;
 }

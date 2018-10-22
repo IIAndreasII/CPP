@@ -31,6 +31,8 @@ public:
 
 	void PrintUI();
 
+	void Reset();
+
 	int& GetPhysDmg();
 	int& GetSpellDmg();
 	unsigned& GetHPPotions();

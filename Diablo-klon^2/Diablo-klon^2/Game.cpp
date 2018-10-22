@@ -37,8 +37,15 @@ int Game::Play()
 	return 0;
 }
 
+void Game::Reset()
+{
+	myPlayer->Reset();
+	myDungeon.Reset();
+}
+
 void Game::MainMenu()
 {
+	Reset();
 	CLSSlow();
 	Print("Diabloclone^2\n[1] Play\n[2] Quit");
 
@@ -59,6 +66,11 @@ void Game::GameMenu()
 	bool tempLoop = true;
 	while (tempLoop)
 	{
+		if (myPlayer->GetHealth() <= 0)
+		{
+			break;
+		}
+
 		CLSSlow();
 		myPlayer->PrintUI();
 		Print("____| Select |____\n[1] Enter Dungeon\n[2] Inventory\n[3] Long rest\n[4] Shop\n[5] Quit game");
