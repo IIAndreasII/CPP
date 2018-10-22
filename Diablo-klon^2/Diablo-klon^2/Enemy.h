@@ -15,7 +15,7 @@ public:
 	std::string& GetName();
 
 	int& GetHealth();
-	int& GetDamage();
+	int GetDamage() const;
 	unsigned& GetArmour();
 
 	void TakeDamage(int& aDamageToTake);

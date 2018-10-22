@@ -41,7 +41,7 @@ bool Room::Enter(Player & aPlayer)
 		{
 			CLSSlow();
 			aPlayer.PrintUI();
-			Print("__| Make a choice |__\n[1] Attack\n[2] Drink potion (Available: " + std::to_string(aPlayer.GetHPPotions()) + ")\n[3] Suicide (confuses the enemy and ends the game)");
+			Print("__| Make a choice |__\n[1] Attack\n[2] Drink estus flask (Available: " + std::to_string(aPlayer.GetHPPotions()) + ")\n[3] Suicide (confuses the enemy and ends the game)");
 
 			bool tempLoop = true;
 			while (tempLoop)
@@ -99,13 +99,13 @@ bool Room::Enter(Player & aPlayer)
 							Print("__| Choose an enemy |__");
 							std::vector<unsigned> tempIndexes;
 							int tempIt = 0;
-							for (size_t i = 0; i < myEnemies.size(); i++)
+							for (unsigned i = 0; i < myEnemies.size(); i++)
 							{			
 								if (myEnemies.at(i).GetHealth() > 0)
 								{
 									tempIndexes.push_back(i);
 									tempIt++;
-									Print("[" + std::to_string(tempIt) + "] " + myEnemies.at(i).GetName() + "[HP: " + std::to_string(myEnemies.at(i).GetHealth()) + " Def: " + std::to_string(myEnemies.at(i).GetArmour()) + "]");
+									Print("[" + std::to_string(tempIt) + "] " + myEnemies.at(i).GetName() + " [Health: " + std::to_string(myEnemies.at(i).GetHealth()) + " Armour: " + std::to_string(myEnemies.at(i).GetArmour()) + "]");
 								}
 							}
 
@@ -114,6 +114,9 @@ bool Room::Enter(Player & aPlayer)
 							tempInput--; // Compensate
 
 							myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal);
+
+							CLSSlow();
+							aPlayer.PrintUI();
 							Print("The enemy takes " + std::to_string(tempDamageToDeal - myEnemies.at(tempIndexes.at(tempInput)).GetArmour()) + " damage");
 						}
 						else
@@ -125,11 +128,21 @@ bool Room::Enter(Player & aPlayer)
 									tempEnemy.TakeDamage(tempDamageToDeal);
 								}
 							}
-							Print("All enemies take " + std::to_string(tempDamageToDeal) + " damage");
+							Print("All enemies take " + std::to_string(tempDamageToDeal) + " damage!");
 						}
-						std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+						std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
-						// TODO: Damage player
+						for (Enemy tempEnemy : myEnemies)
+						{
+							if (tempEnemy.GetHealth() > 0)
+							{
+								CLSSlow();
+								aPlayer.PrintUI();
+								Print("The enemy strikes!\n");
+								std::this_thread::sleep_for(std::chrono::seconds(1));
+								aPlayer.TakeDamage(tempEnemy.GetDamage());
+							}
+						}
 
 						tempLoop = false;
 					}
@@ -137,10 +150,12 @@ bool Room::Enter(Player & aPlayer)
 
 					case 3:
 					{
+						CLSSlow();
+						aPlayer.PrintUI();
 						aPlayer.TakeDamage(aPlayer.GetHealth() + aPlayer.GetArmour());
 						CLSSlow();
 						aPlayer.PrintUI();
-						Print("You killed yourself and confused the enemy in doing so");
+						Print("You killed yourself and confused the enemy in doing so.");
 						std::this_thread::sleep_for(std::chrono::seconds(3));
 						tempLoop = false;
 					}
@@ -164,9 +179,41 @@ bool Room::Enter(Player & aPlayer)
 
 		if (!tempEnemiesAreAlive)
 		{
-			myEnemies.clear();
+			CLSSlow();
+			aPlayer.PrintUI();
+			Print("All enemies defeated!");
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 
-			// TODO: Reward player
+			int tempXP = static_cast<int>(myEnemies.size()) * 5 * aPlayer.GetLevel();
+			CLSSlow();
+			aPlayer.PrintUI();
+			Print(std::to_string(tempXP) + " experience gained!");
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			aPlayer.AddExp(tempXP);
+
+			for (size_t i = 0; i < myEnemies.size(); i++)
+			{
+				int tempGold = RNG(0, 10) * 5;
+				if (tempGold != 0)
+				{
+					aPlayer.AddGold(tempGold);
+					CLSSlow();
+					aPlayer.PrintUI();
+					Print("You found " + std::to_string(tempGold) + " on one of the corpses!");
+					std::this_thread::sleep_for(std::chrono::seconds(1));
+				}
+			}
+
+			if (RNG(0, 10) > 9)
+			{
+				aPlayer.AddRandomItem();
+				CLSSlow();
+				aPlayer.PrintUI();
+				Print("You have found an item!");
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+
+			myEnemies.clear();
 		}
 	}
 	else

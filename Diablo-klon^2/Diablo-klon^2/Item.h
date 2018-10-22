@@ -13,28 +13,34 @@ public:
 	Item(std::string aName, int aStat, EItemType anItemType, bool isEquipped);
 	~Item();
 
-	std::string& GetName();
-	EItemType& GetItemType();
-	std::string GetRingType();
-	unsigned& GetLevel();
+	std::string GetName() const;
+	std::string GetRingTypeToString() const;
+	
+	EItemType GetItemType() const;
+	ERingType GetRingType() const;
+	
 	int& GetStat();
-
-	void SetIsEquipped(bool aValue);
+	unsigned& GetLevel();
 	bool& GetIsEquipped();
 
-	bool operator == (Item);
+	void SetIsEquipped(bool aValue);
+
+	void Combine(Item &anItem);
 
 private:
 
 	std::string myName;
 
-	unsigned myLevel;
 	int myStat;
+	
+	unsigned myLevel;
 
 	bool myIsEquipped;
 
 	EItemType myItemType;
 	ERingType myRingType;
+
+	std::string ItemTypeToString(EItemType &aType);
 
 };
 

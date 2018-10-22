@@ -1,58 +1,120 @@
 #include "stdafx.h"
 #include "Item.h"
+#include "Util.h"
 
-Item::Item() : myLevel(), myIsEquipped(false)
+Item::Item() : myLevel(1), myIsEquipped(false)
 {
 }
 
 Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 {
+	myStat = RNG(1, 5) * aLevel;
+	switch (RNG(0, 3))
+	{
+	case 0:
+		myItemType = EItemType::SWORD;
+		break;
+	case 1:
+		myItemType = EItemType::STAFF;
+		break;
+	case 2:
+		myItemType = EItemType::ARMOUR;
+		break;
+	case 3:
+		myItemType = EItemType::RING;
+		
+		switch (RNG(0, 3))
+		{
+		case 0:
+			myRingType = ERingType::DEFENCE;
+			break;
+		case 1:
+			myRingType = ERingType::INTELLIGENCE;
+			break;
+		case 2:
+			myRingType = ERingType::STRENGTH;
+			break;
+		case 3:
+			myRingType = ERingType::VITALITY;
+		}
+
+		break;
+	}
+
+	std::vector<std::string> tempNames = {"of silliness", " of stupidity", " of peanutbutter", " of Neverwinter", " of Waterdeep", " of evil", " of Korn", " of Thor", " of jelly"};
+	myName = ItemTypeToString(myItemType) + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
 }
 
-Item::Item(std::string aName, int aStat, EItemType anItemType) : myName(aName), myStat(aStat), myItemType(anItemType)
+Item::Item(std::string aName, int aStat, EItemType anItemType) : myName(aName), myStat(aStat), myItemType(anItemType), myLevel(1)
 {
 }
 
-Item::Item(std::string aName, int aStat, EItemType anItemType, bool isEquipped) : myName(aName), myStat(aStat), myItemType(anItemType), myIsEquipped(isEquipped)
+Item::Item(std::string aName, int aStat, EItemType anItemType, bool isEquipped) : myName(aName), myStat(aStat), myItemType(anItemType), myIsEquipped(isEquipped), myLevel(1)
 {
+	if (myItemType == EItemType::RING)
+	{
+		switch (RNG(0, 3))
+		{
+		case 0:
+			myRingType = ERingType::DEFENCE;
+			break;
+		case 1:
+			myRingType = ERingType::INTELLIGENCE;
+			break;
+		case 2:
+			myRingType = ERingType::STRENGTH;
+			break;
+		case 3:
+			myRingType = ERingType::VITALITY;
+			break;
+		}
+	}
+	else
+	{
+		myRingType = ERingType::NOT_A_RING;
+	}
 }
 
 Item::~Item()
 {
 }
 
-std::string & Item::GetName()
+std::string Item::GetName() const
 {
 	return myName;
 }
 
-EItemType & Item::GetItemType()
+EItemType Item::GetItemType() const
 {
 	return myItemType;
 }
 
-std::string Item::GetRingType()
+ERingType Item::GetRingType() const
+{
+	return myRingType;
+}
+
+std::string Item::GetRingTypeToString() const
 {
 	std::string tempReturnValue;
 	switch (myRingType)
 	{
 	case ERingType::NOT_A_RING:
-		tempReturnValue = "";
+		tempReturnValue = "ERROR";
 		break;
 	case ERingType::DEFENCE:
-		tempReturnValue = "Defence ";
+		tempReturnValue = "Defence";
 		break;
 	case ERingType::INTELLIGENCE:
-		tempReturnValue = "Intelligence ";
+		tempReturnValue = "Intelligence";
 		break;
 	case ERingType::STRENGTH:
-		tempReturnValue = "Strength ";
+		tempReturnValue = "Strength";
 		break;
 	case ERingType::VITALITY:
-		tempReturnValue = "Vitality ";
+		tempReturnValue = "Vitality";
 		break;
 	}
-	tempReturnValue += std::to_string(myLevel);
 	return tempReturnValue;
 }
 
@@ -71,16 +133,31 @@ void Item::SetIsEquipped(bool aValue)
 	myIsEquipped = aValue;
 }
 
+void Item::Combine(Item & anItem)
+{
+	myName = "Combined " + myName;
+	myStat += anItem.GetStat();
+	myLevel += 1;
+}
+
 bool& Item::GetIsEquipped()
 {
 	return myIsEquipped;
 }
 
-bool Item::operator== (Item anItem)
+
+std::string Item::ItemTypeToString(EItemType & aType)
 {
-	if (myName == anItem.GetName()) // Eller något motsvarande som kollar ifall dem är likadana
+	switch (aType)
 	{
-		return true;
+	case EItemType::SWORD:
+		return "Sword";
+	case EItemType::STAFF:
+		return "Staff";
+	case EItemType::ARMOUR:
+		return "Armour";
+	case EItemType::RING:
+		return "Ring";
 	}
-	return false;
+	return std::string();
 }

@@ -15,7 +15,7 @@ Player::Player() :
 	myRingLeft(4), 
 	myGold(50), 
 	myHealthMax(100),
-	myHPPotions(0),
+	myHPPotions(5),
 	myLevel(1)
 {
 	/* Basic attack types */
@@ -23,9 +23,9 @@ Player::Player() :
 	myAttackTypes->push_back(EAttackTypes::ICELANCE);
 
 	/* Add starting items */
-	myItems->push_back(new Item("Sharp thing", 10, EItemType::SWORD, true));
-	myItems->push_back(new Item("Wooden stick-thing", 10, EItemType::STAFF, true));
-	myItems->push_back(new Item("Flat thing", 10, EItemType::ARMOUR, true));
+	myItems->push_back(new Item("Sharp thing", 15, EItemType::SWORD, true));
+	myItems->push_back(new Item("Wooden stick-thing", 15, EItemType::STAFF, true));
+	myItems->push_back(new Item("Flat thing", 2, EItemType::ARMOUR, true));
 	myItems->push_back(new Item("Round thing", 0, EItemType::RING, true));
 	myItems->push_back(new Item("Circular thing", 0, EItemType::RING, true));
 
@@ -60,14 +60,14 @@ void Player::ShowInventory()
 		CLSSlow();
 		PrintUI();
 		Print("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Health Potions: " + std::to_string(myHPPotions) +
-			"\n\n___| Equipment |___\n[1] Sword: " + myItems->at(mySword)->GetName() + " [Atk: " + std::to_string(myItems->at(mySword)->GetStat()) +
-			"]\n[2] Staff: " + myItems->at(myStaff)->GetName() + " [Atk: " + std::to_string(myItems->at(myStaff)->GetStat()) +
-			"]\n[3] Armour: " + myItems->at(myArmour)->GetName() + " [Def: " + std::to_string(GetArmour()) +
-			"]\n[4] Righthand Ring: " + myItems->at(myRingRight)->GetName() + " [" + myItems->at(myRingRight)->GetRingType() + ": " + std::to_string(myItems->at(myRingRight)->GetStat()) +
-			"]\n[5] Lefthand Ring: " + myItems->at(myRingLeft)->GetName() + " [" + myItems->at(myRingLeft)->GetRingType() + ": " + std::to_string(myItems->at(myRingRight)->GetStat()) +
+			"\n\n___| Equipment |___\n[1] Sword: " + myItems->at(mySword)->GetName() + " [Attack: " + std::to_string(myItems->at(mySword)->GetStat()) + "  Level: " + std::to_string(myItems->at(mySword)->GetLevel()) + 
+			"]\n[2] Staff: " + myItems->at(myStaff)->GetName() + " [Attack: " + std::to_string(myItems->at(myStaff)->GetStat()) + "  Level: " + std::to_string(myItems->at(myStaff)->GetLevel()) + 
+			"]\n[3] Armour: " + myItems->at(myArmour)->GetName() + " [Defence: " + std::to_string(GetArmour()) + "  Level: " + std::to_string(myItems->at(mySword)->GetLevel()) + 
+			"]\n[4] R Ring: " + myItems->at(myRingRight)->GetName() + " [" + myItems->at(myRingRight)->GetRingTypeToString() + "  Stat: " + std::to_string(myItems->at(myRingRight)->GetStat()) + "  Level: " + std::to_string(myItems->at(myRingRight)->GetLevel()) +
+			"]\n[5] L Ring: " + myItems->at(myRingLeft)->GetName() + " [" + myItems->at(myRingLeft)->GetRingTypeToString() + " Stat: " + std::to_string(myItems->at(myRingLeft)->GetStat()) + "  Level: " + std::to_string(myItems->at(myRingRight)->GetLevel()) +
 			"]\n[6] Back");
 
-		EItemType tempItemType;
+		EItemType tempItemType = EItemType::SWORD;
 		bool tempIsRight = true;
 		switch (GetInput())
 		{
@@ -159,20 +159,40 @@ std::string Player::CharmTypeToString(ECharmType &aCharmType)
 	return std::string();
 }
 
-void Player::LevelUp()
+void Player::AddGold(int someGold)
 {
+	myGold += someGold;
+}
+
+void Player::AddExp(int someExp)
+{
+	myEXP += someExp;
 	if (myEXP >= myEXPRequired)
 	{
 		myEXP -= myEXPRequired;
 		myLevel += 1;
 		myHealthMax += 10;
+		myHealth = myHealthMax;
 		myEXPRequired *= 2;
-		myStrength += 2;
-		myIntelligence += 2;
+		myStrength += 5;
+		myIntelligence += 5;
+		
+		CLSSlow();
+		PrintUI();
+		Print("Level up!");
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		if (myLevel == 5 || myLevel == 10)
+		{
+			CLSSlow();
+			PrintUI();
+			Print("New attacktypes available in the shop!");
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+		}
 	}
 }
 
-int & Player::GetLevel()
+unsigned Player::GetLevel() const
 {
 	return myLevel;
 }
@@ -181,13 +201,13 @@ void Player::TakeDamage(int& aDamageToTake)
 {
 	int tempDamageTaken = aDamageToTake - GetArmour();
 	myHealth -= tempDamageTaken;
-	CLSSlow();
 	Print("You take " + std::to_string(tempDamageTaken) + " damage!");
 	std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 	if (myHealth <= 0)
 	{
 		CLSSlow();
-		Print("YOU DIED");
+		PrintUI();
+		Print("YOU DIED!");
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 	}
 }
@@ -195,13 +215,18 @@ void Player::TakeDamage(int& aDamageToTake)
 void Player::TakeDamage(int aDamageToTake)
 {
 	int tempDamageTaken = aDamageToTake - GetArmour();
+	if (tempDamageTaken < 0)
+	{
+		tempDamageTaken = 0;
+	}
 	myHealth -= tempDamageTaken;
-	CLSSlow();
+	
 	Print("You take " + std::to_string(tempDamageTaken) + " damage!");
 	std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 	if (myHealth <= 0)
 	{
 		CLSSlow();
+		PrintUI();
 		Print("YOU DIED");
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 	}
@@ -237,7 +262,7 @@ void Player::Reset()
 	myEXP = 0;
 	myEXPRequired = 20;
 	myGold = 50;
-	myHPPotions = 0;
+	myHPPotions = 5;
 
 	myItems->clear();
 	myAttackTypes->clear();
@@ -247,11 +272,14 @@ void Player::Reset()
 	myAttackTypes->push_back(EAttackTypes::ICELANCE);
 
 	/* Add starting items */
-	myItems->push_back(new Item("Sharp thing", 10, EItemType::SWORD, true));
-	myItems->push_back(new Item("Wooden stick-thing", 10, EItemType::STAFF, true));
-	myItems->push_back(new Item("Flat thing", 10, EItemType::ARMOUR, true));
+	myItems->push_back(new Item("Sharp thing", 15, EItemType::SWORD, true));
+	myItems->push_back(new Item("Wooden stick-thing", 15, EItemType::STAFF, true));
+	myItems->push_back(new Item("Flat thing", 2, EItemType::ARMOUR, true));
 	myItems->push_back(new Item("Round thing", 0, EItemType::RING, true));
 	myItems->push_back(new Item("Circular thing", 0, EItemType::RING, true));
+
+	/* Test dummy */
+	myItems->push_back(new Item("Sharp potato", 10, EItemType::SWORD, false));
 }
 
 int& Player::GetPhysDmg()
@@ -273,11 +301,16 @@ unsigned & Player::GetHPPotions()
 
 void Player::DrinkPotion()
 {
-	myHealth += myHealthMax / 3;
+	myHealth += myHealthMax / 2;
 	if (myHealth > myHealthMax)
 	{
 		myHealth = myHealthMax;
 	}
+}
+
+void Player::AddRandomItem()
+{
+	myItems->push_back(new Item(myLevel));
 }
 
 void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
@@ -308,7 +341,7 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 
 		while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
 
-		Print("[1] Equip [2] Cancel");
+		Print("[1] Equip  [2] Throw away  [3] Combine w/ equipped (" + std::to_string(50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel()) + " gold) [4] Cancel");
 
 		while (GetInput(tempConfirmInput) > 2 && tempConfirmInput == 0);
 
@@ -348,6 +381,41 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 				break;
 			}
 			break;
+		case 2:
+			myItems->erase(myItems->begin() + (tempIndexes.at(tempInput - 1)));
+			break;
+		case 3:
+			if (myGold - 50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel() >= 0)
+			{
+				myGold -= 50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel();
+				switch (anItemType)
+				{
+				case EItemType::SWORD:
+					myItems->at(mySword)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
+					break;
+				case EItemType::STAFF:
+					myItems->at(myStaff)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
+					break;
+				case EItemType::ARMOUR:
+					myItems->at(myArmour)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
+					break;
+				case EItemType::RING:
+					if (isRight)
+					{
+						myItems->at(myRingRight)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+						myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
+					}
+					else
+					{
+						myItems->at(myRingLeft)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+						myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
+					}
+					break;
+				}
+			}
 		}
 	}
 }

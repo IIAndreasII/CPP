@@ -23,8 +23,9 @@ public:
 	std::string AtkTypeToString(EAttackTypes &anAtkType);
 	std::string CharmTypeToString(ECharmType &aCharmType);
 
-	void LevelUp();
-	int& GetLevel();
+	void AddGold(int someGold);
+	void AddExp(int someExp);
+	unsigned GetLevel() const;
 
 	void TakeDamage(int& aDamageToTake);
 	void TakeDamage(int aDamageToTake);
@@ -38,6 +39,8 @@ public:
 	unsigned& GetHPPotions();
 	void DrinkPotion();
 
+	void AddRandomItem();
+
 private:
 
 	void ChangeEquipment(EItemType anItemType, bool &isRight);
@@ -50,10 +53,10 @@ private:
 	int myPhysDmg;
 	int mySpellDmg;
 
-	int myLevel;
-	unsigned myEXP;
-	unsigned myEXPRequired;
-	unsigned myGold;
+	unsigned myLevel;
+	int myEXP;
+	int myEXPRequired;
+	int myGold;
 	unsigned myHPPotions;
 
 	unsigned mySpellArmour;
