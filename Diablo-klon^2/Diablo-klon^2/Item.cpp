@@ -8,7 +8,7 @@ Item::Item() : myLevel(1), myIsEquipped(false)
 
 Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 {
-	myStat = RNG(1, 5) * aLevel;
+	myStat = RNG(5, 10) * aLevel;
 	switch (RNG(0, 3))
 	{
 	case 0:
@@ -118,7 +118,7 @@ std::string Item::GetRingTypeToString() const
 	return tempReturnValue;
 }
 
-unsigned& Item::GetLevel()
+uint16_t& Item::GetLevel()
 {
 	return myLevel;
 }

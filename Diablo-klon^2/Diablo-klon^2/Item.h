@@ -20,7 +20,7 @@ public:
 	ERingType GetRingType() const;
 	
 	int& GetStat();
-	unsigned& GetLevel();
+	uint16_t& GetLevel();
 	bool& GetIsEquipped();
 
 	void SetIsEquipped(bool aValue);
@@ -33,7 +33,9 @@ private:
 
 	int myStat;
 	
-	unsigned myLevel;
+	uint16_t myLevel;
+
+	
 
 	bool myIsEquipped;
 

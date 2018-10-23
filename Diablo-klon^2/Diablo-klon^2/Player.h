@@ -41,6 +41,8 @@ public:
 
 	void AddRandomItem();
 
+	void SetIntel(const int someIntel);
+
 private:
 
 	void ChangeEquipment(EItemType anItemType, bool &isRight);

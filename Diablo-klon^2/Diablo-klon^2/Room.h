@@ -13,8 +13,6 @@ public:
 	Room(int aLevel);
 	~Room();
 
-	void SetEnemies(int &aLevel);
-
 	bool Enter(Player &aPlayer);
 
 private:

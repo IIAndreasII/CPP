@@ -234,7 +234,7 @@ void Player::TakeDamage(int aDamageToTake)
 
 void Player::PrintUI()
 {
-	std::string tempStringToPrint = "Health: " + std::to_string(myHealth) + "  Armour: " + std::to_string(GetArmour()) + "  Strength: +" + std::to_string(myStrength) + "  Intelligence: +" + std::to_string(myIntelligence) + " |";
+	std::string tempStringToPrint = "Health: " + std::to_string(myHealth) + "  Armour: " + std::to_string(GetArmour()) + "  Strength: " + std::to_string(myStrength) + "  Intelligence: " + std::to_string(myIntelligence) + " |";
 	std::string tempUnderline;
 
 	for (size_t i = 0; i < tempStringToPrint.size(); i++)
@@ -261,7 +261,7 @@ void Player::Reset()
 	myLevel = 1;
 	myEXP = 0;
 	myEXPRequired = 20;
-	myGold = 50;
+	myGold = 10;
 	myHPPotions = 5;
 
 	myItems->clear();
@@ -301,16 +301,29 @@ unsigned & Player::GetHPPotions()
 
 void Player::DrinkPotion()
 {
+	myHPPotions--;
 	myHealth += myHealthMax / 2;
 	if (myHealth > myHealthMax)
 	{
 		myHealth = myHealthMax;
 	}
+
+	CLSSlow();
+	PrintUI();
+	Print("You drink an estus flask!\n");
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	Print("Health restored!");
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 void Player::AddRandomItem()
 {
 	myItems->push_back(new Item(myLevel));
+}
+
+void Player::SetIntel(const int someIntel)
+{
+	myIntelligence = someIntel;
 }
 
 void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
@@ -326,13 +339,14 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 		{
 			tempIt++;
 			tempIndexes.push_back(i);
-			Print("[" + std::to_string(tempIt) + "] " + myItems->at(i)->GetName() + " [Lvl: " + std::to_string(myItems->at(i)->GetLevel()) + " Stat: " + std::to_string(myItems->at(i)->GetStat()) + "]");
+			Print("[" + std::to_string(tempIt) + "] " + myItems->at(i)->GetName() + " [Level: " + std::to_string(myItems->at(i)->GetLevel()) + " Stat: " + std::to_string(myItems->at(i)->GetStat()) + "]");
 		}
 	}
 
 	if (tempIndexes.size() == 0)
 	{
 		Print("No available items");
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 	else
 	{
@@ -385,9 +399,10 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 			myItems->erase(myItems->begin() + (tempIndexes.at(tempInput - 1)));
 			break;
 		case 3:
-			if (myGold - 50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel() >= 0)
+			int tempAmountToSubtract = 50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel();
+			if (myGold - tempAmountToSubtract >= 0)
 			{
-				myGold -= 50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel();
+				myGold -= tempAmountToSubtract;
 				switch (anItemType)
 				{
 				case EItemType::SWORD:

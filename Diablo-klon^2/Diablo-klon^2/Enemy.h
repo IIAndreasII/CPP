@@ -18,6 +18,8 @@ public:
 	int GetDamage() const;
 	unsigned& GetArmour();
 
+	bool GetCanTakePhysDmg() const;
+
 	void TakeDamage(int& aDamageToTake);
 
 private:
@@ -26,6 +28,8 @@ private:
 
 	int myHealth;
 	int myDamage;
+
+	bool myCanTakePhysDmg;
 
 	unsigned myArmour;
 };
