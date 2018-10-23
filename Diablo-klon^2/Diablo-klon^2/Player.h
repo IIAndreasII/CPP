@@ -12,23 +12,23 @@ public:
 	Player();
 	~Player();
 
-	int& GetHealth();
-	int& GetArmour();
+	int GetHealth() const;
+	int GetArmour() const;
+	int GetSpellArmour() const;
 
 	void ShowInventory();
 	void LongRest();
 
-	void AddAttackType(EAttackTypes anAttack);
-	std::vector<EAttackTypes>& GetAttackTypes();
-	std::string AtkTypeToString(EAttackTypes &anAtkType);
-	std::string CharmTypeToString(ECharmType &aCharmType);
+	void AddAttackType(EAttackType anAttack);
+	std::vector<EAttackType>& GetAttackTypes();
+	std::string AtkTypeToString(EAttackType &anAtkType);
 
 	void AddGold(int someGold);
 	void AddExp(int someExp);
 	unsigned GetLevel() const;
 
 	void TakeDamage(int& aDamageToTake);
-	void TakeDamage(int aDamageToTake);
+	void TakeDamage(int aDamageToTake, EDamageType aDmgType);
 
 	void PrintUI();
 
@@ -46,11 +46,18 @@ public:
 private:
 
 	void ChangeEquipment(EItemType anItemType, bool &isRight);
+	void EquipRing(Item &aRing);
+	void UnEquipRing(Item &aRing);
 
 	int myHealth;
 	int myHealthMax;
 	int myStrength;
 	int myIntelligence;
+
+	int myHealthMod;
+	int myStrengthMod;
+	int myIntelligenceMod;
+	int myDefenceMod;
 
 	int myPhysDmg;
 	int mySpellDmg;
@@ -61,22 +68,20 @@ private:
 	int myGold;
 	unsigned myHPPotions;
 
-	unsigned mySpellArmour;
-
+	// TODO: Change to pointers
 	/* START Indexes for the respective items*/
 	unsigned mySword;
 	unsigned myStaff;
 	unsigned myArmour;
+	unsigned mySpellArmour;
 	unsigned myRingRight;
 	unsigned myRingLeft;
-	unsigned myCharm;
 	/*END*/
 
 	unsigned myAttackMod;
 
-	std::vector<ECharmType>* myCharms;
 	std::vector<Item*>* myItems;
-	std::vector<EAttackTypes>* myAttackTypes;
+	std::vector<EAttackType>* myAttackTypes;
 };
 
 #endif

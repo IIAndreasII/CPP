@@ -9,7 +9,7 @@ Item::Item() : myLevel(1), myIsEquipped(false)
 Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 {
 	myStat = RNG(5, 10) * aLevel;
-	switch (RNG(0, 3))
+	switch (RNG(0, 4))
 	{
 	case 0:
 		myItemType = EItemType::SWORD;
@@ -21,6 +21,9 @@ Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 		myItemType = EItemType::ARMOUR;
 		break;
 	case 3:
+		myItemType = EItemType::SPELLARMOUR;
+		break;
+	case 4:
 		myItemType = EItemType::RING;
 		
 		switch (RNG(0, 3))
@@ -133,7 +136,7 @@ void Item::SetIsEquipped(bool aValue)
 	myIsEquipped = aValue;
 }
 
-void Item::Combine(Item & anItem)
+void Item::Combine(Item &anItem)
 {
 	myName = "Combined " + myName;
 	myStat += anItem.GetStat();

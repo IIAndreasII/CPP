@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "pch.h"
+#include "Enums.h"
 
 class Player;
 
@@ -14,13 +15,15 @@ public:
 
 	std::string& GetName();
 
-	int& GetHealth();
+	int GetHealth() const;
 	int GetDamage() const;
 	unsigned& GetArmour();
 
+	EDamageType GetDamageType() const;
+
 	bool GetCanTakePhysDmg() const;
 
-	void TakeDamage(int& aDamageToTake);
+	void TakeDamage(int &aDamageToTake, EDamageType &aDmgType);
 
 private:
 
@@ -32,6 +35,8 @@ private:
 	bool myCanTakePhysDmg;
 
 	unsigned myArmour;
+
+	EDamageType myDamageType;
 };
 
 #endif

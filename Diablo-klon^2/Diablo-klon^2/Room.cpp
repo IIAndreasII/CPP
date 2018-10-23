@@ -49,7 +49,7 @@ bool Room::Enter(Player & aPlayer)
 						aPlayer.PrintUI();
 						Print("__| Available attacks |__");
 						unsigned tempIt = 0;
-						for (EAttackTypes tempAtkType : aPlayer.GetAttackTypes())
+						for (EAttackType tempAtkType : aPlayer.GetAttackTypes())
 						{
 							tempIt++;
 							Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
@@ -64,30 +64,34 @@ bool Room::Enter(Player & aPlayer)
 						unsigned tempEnemiesToHitAoE = 0;
 						bool tempIsAoE = true;
 						bool tempIsAtkMagical = false;
+						EDamageType tempDamageType = EDamageType::PHYSICAL;
 						switch (aPlayer.GetAttackTypes().at(tempInput))
 						{
-						case EAttackTypes::SLASH:
+						case EAttackType::SLASH:
 							tempDamageToDeal = aPlayer.GetPhysDmg();
 							tempIsAoE = false;
 							break;
-						case EAttackTypes::SWEEP:
+						case EAttackType::SWEEP:
 							tempDamageToDeal = aPlayer.GetPhysDmg() / 2;
 							break;
-						case EAttackTypes::WHIRLWIND:
+						case EAttackType::WHIRLWIND:
 							tempDamageToDeal = aPlayer.GetPhysDmg() / 3;
 							break;
-						case EAttackTypes::ICELANCE:
+						case EAttackType::ICELANCE:
 							tempDamageToDeal = aPlayer.GetSpellDmg();
 							tempIsAtkMagical = true;
 							tempIsAoE = false;
+							tempDamageType = EDamageType::MAGICAL;
 							break;
-						case EAttackTypes::COC:
+						case EAttackType::COC:
 							tempDamageToDeal = aPlayer.GetSpellDmg();
 							tempIsAtkMagical = true;
+							tempDamageType = EDamageType::MAGICAL;
 							break;
-						case EAttackTypes::BLIZZARD:
+						case EAttackType::BLIZZARD:
 							tempDamageToDeal = aPlayer.GetSpellDmg();
 							tempIsAtkMagical = true;
+							tempDamageType = EDamageType::MAGICAL;
 							break;
 						}
 
@@ -99,7 +103,7 @@ bool Room::Enter(Player & aPlayer)
 							std::vector<unsigned> tempIndexes;
 							int tempIt = 0;
 							for (unsigned i = 0; i < myEnemies.size(); i++)
-							{			
+							{
 								if (myEnemies.at(i).GetHealth() > 0)
 								{
 									tempIndexes.push_back(i);
@@ -112,25 +116,13 @@ bool Room::Enter(Player & aPlayer)
 							while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
 							tempInput--; // Compensate
 
-							if (!myEnemies.at(tempIndexes.at(tempInput)).GetCanTakePhysDmg() && !tempIsAtkMagical)
+							CLSSlow();
+							aPlayer.PrintUI();
+							myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal, tempDamageType);
+							if (myEnemies.at(tempIndexes.at(tempInput)).GetHealth() <= 0)
 							{
-								CLSSlow();
-								aPlayer.PrintUI();
-								Print("Your attack misses because this enemy cannot take physical damage!");
-								std::this_thread::sleep_for(std::chrono::seconds(2));
-							}
-							else
-							{
-								myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal);
-								CLSSlow();
-								aPlayer.PrintUI();
-								Print("The enemy takes " + std::to_string(tempDamageToDeal - myEnemies.at(tempIndexes.at(tempInput)).GetArmour()) + " damage!");
+								Print("\nThe enemy has perished!");
 								std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-								if (myEnemies.at(tempIndexes.at(tempInput)).GetHealth() <= 0)
-								{
-									Print("\nThe enemy has perished!");
-									std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-								}
 							}
 						}
 						else
@@ -139,11 +131,9 @@ bool Room::Enter(Player & aPlayer)
 							{
 								if (tempEnemy.GetHealth() > 0)
 								{
-									tempEnemy.TakeDamage(tempDamageToDeal);
+									tempEnemy.TakeDamage(tempDamageToDeal, tempDamageType);
 								}
 							}
-							Print("All enemies take " + std::to_string(tempDamageToDeal) + " damage!");
-							std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 						}
 						
 						for (Enemy tempEnemy : myEnemies)
@@ -154,7 +144,7 @@ bool Room::Enter(Player & aPlayer)
 								aPlayer.PrintUI();
 								Print("The enemy strikes!\n");
 								std::this_thread::sleep_for(std::chrono::seconds(1));
-								aPlayer.TakeDamage(tempEnemy.GetDamage());
+								aPlayer.TakeDamage(tempEnemy.GetDamage(), tempEnemy.GetDamageType());
 							}
 						}
 
@@ -176,7 +166,7 @@ bool Room::Enter(Player & aPlayer)
 						aPlayer.SetIntel(-100);
 						CLSSlow();
 						aPlayer.PrintUI();
-						aPlayer.TakeDamage(aPlayer.GetHealth() + aPlayer.GetArmour());
+						aPlayer.TakeDamage(aPlayer.GetHealth() + aPlayer.GetArmour(), EDamageType::PHYSICAL);
 						CLSSlow();
 						aPlayer.PrintUI();
 						Print("You killed yourself and confused the enemy in doing so.");

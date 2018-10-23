@@ -1,7 +1,7 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum EAttackTypes
+enum EAttackType
 {
 	SLASH,
 	SWEEP,
@@ -16,6 +16,7 @@ enum EItemType
 	SWORD,
 	STAFF,
 	ARMOUR,
+	SPELLARMOUR,
 	RING
 };
 
@@ -28,12 +29,10 @@ enum ERingType
 	INTELLIGENCE
 };
 
-enum ECharmType
+enum EDamageType
 {
-	HEALTH,
-	PROTECTION,
-	STUN,
-	VENOM
+	PHYSICAL,
+	MAGICAL
 };
 
 #endif
