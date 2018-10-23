@@ -15,10 +15,10 @@ public:
 
 	std::string GetName() const;
 	std::string GetRingTypeToString() const;
-	
+
 	EItemType GetItemType() const;
 	ERingType GetRingType() const;
-	
+
 	int& GetStat();
 	uint16_t& GetLevel();
 	bool& GetIsEquipped();
@@ -32,10 +32,8 @@ private:
 	std::string myName;
 
 	int myStat;
-	
-	uint16_t myLevel;
 
-	
+	uint16_t myLevel;
 
 	bool myIsEquipped;
 
@@ -43,7 +41,6 @@ private:
 	ERingType myRingType;
 
 	std::string ItemTypeToString(EItemType &aType);
-
 };
 
 #endif

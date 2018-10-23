@@ -4,7 +4,6 @@
 #include "pch.h"
 #include <chrono>
 
-
 extern inline void Print(std::string tempValue);
 
 extern inline void CLS();

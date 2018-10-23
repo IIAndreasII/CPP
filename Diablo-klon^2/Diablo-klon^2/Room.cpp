@@ -43,136 +43,135 @@ bool Room::Enter(Player & aPlayer)
 
 				switch (GetInput())
 				{
-					case 1:
+				case 1:
+				{
+					CLSSlow();
+					aPlayer.PrintUI();
+					Print("__| Available attacks |__");
+					unsigned tempIt = 0;
+					for (EAttackType tempAtkType : aPlayer.GetAttackTypes())
+					{
+						tempIt++;
+						Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
+					}
+
+					int tempInput = 0;
+					while (GetInput(tempInput) > aPlayer.GetAttackTypes().size());
+					tempInput--; // Compensate
+
+					int tempDamageToDeal = 0;
+					unsigned tempEnemiesToHitAoE = 0;
+					bool tempIsAoE = true;
+					bool tempIsAtkMagical = false;
+					EDamageType tempDamageType = EDamageType::PHYSICAL;
+					switch (aPlayer.GetAttackTypes().at(tempInput))
+					{
+					case EAttackType::SLASH:
+						tempDamageToDeal = aPlayer.GetPhysDmg();
+						tempIsAoE = false;
+						break;
+					case EAttackType::SWEEP:
+						tempDamageToDeal = aPlayer.GetPhysDmg() / 2;
+						break;
+					case EAttackType::WHIRLWIND:
+						tempDamageToDeal = aPlayer.GetPhysDmg() / 3;
+						break;
+					case EAttackType::ICELANCE:
+						tempDamageToDeal = aPlayer.GetSpellDmg();
+						tempIsAtkMagical = true;
+						tempIsAoE = false;
+						tempDamageType = EDamageType::MAGICAL;
+						break;
+					case EAttackType::COC:
+						tempDamageToDeal = aPlayer.GetSpellDmg();
+						tempIsAtkMagical = true;
+						tempDamageType = EDamageType::MAGICAL;
+						break;
+					case EAttackType::BLIZZARD:
+						tempDamageToDeal = aPlayer.GetSpellDmg();
+						tempIsAtkMagical = true;
+						tempDamageType = EDamageType::MAGICAL;
+						break;
+					}
+
+					if (!tempIsAoE)
 					{
 						CLSSlow();
 						aPlayer.PrintUI();
-						Print("__| Available attacks |__");
-						unsigned tempIt = 0;
-						for (EAttackType tempAtkType : aPlayer.GetAttackTypes())
+						Print("__| Choose an enemy |__");
+						std::vector<unsigned> tempIndexes;
+						int tempIt = 0;
+						for (unsigned i = 0; i < myEnemies.size(); i++)
 						{
-							tempIt++;
-							Print("[" + std::to_string(tempIt) + "] " + aPlayer.AtkTypeToString(tempAtkType));
+							if (myEnemies.at(i).GetHealth() > 0)
+							{
+								tempIndexes.push_back(i);
+								tempIt++;
+								Print("[" + std::to_string(tempIt) + "] " + myEnemies.at(i).GetName() + " [Health: " + std::to_string(myEnemies.at(i).GetHealth()) + " Armour: " + std::to_string(myEnemies.at(i).GetArmour()) + "]");
+							}
 						}
 
-						int tempInput = 0; 
-						while (GetInput(tempInput) > aPlayer.GetAttackTypes().size());
+						tempInput = 0;
+						while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
 						tempInput--; // Compensate
 
-
-						int tempDamageToDeal = 0;
-						unsigned tempEnemiesToHitAoE = 0;
-						bool tempIsAoE = true;
-						bool tempIsAtkMagical = false;
-						EDamageType tempDamageType = EDamageType::PHYSICAL;
-						switch (aPlayer.GetAttackTypes().at(tempInput))
+						CLSSlow();
+						aPlayer.PrintUI();
+						myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal, tempDamageType);
+						if (myEnemies.at(tempIndexes.at(tempInput)).GetHealth() <= 0)
 						{
-						case EAttackType::SLASH:
-							tempDamageToDeal = aPlayer.GetPhysDmg();
-							tempIsAoE = false;
-							break;
-						case EAttackType::SWEEP:
-							tempDamageToDeal = aPlayer.GetPhysDmg() / 2;
-							break;
-						case EAttackType::WHIRLWIND:
-							tempDamageToDeal = aPlayer.GetPhysDmg() / 3;
-							break;
-						case EAttackType::ICELANCE:
-							tempDamageToDeal = aPlayer.GetSpellDmg();
-							tempIsAtkMagical = true;
-							tempIsAoE = false;
-							tempDamageType = EDamageType::MAGICAL;
-							break;
-						case EAttackType::COC:
-							tempDamageToDeal = aPlayer.GetSpellDmg();
-							tempIsAtkMagical = true;
-							tempDamageType = EDamageType::MAGICAL;
-							break;
-						case EAttackType::BLIZZARD:
-							tempDamageToDeal = aPlayer.GetSpellDmg();
-							tempIsAtkMagical = true;
-							tempDamageType = EDamageType::MAGICAL;
-							break;
+							Print("\nThe enemy has perished!");
+							std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 						}
-
-						if (!tempIsAoE)
-						{
-							CLSSlow();
-							aPlayer.PrintUI();
-							Print("__| Choose an enemy |__");
-							std::vector<unsigned> tempIndexes;
-							int tempIt = 0;
-							for (unsigned i = 0; i < myEnemies.size(); i++)
-							{
-								if (myEnemies.at(i).GetHealth() > 0)
-								{
-									tempIndexes.push_back(i);
-									tempIt++;
-									Print("[" + std::to_string(tempIt) + "] " + myEnemies.at(i).GetName() + " [Health: " + std::to_string(myEnemies.at(i).GetHealth()) + " Armour: " + std::to_string(myEnemies.at(i).GetArmour()) + "]");
-								}
-							}
-
-							tempInput = 0;
-							while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
-							tempInput--; // Compensate
-
-							CLSSlow();
-							aPlayer.PrintUI();
-							myEnemies.at(tempIndexes.at(tempInput)).TakeDamage(tempDamageToDeal, tempDamageType);
-							if (myEnemies.at(tempIndexes.at(tempInput)).GetHealth() <= 0)
-							{
-								Print("\nThe enemy has perished!");
-								std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-							}
-						}
-						else
-						{
-							for (Enemy tempEnemy : myEnemies)
-							{
-								if (tempEnemy.GetHealth() > 0)
-								{
-									tempEnemy.TakeDamage(tempDamageToDeal, tempDamageType);
-								}
-							}
-						}
-						
+					}
+					else
+					{
 						for (Enemy tempEnemy : myEnemies)
 						{
 							if (tempEnemy.GetHealth() > 0)
 							{
-								CLSSlow();
-								aPlayer.PrintUI();
-								Print("The enemy strikes!\n");
-								std::this_thread::sleep_for(std::chrono::seconds(1));
-								aPlayer.TakeDamage(tempEnemy.GetDamage(), tempEnemy.GetDamageType());
+								tempEnemy.TakeDamage(tempDamageToDeal, tempDamageType);
 							}
 						}
-
-						tempLoop = false;
 					}
-					break;
 
-					case 2:
+					for (Enemy tempEnemy : myEnemies)
 					{
-						if (aPlayer.GetHPPotions() > 0)
+						if (tempEnemy.GetHealth() > 0)
 						{
-							aPlayer.DrinkPotion();
+							CLSSlow();
+							aPlayer.PrintUI();
+							Print("The enemy strikes!\n");
+							std::this_thread::sleep_for(std::chrono::seconds(1));
+							aPlayer.TakeDamage(tempEnemy.GetDamage(), tempEnemy.GetDamageType());
 						}
 					}
-					break;
 
-					case 3:
+					tempLoop = false;
+				}
+				break;
+
+				case 2:
+				{
+					if (aPlayer.GetHPPotions() > 0)
 					{
-						aPlayer.SetIntel(-100);
-						CLSSlow();
-						aPlayer.PrintUI();
-						aPlayer.TakeDamage(aPlayer.GetHealth() + aPlayer.GetArmour(), EDamageType::PHYSICAL);
-						CLSSlow();
-						aPlayer.PrintUI();
-						Print("You killed yourself and confused the enemy in doing so.");
-						std::this_thread::sleep_for(std::chrono::seconds(3));
-						tempLoop = false;
+						aPlayer.DrinkPotion();
 					}
+				}
+				break;
+
+				case 3:
+				{
+					aPlayer.SetIntel(-100);
+					CLSSlow();
+					aPlayer.PrintUI();
+					aPlayer.TakeDamage(aPlayer.GetHealth() + aPlayer.GetArmour(), EDamageType::PHYSICAL);
+					CLSSlow();
+					aPlayer.PrintUI();
+					Print("You killed yourself and confused the enemy in doing so.");
+					std::this_thread::sleep_for(std::chrono::seconds(3));
+					tempLoop = false;
+				}
 				}
 			}
 

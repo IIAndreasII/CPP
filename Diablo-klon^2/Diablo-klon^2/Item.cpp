@@ -25,7 +25,7 @@ Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 		break;
 	case 4:
 		myItemType = EItemType::RING;
-		
+
 		switch (RNG(0, 3))
 		{
 		case 0:
@@ -44,7 +44,7 @@ Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 		break;
 	}
 
-	std::vector<std::string> tempNames = {"of silliness", " of stupidity", " of peanutbutter", " of Neverwinter", " of Waterdeep", " of evil", " of Korn", " of Thor", " of jelly"};
+	std::vector<std::string> tempNames = { "of silliness", " of stupidity", " of peanutbutter", " of Neverwinter", " of Waterdeep", " of evil", " of Korn", " of Thor", " of jelly" };
 	myName = ItemTypeToString(myItemType) + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
 }
 
@@ -147,7 +147,6 @@ bool& Item::GetIsEquipped()
 {
 	return myIsEquipped;
 }
-
 
 std::string Item::ItemTypeToString(EItemType & aType)
 {

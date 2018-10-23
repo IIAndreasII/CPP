@@ -4,17 +4,16 @@
 #include <thread>
 #include "Item.h"
 
-Player::Player() : 
-	myItems(new std::vector<Item*>()), 
-	myAttackTypes(new std::vector<EAttackType>()), 
-	myCharms(new std::vector<ECharmType>()), 
-	mySword(0), 
-	myStaff(1), 
-	myArmour(2), 
+Player::Player() :
+	myItems(new std::vector<Item*>()),
+	myAttackTypes(new std::vector<EAttackType>()),
+	mySword(0),
+	myStaff(1),
+	myArmour(2),
 	mySpellArmour(3),
-	myRingRight(4), 
-	myRingLeft(5), 
-	myGold(50), 
+	myRingRight(4),
+	myRingLeft(5),
+	myGold(50),
 	myHealthMax(100),
 	myHPPotions(5),
 	myLevel(1),
@@ -173,7 +172,7 @@ void Player::AddExp(int someExp)
 		myEXPRequired *= 2;
 		myStrength += 5;
 		myIntelligence += 5;
-		
+
 		CLSSlow();
 		PrintUI();
 		Print("Level up!");
@@ -227,7 +226,7 @@ void Player::TakeDamage(int aDamageToTake, EDamageType aDmgType)
 		tempDamageTaken = 0;
 	}
 	myHealth -= tempDamageTaken;
-	
+
 	Print("You take " + std::to_string(tempDamageTaken) + " damage!");
 	std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 	if (myHealth <= 0)
@@ -256,7 +255,6 @@ void Player::PrintUI()
 		}
 	}
 	Print(tempStringToPrint + "\n" + tempUnderline + "\n");
-
 }
 
 void Player::Reset()

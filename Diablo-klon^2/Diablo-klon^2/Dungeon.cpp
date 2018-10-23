@@ -16,7 +16,6 @@ Dungeon::Dungeon(int aLevel) : myRooms(), myCurrentRoomIndex(0)
 	myRooms.push_back(tempRoom);
 }
 
-
 Dungeon::~Dungeon()
 {
 }
@@ -84,15 +83,15 @@ bool Dungeon::Navigate(Player &aPlayer)
 	Room tempRoom(aPlayer.GetLevel());
 
 	size_t tempPrevRoomIndex = myCurrentRoomIndex;
-	
+
 	bool tempLoop = true;
 	while (tempLoop)
 	{
 		CLSSlow();
 		aPlayer.PrintUI();
-		
+
 		Print("__| Select |__\n[1] Continue on journey\n[2] Inventory\n[3] Rest\n[4] Quit");
-		
+
 		bool tempInnerLoop = true;
 		bool tempAllowPrevRoom = false;
 		switch (GetInput())
@@ -117,7 +116,7 @@ bool Dungeon::Navigate(Player &aPlayer)
 					tempInnerLoop = false;
 					tempLoop = false;
 					break;
-				
+
 				case 2:
 					if (tempAllowPrevRoom)
 					{
