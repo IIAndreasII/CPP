@@ -34,12 +34,12 @@ int Enemy::GetHealth() const
 	return myHealth;
 }
 
-int Enemy::GetDamage() const
+uint16_t Enemy::GetDamage() const
 {
 	return myDamage;
 }
 
-unsigned & Enemy::GetArmour()
+uint16_t Enemy::GetArmour() const
 {
 	return myArmour;
 }

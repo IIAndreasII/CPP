@@ -2,8 +2,6 @@
 #include "Game.h"
 #include "Util.h"
 #include "Player.h"
-#include "DungeonManager.h"
-#include "Dungeon.h"
 
 Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player()), myDungeon()
 {
@@ -39,7 +37,7 @@ int Game::Play()
 
 void Game::Reset()
 {
-	myPlayer->Reset();
+	myPlayer->Init();
 	myDungeon.Reset();
 }
 
@@ -101,9 +99,4 @@ void Game::GameMenu()
 			break;
 		}
 	}
-}
-
-Player& Game::GetPlayer()
-{
-	return *myPlayer;
 }

@@ -6,13 +6,7 @@
 
 Player::Player() :
 	myItems(new std::vector<Item*>()),
-	myAttackTypes(new std::vector<EAttackType>()),
-	mySword(0),
-	myStaff(1),
-	myArmour(2),
-	mySpellArmour(3),
-	myRingRight(4),
-	myRingLeft(5),
+	myAttackTypes(),
 	myGold(50),
 	myHealthMax(100),
 	myHPPotions(5),
@@ -22,27 +16,24 @@ Player::Player() :
 	myDefenceMod(0),
 	myHealthMod(0)
 {
-	/* Basic attack types */
-	myAttackTypes->push_back(EAttackType::SLASH);
-	myAttackTypes->push_back(EAttackType::ICELANCE);
-
-	/* Add starting items */
-	myItems->push_back(new Item("Sharp thing", 15, EItemType::SWORD, true));
-	myItems->push_back(new Item("Wooden stick-thing", 15, EItemType::STAFF, true));
-	myItems->push_back(new Item("Flat thing", 2, EItemType::ARMOUR, true));
-	myItems->push_back(new Item("Round thing", 0, EItemType::RING, true));
-	myItems->push_back(new Item("Circular thing", 0, EItemType::RING, true));
-
-	/* Test dummy */
-	myItems->push_back(new Item("Sharp potato", 10, EItemType::SWORD, false));
-
-	myHealth = myHealthMax;
+	Init();
 }
 
 Player::~Player()
 {
+	SafeDelete(mySword);
+	SafeDelete(myStaff);
+	SafeDelete(myArmour);
+	SafeDelete(mySpellArmour);
+	SafeDelete(myRingLeft);
+	SafeDelete(myRingRight);
+	
+	for (Item* it : *myItems)
+	{
+		SafeDelete(it);
+	}
+	myItems->clear();
 	SafeDelete(myItems);
-	SafeDelete(myAttackTypes);
 }
 
 int Player::GetHealth() const
@@ -50,14 +41,14 @@ int Player::GetHealth() const
 	return myHealth;
 }
 
-int Player::GetArmour() const
+uint16_t Player::GetArmour() const
 {
-	return myItems->at(myArmour)->GetStat() + myDefenceMod;
+	return myArmour->GetStat() + myDefenceMod;
 }
 
-int Player::GetSpellArmour() const
+uint16_t Player::GetSpellArmour() const
 {
-	return myItems->at(mySpellArmour)->GetStat() + myDefenceMod;
+	return mySpellArmour->GetStat() + myDefenceMod;
 }
 
 void Player::ShowInventory()
@@ -68,12 +59,12 @@ void Player::ShowInventory()
 		CLSSlow();
 		PrintUI();
 		Print("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Health Potions: " + std::to_string(myHPPotions) +
-			"\n\n___| Equipment |___\n[1] Sword: " + myItems->at(mySword)->GetName() + " [Attack: " + std::to_string(myItems->at(mySword)->GetStat()) + ", Level: " + std::to_string(myItems->at(mySword)->GetLevel()) +
-			"]\n[2] Staff: " + myItems->at(myStaff)->GetName() + " [Attack: " + std::to_string(myItems->at(myStaff)->GetStat()) + ", Level: " + std::to_string(myItems->at(myStaff)->GetLevel()) +
-			"]\n[3] Armour: " + myItems->at(myArmour)->GetName() + " [Defence: " + std::to_string(GetArmour()) + ", Level: " + std::to_string(myItems->at(myArmour)->GetLevel()) +
-			"]\n[4] Spellarmour: " + myItems->at(mySpellArmour)->GetName() + " [Defence: " + std::to_string(GetSpellArmour()) + ", Level: " + std::to_string(myItems->at(mySpellArmour)->GetLevel()) +
-			"]\n[5] R Ring: " + myItems->at(myRingRight)->GetName() + " [Type: " + myItems->at(myRingRight)->GetRingTypeToString() + ", Stat: " + std::to_string(myItems->at(myRingRight)->GetStat()) + ", Level: " + std::to_string(myItems->at(myRingRight)->GetLevel()) +
-			"]\n[6] L Ring: " + myItems->at(myRingLeft)->GetName() + " [Type: " + myItems->at(myRingLeft)->GetRingTypeToString() + ", Stat: " + std::to_string(myItems->at(myRingLeft)->GetStat()) + ", Level: " + std::to_string(myItems->at(myRingRight)->GetLevel()) +
+			"\n\n___| Equipment |___\n[1] Sword: " + mySword->GetName() + " [Attack: " + std::to_string(mySword->GetStat()) + ", Level: " + std::to_string(mySword->GetLevel()) +
+			"]\n[2] Staff: " + myStaff->GetName() + " [Attack: " + std::to_string(myStaff->GetStat()) + ", Level: " + std::to_string(myStaff->GetLevel()) +
+			"]\n[3] Armour: " + myArmour->GetName() + " [Defence: " + std::to_string(GetArmour()) + ", Level: " + std::to_string(myArmour->GetLevel()) +
+			"]\n[4] Spellarmour: " + mySpellArmour->GetName() + " [Defence: " + std::to_string(GetSpellArmour()) + ", Level: " + std::to_string(mySpellArmour->GetLevel()) +
+			"]\n[5] R Ring: " + myRingRight->GetName() + " [Type: " + myRingRight->GetRingTypeToString() + ", Stat: " + std::to_string(myRingRight->GetStat()) + ", Level: " + std::to_string(myRingRight->GetLevel()) +
+			"]\n[6] L Ring: " + myRingLeft->GetName() + " [Type: " + myRingLeft->GetRingTypeToString() + ", Stat: " + std::to_string(myRingLeft->GetStat()) + ", Level: " + std::to_string(myRingRight->GetLevel()) +
 			"]\n[7] Back");
 
 		EItemType tempItemType = EItemType::SWORD;
@@ -124,15 +115,15 @@ void Player::LongRest()
 
 void Player::AddAttackType(EAttackType anAttack)
 {
-	if (!(std::find(myAttackTypes->begin(), myAttackTypes->end(), anAttack) != myAttackTypes->end()))
+	if (!(std::find(myAttackTypes.begin(), myAttackTypes.end(), anAttack) != myAttackTypes.end()))
 	{
-		myAttackTypes->push_back(anAttack);
+		myAttackTypes.push_back(anAttack);
 	}
 }
 
 std::vector<EAttackType>& Player::GetAttackTypes()
 {
-	return *myAttackTypes;
+	return myAttackTypes;
 }
 
 std::string Player::AtkTypeToString(EAttackType &anAtkType)
@@ -188,7 +179,7 @@ void Player::AddExp(int someExp)
 	}
 }
 
-unsigned Player::GetLevel() const
+uint16_t Player::GetLevel() const
 {
 	return myLevel;
 }
@@ -240,7 +231,7 @@ void Player::TakeDamage(int aDamageToTake, EDamageType aDmgType)
 
 void Player::PrintUI()
 {
-	std::string tempStringToPrint = "Health: " + std::to_string(myHealth) + "  Armour: " + std::to_string(GetArmour() + myDefenceMod) + "  Strength: " + std::to_string(myStrength + myStrengthMod) + "  Intelligence: " + std::to_string(myIntelligence + myIntelligenceMod) + " |";
+	std::string tempStringToPrint = "Health: " + std::to_string(myHealth) + "  Armour: " + std::to_string(GetArmour() + myDefenceMod) + "  Spellarmour: " + std::to_string(GetSpellArmour() + myDefenceMod) + "  Strength: " + std::to_string(myStrength + myStrengthMod) + "  Intelligence: " + std::to_string(myIntelligence + myIntelligenceMod) + " |";
 	std::string tempUnderline;
 
 	for (size_t i = 0; i < tempStringToPrint.size(); i++)
@@ -257,7 +248,7 @@ void Player::PrintUI()
 	Print(tempStringToPrint + "\n" + tempUnderline + "\n");
 }
 
-void Player::Reset()
+void Player::Init()
 {
 	myHealthMax = 100;
 	myHealth = myHealthMax;
@@ -275,21 +266,28 @@ void Player::Reset()
 	myHealthMod = 0;
 
 	myItems->clear();
-	myAttackTypes->clear();
+	myAttackTypes.clear();
 
 	/* Basic attack types */
-	myAttackTypes->push_back(EAttackType::SLASH);
-	myAttackTypes->push_back(EAttackType::ICELANCE);
+	myAttackTypes.push_back(EAttackType::SLASH);
+	myAttackTypes.push_back(EAttackType::ICELANCE);
 
 	/* Add starting items */
 	myItems->push_back(new Item("Sharp thing", 15, EItemType::SWORD, true));
 	myItems->push_back(new Item("Wooden stick-thing", 15, EItemType::STAFF, true));
 	myItems->push_back(new Item("Flat thing", 2, EItemType::ARMOUR, true));
 	myItems->push_back(new Item("Anti-spell thing", 2, EItemType::SPELLARMOUR, true));
-	myItems->push_back(new Item("Round thing", 5, EItemType::RING, true));
-	myItems->push_back(new Item("Circular thing", 5, EItemType::RING, true));
-	EquipRing(*myItems->at(myRingRight));
-	EquipRing(*myItems->at(myRingLeft));
+	myItems->push_back(new Item("Round thing", 1, EItemType::RING, true));
+	myItems->push_back(new Item("Circular thing", 1, EItemType::RING, true));
+	
+	mySword = myItems->at(0);
+	myStaff = myItems->at(1);
+	myArmour = myItems->at(2);
+	mySpellArmour = myItems->at(3);
+	myRingRight = myItems->at(4);
+	myRingLeft = myItems->at(5);
+	EquipRing(myRingRight);
+	EquipRing(myRingLeft);
 
 	/* Test dummies */
 	myItems->push_back(new Item("Sharp potato", 10, EItemType::SWORD, false));
@@ -298,19 +296,17 @@ void Player::Reset()
 	myItems->push_back(new Item("Circular thing the second", 5, EItemType::RING, false));
 }
 
-int& Player::GetPhysDmg()
+uint16_t Player::GetPhysDmg() const
 {
-	myPhysDmg = myItems->at(mySword)->GetStat() + myStrength + myStrengthMod;
-	return myPhysDmg;
+	return mySword->GetStat() + myStrength + myStrengthMod;
 }
 
-int& Player::GetSpellDmg()
+uint16_t Player::GetSpellDmg() const
 {
-	mySpellDmg = myItems->at(myStaff)->GetStat() + myIntelligence + myIntelligenceMod;
-	return mySpellDmg;
+	return myStaff->GetStat() + myIntelligence + myIntelligenceMod;
 }
 
-unsigned& Player::GetHPPotions()
+uint16_t Player::GetHPPotions() const
 {
 	return myHPPotions;
 }
@@ -388,41 +384,41 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 			switch (anItemType)
 			{
 			case EItemType::SWORD:
-				myItems->at(mySword)->SetIsEquipped(false);
-				mySword = tempIndexes.at(tempInput - 1);
-				myItems->at(mySword)->SetIsEquipped(true);
+				mySword->SetIsEquipped(false);
+				mySword = myItems->at(tempIndexes.at(tempInput - 1));
+				mySword->SetIsEquipped(true);
 				break;
 			case EItemType::STAFF:
-				myItems->at(myStaff)->SetIsEquipped(false);
-				myStaff = tempIndexes.at(tempInput - 1);
-				myItems->at(myStaff)->SetIsEquipped(true);
+				myStaff->SetIsEquipped(false);
+				myStaff = myItems->at(tempIndexes.at(tempInput - 1));
+				myStaff->SetIsEquipped(true);
 				break;
 			case EItemType::ARMOUR:
-				myItems->at(myArmour)->SetIsEquipped(false);
-				myArmour = tempIndexes.at(tempInput - 1);
-				myItems->at(myArmour)->SetIsEquipped(true);
+				myArmour->SetIsEquipped(false);
+				myArmour = myItems->at(tempIndexes.at(tempInput - 1));
+				myArmour->SetIsEquipped(true);
 				break;
 			case EItemType::SPELLARMOUR:
-				myItems->at(mySpellArmour)->SetIsEquipped(false);
-				mySpellArmour = tempIndexes.at(tempInput - 1);
-				myItems->at(mySpellArmour)->SetIsEquipped(true);
+				mySpellArmour->SetIsEquipped(false);
+				mySpellArmour = myItems->at(tempIndexes.at(tempInput - 1));
+				mySpellArmour->SetIsEquipped(true);
 				break;
 			case EItemType::RING:
 				if (isRight)
 				{
-					myItems->at(myRingRight)->SetIsEquipped(false);
-					UnEquipRing(*myItems->at(myRingRight));
-					myRingRight = tempIndexes.at(tempInput - 1);
-					myItems->at(myRingRight)->SetIsEquipped(true);
-					EquipRing(*myItems->at(myRingRight));
+					myRingRight->SetIsEquipped(false);
+					UnEquipRing(myRingRight);
+					myRingRight = myItems->at(tempIndexes.at(tempInput - 1));
+					myRingRight->SetIsEquipped(true);
+					EquipRing(myRingRight);
 				}
 				else
 				{
-					myItems->at(myRingLeft)->SetIsEquipped(false);
-					UnEquipRing(*myItems->at(myRingLeft));
-					myRingLeft = tempIndexes.at(tempInput - 1);
-					myItems->at(myRingLeft)->SetIsEquipped(true);
-					EquipRing(*myItems->at(myRingLeft));
+					myRingLeft->SetIsEquipped(false);
+					UnEquipRing(myRingLeft);
+					myRingLeft = myItems->at(tempIndexes.at(tempInput - 1));
+					myRingLeft->SetIsEquipped(true);
+					EquipRing(myRingLeft);
 				}
 				break;
 			}
@@ -439,35 +435,35 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 				switch (anItemType)
 				{
 				case EItemType::SWORD:
-					myItems->at(mySword)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					mySword->Combine(myItems->at(tempIndexes.at(tempInput - 1)));
 					SafeDelete(myItems->at(tempIndexes.at(tempInput - 1)));
 					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
 					break;
 				case EItemType::STAFF:
-					myItems->at(myStaff)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					myStaff->Combine(myItems->at(tempIndexes.at(tempInput - 1)));
 					SafeDelete(myItems->at(tempIndexes.at(tempInput - 1)));
 					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
 					break;
 				case EItemType::ARMOUR:
-					myItems->at(myArmour)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					myArmour->Combine(myItems->at(tempIndexes.at(tempInput - 1)));
 					SafeDelete(myItems->at(tempIndexes.at(tempInput - 1)));
 					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
 					break;
 				case EItemType::SPELLARMOUR:
-					myItems->at(mySpellArmour)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+					mySpellArmour->Combine(myItems->at(tempIndexes.at(tempInput - 1)));
 					SafeDelete(myItems->at(tempIndexes.at(tempInput - 1)));
 					myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
 					break;
 				case EItemType::RING:
 					if (isRight)
 					{
-						myItems->at(myRingRight)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+						myRingRight->Combine(myItems->at(tempIndexes.at(tempInput - 1)));
 						SafeDelete(myItems->at(tempIndexes.at(tempInput - 1)));
 						myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
 					}
 					else
 					{
-						myItems->at(myRingLeft)->Combine(*myItems->at(tempIndexes.at(tempInput - 1)));
+						myRingLeft->Combine(myItems->at(tempIndexes.at(tempInput - 1)));
 						SafeDelete(myItems->at(tempIndexes.at(tempInput - 1)));
 						myItems->erase(myItems->begin() + tempIndexes.at(tempInput - 1));
 					}
@@ -478,40 +474,42 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 	}
 }
 
-void Player::EquipRing(Item & aRing)
+void Player::EquipRing(Item* aRing)
 {
-	switch (aRing.GetRingType())
+	switch (aRing->GetRingType())
 	{
 	case ERingType::DEFENCE:
-		myDefenceMod += aRing.GetStat();
+		myDefenceMod += aRing->GetStat();
 		break;
 	case ERingType::INTELLIGENCE:
-		myIntelligenceMod += aRing.GetStat();
+		myIntelligenceMod += aRing->GetStat();
 		break;
 	case ERingType::STRENGTH:
-		myStrengthMod += aRing.GetStat();
+		myStrengthMod += aRing->GetStat();
 		break;
 	case ERingType::VITALITY:
-		myHealthMod += aRing.GetStat();
+		myHealth += aRing->GetStat();
+		myHealthMod += aRing->GetStat();
 		break;
 	}
 }
 
-void Player::UnEquipRing(Item & aRing)
+void Player::UnEquipRing(Item* aRing)
 {
-	switch (aRing.GetRingType())
+	switch (aRing->GetRingType())
 	{
 	case ERingType::DEFENCE:
-		myDefenceMod -= aRing.GetStat();
+		myDefenceMod -= aRing->GetStat();
 		break;
 	case ERingType::INTELLIGENCE:
-		myIntelligenceMod -= aRing.GetStat();
+		myIntelligenceMod -= aRing->GetStat();
 		break;
 	case ERingType::STRENGTH:
-		myStrengthMod -= aRing.GetStat();
+		myStrengthMod -= aRing->GetStat();
 		break;
 	case ERingType::VITALITY:
-		myHealthMod -= aRing.GetStat();
+		myHealth -= aRing->GetStat();
+		myHealthMod -= aRing->GetStat();
 		break;
 	}
 }

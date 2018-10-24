@@ -8,7 +8,7 @@
 template<typename T> void SafeDelete(T*& aPtrToDelete)
 {
 	delete (aPtrToDelete);
-	aPtrToDelete = NULL;
+	aPtrToDelete = nullptr;
 }
 
 #endif

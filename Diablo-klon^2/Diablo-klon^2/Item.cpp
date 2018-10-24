@@ -6,7 +6,7 @@ Item::Item() : myLevel(1), myIsEquipped(false)
 {
 }
 
-Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
+Item::Item(uint16_t aLevel) : myLevel(aLevel), myIsEquipped(false)
 {
 	myStat = RNG(5, 10) * aLevel;
 	switch (RNG(0, 4))
@@ -48,11 +48,11 @@ Item::Item(int aLevel) : myLevel(aLevel), myIsEquipped(false)
 	myName = ItemTypeToString(myItemType) + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
 }
 
-Item::Item(std::string aName, int aStat, EItemType anItemType) : myName(aName), myStat(aStat), myItemType(anItemType), myLevel(1)
+Item::Item(std::string aName, uint16_t aStat, EItemType anItemType) : myName(aName), myStat(aStat), myItemType(anItemType), myLevel(1)
 {
 }
 
-Item::Item(std::string aName, int aStat, EItemType anItemType, bool isEquipped) : myName(aName), myStat(aStat), myItemType(anItemType), myIsEquipped(isEquipped), myLevel(1)
+Item::Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped) : myName(aName), myStat(aStat), myItemType(anItemType), myIsEquipped(isEquipped), myLevel(1)
 {
 	if (myItemType == EItemType::RING)
 	{
@@ -121,12 +121,12 @@ std::string Item::GetRingTypeToString() const
 	return tempReturnValue;
 }
 
-uint16_t& Item::GetLevel()
+uint16_t Item::GetLevel() const
 {
 	return myLevel;
 }
 
-int& Item::GetStat()
+uint16_t Item::GetStat() const
 {
 	return myStat;
 }
@@ -136,10 +136,10 @@ void Item::SetIsEquipped(bool aValue)
 	myIsEquipped = aValue;
 }
 
-void Item::Combine(Item &anItem)
+void Item::Combine(Item* anItem)
 {
 	myName = "Combined " + myName;
-	myStat += anItem.GetStat();
+	myStat += anItem->GetStat();
 	myLevel += 1;
 }
 

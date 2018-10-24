@@ -12,76 +12,64 @@ public:
 	Player();
 	~Player();
 
-	int GetHealth() const;
-	int GetArmour() const;
-	int GetSpellArmour() const;
-
-	void ShowInventory();
+	void Init();
+	void PrintUI();
 	void LongRest();
-
-	void AddAttackType(EAttackType anAttack);
-	std::vector<EAttackType>& GetAttackTypes();
-	std::string AtkTypeToString(EAttackType &anAtkType);
-
-	void AddGold(int someGold);
+	void DrinkPotion();
+	void ShowInventory();
+	void AddRandomItem();
 	void AddExp(int someExp);
-	unsigned GetLevel() const;
-
+	void AddGold(int someGold);
+	void SetIntel(const int someIntel);
+	void AddAttackType(EAttackType anAttack);
 	void TakeDamage(int& aDamageToTake);
 	void TakeDamage(int aDamageToTake, EDamageType aDmgType);
 
-	void PrintUI();
 
-	void Reset();
+	std::vector<EAttackType>& GetAttackTypes();
+	std::string AtkTypeToString(EAttackType &anAtkType);
 
-	int& GetPhysDmg();
-	int& GetSpellDmg();
-	unsigned& GetHPPotions();
-	void DrinkPotion();
-
-	void AddRandomItem();
-
-	void SetIntel(const int someIntel);
+	int GetHealth() const;
+	uint16_t GetLevel() const;
+	uint16_t GetArmour() const;
+	uint16_t GetPhysDmg() const;
+	uint16_t GetSpellDmg() const;
+	uint16_t GetHPPotions() const;
+	uint16_t GetSpellArmour() const;
 
 private:
 
+	void EquipRing(Item* aRing);
+	void UnEquipRing(Item* aRing);
 	void ChangeEquipment(EItemType anItemType, bool &isRight);
-	void EquipRing(Item &aRing);
-	void UnEquipRing(Item &aRing);
+
+	uint16_t myEXP;
+	uint16_t myGold;
+	uint16_t myLevel;
+	uint16_t myStrength;
+	uint16_t myHealthMax;
+	uint16_t myHPPotions;
+	uint16_t myEXPRequired;
+	uint16_t myIntelligence;
 
 	int myHealth;
-	int myHealthMax;
-	int myStrength;
-	int myIntelligence;
-
-	int myHealthMod;
-	int myStrengthMod;
-	int myIntelligenceMod;
-	int myDefenceMod;
-
 	int myPhysDmg;
 	int mySpellDmg;
+	int myHealthMod;
+	int myDefenceMod;
+	int myStrengthMod;
+	int myIntelligenceMod;
 
-	unsigned myLevel;
-	int myEXP;
-	int myEXPRequired;
-	int myGold;
-	unsigned myHPPotions;
-
-	// TODO: Change to pointers
-	/* START Indexes for the respective items*/
-	unsigned mySword;
-	unsigned myStaff;
-	unsigned myArmour;
-	unsigned mySpellArmour;
-	unsigned myRingRight;
-	unsigned myRingLeft;
-	/*END*/
-
-	unsigned myAttackMod;
+	/* Equipped item-pointers */
+	Item* mySword;
+	Item* myStaff;
+	Item* myArmour;
+	Item* myRingLeft;
+	Item* myRingRight;
+	Item* mySpellArmour;
 
 	std::vector<Item*>* myItems;
-	std::vector<EAttackType>* myAttackTypes;
+	std::vector<EAttackType> myAttackTypes;
 };
 
 #endif

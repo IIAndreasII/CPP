@@ -2,9 +2,9 @@
 #define GAME_H
 
 #include "pch.h"
+#include "Dungeon.h"
 
 class Player;
-#include "Dungeon.h"
 
 enum EGameState
 {
@@ -22,13 +22,11 @@ public:
 	int Play();
 
 	void Reset();
-
 	void MainMenu();
 	void GameMenu();
 
-	Player& GetPlayer();
-
 private:
+
 	EGameState myGameState;
 
 	Dungeon myDungeon;

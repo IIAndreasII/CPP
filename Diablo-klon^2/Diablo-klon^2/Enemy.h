@@ -4,8 +4,6 @@
 #include "pch.h"
 #include "Enums.h"
 
-class Player;
-
 class Enemy
 {
 public:
@@ -16,8 +14,8 @@ public:
 	std::string& GetName();
 
 	int GetHealth() const;
-	int GetDamage() const;
-	unsigned& GetArmour();
+	uint16_t GetDamage() const;
+	uint16_t GetArmour() const;
 
 	EDamageType GetDamageType() const;
 
@@ -30,11 +28,10 @@ private:
 	std::string myName;
 
 	int myHealth;
-	int myDamage;
+	uint16_t myDamage;
+	uint16_t myArmour;
 
 	bool myCanTakePhysDmg;
-
-	unsigned myArmour;
 
 	EDamageType myDamageType;
 };

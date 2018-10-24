@@ -20,57 +20,6 @@ Dungeon::~Dungeon()
 {
 }
 
-void Dungeon::ViewMap()
-{
-	/*std::string tempRows[21];
-
-	for (size_t i = 0; i < 21; i++)
-	{
-		tempRows[i] += "|";
-		for (size_t j = 0; j < 21; j++)
-		{
-			char tempCharToAdd;
-
-			if (myRooms[i][j].GetIsTrueRoom())
-			{
-				if (myRooms[i][j].GetIsCurrentRoom())
-				{
-					tempCharToAdd = 'X';
-				}
-				else
-				{
-					tempCharToAdd = 'O';
-				}
-			}
-			else
-			{
-				tempCharToAdd = ' ';
-			}
-
-			tempRows[i] += tempCharToAdd;
-		}
-		tempRows[i] += "|";
-	}
-
-	bool tempLoop = true;
-	while (tempLoop)
-	{
-		CLSSlow();
-
-		Print("________| Map |________");
-		for (size_t i = 0; i < 21; i++)
-		{
-			Print(tempRows[i]);
-		}
-		Print("|_____________________|\n[1] Back");
-
-		if (GetInput() == 1)
-		{
-			tempLoop = false;
-		}
-	}*/
-}
-
 void Dungeon::Reset()
 {
 	myRooms.clear();
@@ -90,7 +39,7 @@ bool Dungeon::Navigate(Player &aPlayer)
 		CLSSlow();
 		aPlayer.PrintUI();
 
-		Print("__| Select |__\n[1] Continue on journey\n[2] Inventory\n[3] Rest\n[4] Quit");
+		Print("__| Select |__\n[1] Continue on journey\n[2] Inventory\n[3] Exit dungeon");
 
 		bool tempInnerLoop = true;
 		bool tempAllowPrevRoom = false;
@@ -134,9 +83,6 @@ bool Dungeon::Navigate(Player &aPlayer)
 			aPlayer.ShowInventory();
 			break;
 		case 3:
-			aPlayer.LongRest();
-			break;
-		case 4:
 			return !Confirm();
 		}
 	}

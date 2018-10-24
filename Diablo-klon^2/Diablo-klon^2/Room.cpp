@@ -11,7 +11,7 @@ Room::Room() : myEnemies()
 Room::Room(int aLevel)
 {
 	int tempEnemies = RNG(0, 4);
-	for (int i = 0; i < tempEnemies; i++)
+	for (size_t i = 0; i < tempEnemies; i++)
 	{
 		Enemy tempEnemy(aLevel);
 		myEnemies.push_back(tempEnemy);

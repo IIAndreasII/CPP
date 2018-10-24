@@ -11,21 +11,15 @@ class Dungeon
 public:
 	Dungeon();
 	Dungeon(int aLevel);
-
 	~Dungeon();
 
-	void ViewMap();
-
 	void Reset();
-	bool Navigate(Player &aPlayer);
-
 	void Enter(Player &aPlayer);
+	bool Navigate(Player &aPlayer);
 
 private:
 
 	std::vector<Room> myRooms;
-
-	uint16_t myRoomMax;
 
 	Room* myCurrentRoom;
 
