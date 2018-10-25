@@ -6,12 +6,10 @@
 
 Shop::Shop() : myItems()
 {
-	Restock();
 }
 
-Shop::Shop(Player * aPlayerPtr) : myItems(), myPlayerPtr(aPlayerPtr)
+Shop::Shop(Player* aPlayerPtr) : myItems(), myPlayerPtr(aPlayerPtr)
 {
-	Restock();
 }
 
 Shop::~Shop()
