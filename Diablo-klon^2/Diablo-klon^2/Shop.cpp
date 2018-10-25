@@ -113,7 +113,7 @@ void Shop::SetPlayerPtr(Player* aPlayerPtr)
 
 void Shop::AddAttackType(EAttackType anAtkType)
 {
-	if (!(std::find(mySkills.begin(), mySkills.end(), mySkills) != mySkills.end()))
+	if (!(std::find(mySkills.begin(), mySkills.end(), anAtkType) != mySkills.end()))
 	{
 		mySkills.push_back(anAtkType);
 	}

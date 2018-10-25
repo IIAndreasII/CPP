@@ -185,27 +185,30 @@ void Player::AddExp(int someExp)
 		Print("Level up!");
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
-		if (myLevel == 3 || myLevel == 5)
-		{
+
 			switch (myLevel)
 			{
 			case 3:
 				myShopPtr->AddAttackType(EAttackType::SWEEP);
 				myShopPtr->AddAttackType(EAttackType::COC);
+			CLSSlow();
+			PrintUI();
+			Print("New skills available in the shop!");
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 				break;
 			case 5:
 				myShopPtr->AddAttackType(EAttackType::WHIRLWIND);
 				myShopPtr->AddAttackType(EAttackType::BLIZZARD);
+				CLSSlow();
+				PrintUI();
+				Print("New skills available in the shop!");
+				std::this_thread::sleep_for(std::chrono::seconds(1));
 				break;
 			default:
 				break;
 			}
 
-			CLSSlow();
-			PrintUI();
-			Print("New skills available in the shop!");
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-		}
+		
 	}
 }
 
