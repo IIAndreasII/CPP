@@ -2,9 +2,12 @@
 #include "Game.h"
 #include "Util.h"
 #include "Player.h"
+#include "Shop.h"
 
-Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player()), myDungeon()
+Game::Game() : myGameState(EGameState::EMenu), myPlayer(new Player()), myDungeon(), myShop(new Shop())
 {
+	myPlayer->SetShopPtr(myShop);
+	myShop->SetPlayerPtr(myPlayer);
 }
 
 Game::~Game()
@@ -38,7 +41,7 @@ int Game::Play()
 void Game::Reset()
 {
 	myPlayer->Init();
-	myDungeon.Reset();
+	myDungeon.Reset(myPlayer->GetLevel());
 }
 
 void Game::MainMenu()
@@ -88,7 +91,7 @@ void Game::GameMenu()
 			break;
 		case 4:
 			//tempLoop = false;
-			// TODO: Add a shop
+			myShop->Enter();
 			break;
 		case 5:
 			if (Confirm())

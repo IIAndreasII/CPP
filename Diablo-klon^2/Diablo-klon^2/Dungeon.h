@@ -10,10 +10,10 @@ class Dungeon
 {
 public:
 	Dungeon();
-	Dungeon(int aLevel);
+	Dungeon(uint16_t aLevel);
 	~Dungeon();
 
-	void Reset();
+	void Reset(uint16_t aLevel);
 	void Enter(Player &aPlayer);
 	bool Navigate(Player &aPlayer);
 

@@ -5,6 +5,7 @@
 #include "Dungeon.h"
 
 class Player;
+class Shop;
 
 enum EGameState
 {
@@ -32,6 +33,8 @@ private:
 	Dungeon myDungeon;
 
 	Player* myPlayer;
+
+	Shop* myShop;
 };
 
 #endif

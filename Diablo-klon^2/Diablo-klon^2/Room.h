@@ -10,7 +10,7 @@ class Room
 {
 public:
 	Room();
-	Room(int aLevel);
+	Room(uint16_t aLevel);
 	~Room();
 
 	bool Enter(Player &aPlayer);

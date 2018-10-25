@@ -11,10 +11,12 @@ public:
 	Item(uint16_t aLevel);
 	Item(std::string aName, uint16_t aStat, EItemType anItemType);
 	Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped);
+	Item(uint16_t aLevel, std::string aName, uint16_t aStat, EItemType anItemType, ERingType aRingType, bool isEquipped);
 	~Item();
 
 	std::string GetName() const;
 	std::string GetRingTypeToString() const;
+	std::string GetItemTypeToString() const;
 
 	EItemType GetItemType() const;
 	ERingType GetRingType() const;
@@ -28,6 +30,8 @@ public:
 
 	void Combine(Item* anItem);
 
+	Item* ToNewPtr();
+
 private:
 
 	std::string myName;
@@ -40,7 +44,6 @@ private:
 	EItemType myItemType;
 	ERingType myRingType;
 
-	std::string ItemTypeToString(EItemType &aType);
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include "Util.h"
 #include <thread>
 #include "Item.h"
+#include "Shop.h"
 
 Player::Player() :
 	myItems(new std::vector<Item*>()),
@@ -27,6 +28,7 @@ Player::~Player()
 	SafeDelete(mySpellArmour);
 	SafeDelete(myRingLeft);
 	SafeDelete(myRingRight);
+	SafeDelete(myShopPtr);
 	
 	for (Item* it : *myItems)
 	{
@@ -39,6 +41,11 @@ Player::~Player()
 int Player::GetHealth() const
 {
 	return myHealth;
+}
+
+uint16_t Player::GetGold() const
+{
+	return myGold;
 }
 
 uint16_t Player::GetArmour() const
@@ -118,6 +125,10 @@ void Player::AddAttackType(EAttackType anAttack)
 	if (!(std::find(myAttackTypes.begin(), myAttackTypes.end(), anAttack) != myAttackTypes.end()))
 	{
 		myAttackTypes.push_back(anAttack);
+		CLSSlow();
+		PrintUI();
+		Print("You learned " + AtkTypeToString(anAttack) + "!");
+		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 	}
 }
 
@@ -151,6 +162,11 @@ void Player::AddGold(int someGold)
 	myGold += someGold;
 }
 
+void Player::SetShopPtr(Shop* aShopPtr)
+{
+	myShopPtr = aShopPtr;
+}
+
 void Player::AddExp(int someExp)
 {
 	myEXP += someExp;
@@ -169,14 +185,33 @@ void Player::AddExp(int someExp)
 		Print("Level up!");
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
-		if (myLevel == 5 || myLevel == 10)
+		if (myLevel == 3 || myLevel == 5)
 		{
+			switch (myLevel)
+			{
+			case 3:
+				myShopPtr->AddAttackType(EAttackType::SWEEP);
+				myShopPtr->AddAttackType(EAttackType::COC);
+				break;
+			case 5:
+				myShopPtr->AddAttackType(EAttackType::WHIRLWIND);
+				myShopPtr->AddAttackType(EAttackType::BLIZZARD);
+				break;
+			default:
+				break;
+			}
+
 			CLSSlow();
 			PrintUI();
-			Print("New attacktypes available in the shop!");
+			Print("New skills available in the shop!");
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 	}
+}
+
+void Player::AddItem(Item anItem)
+{
+	myItems->push_back(anItem.ToNewPtr());
 }
 
 uint16_t Player::GetLevel() const
@@ -184,7 +219,7 @@ uint16_t Player::GetLevel() const
 	return myLevel;
 }
 
-void Player::TakeDamage(int& aDamageToTake)
+void Player::TakeDamage(int &aDamageToTake)
 {
 	int tempDamageTaken = aDamageToTake - GetArmour();
 	myHealth -= tempDamageTaken;

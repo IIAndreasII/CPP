@@ -10,7 +10,7 @@ Dungeon::Dungeon() : myRooms(), myCurrentRoomIndex(0)
 	myRooms.push_back(tempRoom);
 }
 
-Dungeon::Dungeon(int aLevel) : myRooms(), myCurrentRoomIndex(0)
+Dungeon::Dungeon(uint16_t aLevel) : myRooms(), myCurrentRoomIndex(0)
 {
 	Room tempRoom(aLevel);
 	myRooms.push_back(tempRoom);
@@ -20,10 +20,10 @@ Dungeon::~Dungeon()
 {
 }
 
-void Dungeon::Reset()
+void Dungeon::Reset(uint16_t aLevel)
 {
 	myRooms.clear();
-	Room tempRoom(1);
+	Room tempRoom(aLevel);
 	myRooms.push_back(tempRoom);
 }
 

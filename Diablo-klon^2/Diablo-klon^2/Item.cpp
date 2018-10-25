@@ -2,11 +2,15 @@
 #include "Item.h"
 #include "Util.h"
 
-Item::Item() : myLevel(1), myIsEquipped(false)
+Item::Item() : 
+	myLevel(1), 
+	myIsEquipped(false)
 {
 }
 
-Item::Item(uint16_t aLevel) : myLevel(aLevel), myIsEquipped(false)
+Item::Item(uint16_t aLevel) : 
+	myLevel(aLevel), 
+	myIsEquipped(false)
 {
 	myStat = RNG(5, 10) * aLevel;
 	switch (RNG(0, 4))
@@ -45,14 +49,22 @@ Item::Item(uint16_t aLevel) : myLevel(aLevel), myIsEquipped(false)
 	}
 
 	std::vector<std::string> tempNames = { "of silliness", " of stupidity", " of peanutbutter", " of Neverwinter", " of Waterdeep", " of evil", " of Korn", " of Thor", " of jelly" };
-	myName = ItemTypeToString(myItemType) + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
+	myName = GetItemTypeToString() + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
 }
 
-Item::Item(std::string aName, uint16_t aStat, EItemType anItemType) : myName(aName), myStat(aStat), myItemType(anItemType), myLevel(1)
+Item::Item(std::string aName, uint16_t aStat, EItemType anItemType) : 
+	myName(aName), 
+	myStat(aStat), 
+	myItemType(anItemType), 
+	myLevel(1)
 {
 }
 
-Item::Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped) : myName(aName), myStat(aStat), myItemType(anItemType), myIsEquipped(isEquipped), myLevel(1)
+Item::Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped) : 
+	myName(aName),
+	myStat(aStat), 
+	myItemType(anItemType),
+	myIsEquipped(isEquipped), myLevel(1)
 {
 	if (myItemType == EItemType::RING)
 	{
@@ -76,6 +88,16 @@ Item::Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquip
 	{
 		myRingType = ERingType::NOT_A_RING;
 	}
+}
+
+Item::Item(uint16_t aLevel, std::string aName, uint16_t aStat, EItemType anItemType, ERingType aRingType, bool isEquipped) :
+	myLevel(aLevel),
+	myName(aName),
+	myStat(aStat),
+	myItemType(anItemType),
+	myRingType(aRingType),
+	myIsEquipped(isEquipped)
+{
 }
 
 Item::~Item()
@@ -143,14 +165,19 @@ void Item::Combine(Item* anItem)
 	myLevel += 1;
 }
 
+Item* Item::ToNewPtr()
+{
+	return new Item(myLevel, myName, myStat, myItemType, myRingType, myIsEquipped);
+}
+
 bool& Item::GetIsEquipped()
 {
 	return myIsEquipped;
 }
 
-std::string Item::ItemTypeToString(EItemType & aType)
+std::string Item::GetItemTypeToString() const
 {
-	switch (aType)
+	switch (myItemType)
 	{
 	case EItemType::SWORD:
 		return "Sword";

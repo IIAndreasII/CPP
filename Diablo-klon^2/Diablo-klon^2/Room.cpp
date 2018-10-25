@@ -8,7 +8,7 @@ Room::Room() : myEnemies()
 {
 }
 
-Room::Room(int aLevel)
+Room::Room(uint16_t aLevel)
 {
 	int tempEnemies = RNG(0, 4);
 	for (size_t i = 0; i < tempEnemies; i++)

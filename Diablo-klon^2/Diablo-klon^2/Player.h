@@ -5,6 +5,7 @@
 #include "Enums.h"
 
 class Item;
+class Shop;
 
 class Player
 {
@@ -19,7 +20,9 @@ public:
 	void ShowInventory();
 	void AddRandomItem();
 	void AddExp(int someExp);
+	void AddItem(Item anItem);
 	void AddGold(int someGold);
+	void SetShopPtr(Shop* aShopPtr);
 	void SetIntel(const int someIntel);
 	void AddAttackType(EAttackType anAttack);
 	void TakeDamage(int& aDamageToTake);
@@ -30,6 +33,7 @@ public:
 	std::string AtkTypeToString(EAttackType &anAtkType);
 
 	int GetHealth() const;
+	uint16_t GetGold() const;
 	uint16_t GetLevel() const;
 	uint16_t GetArmour() const;
 	uint16_t GetPhysDmg() const;
@@ -70,6 +74,8 @@ private:
 
 	std::vector<Item*>* myItems;
 	std::vector<EAttackType> myAttackTypes;
+
+	Shop* myShopPtr;
 };
 
 #endif
