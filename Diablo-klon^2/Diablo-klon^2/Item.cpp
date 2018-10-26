@@ -48,7 +48,7 @@ Item::Item(uint16_t aLevel) :
 		break;
 	}
 
-	std::vector<std::string> tempNames = { "of silliness", " of stupidity", " of peanutbutter", " of Neverwinter", " of Waterdeep", " of evil", " of Korn", " of Thor", " of jelly" };
+	std::vector<std::string> tempNames = { " of silliness", " of stupidity", " of peanutbutter", " of Neverwinter", " of Waterdeep", " of evil", " of Korn", " of Thor", " of jelly" };
 	myName = GetItemTypeToString() + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
 }
 
