@@ -4,17 +4,14 @@
 #include "Player.h"
 #include <thread>
 
-Shop::Shop() : myItems()
-{
-}
-
-Shop::Shop(Player* aPlayerPtr) : myItems(), myPlayerPtr(aPlayerPtr)
+Shop::Shop() :
+	myItems(),
+	mySkills()
 {
 }
 
 Shop::~Shop()
 {
-	SafeDelete(myPlayerPtr);
 }
 
 void Shop::Restock()
@@ -23,6 +20,7 @@ void Shop::Restock()
 	for (size_t i = 0; i < 3; i++)
 	{
 		Item tempItem(myPlayerPtr->GetLevel());
+		myItems.push_back(tempItem);
 	}
 	myEstusAmount = 2;
 }
@@ -34,12 +32,12 @@ void Shop::Enter()
 	{
 		CLSSlow();
 		myPlayerPtr->PrintUI();
-		Print("Welcome to the shop\n\n___| Items for sale |___");
-		for (size_t i = 0; i < 3; i++)
+		Print("Welcome to the shop\n\nAvailable funds: " + std::to_string(myPlayerPtr->GetGold()) + " gold\n\n___| Items for sale |___");
+		for (size_t i = 0; i < myItems.size(); i++)
 		{
 			Print("[" + std::to_string(i + 1) + "] " + myItems.at(i).GetName() + " [Level: " + std::to_string(myItems.at(i).GetLevel()) + "  Stat: " + std::to_string(myItems.at(i).GetStat()) + "] - " + std::to_string(40 * myItems.at(i).GetLevel()) + " gold");
 		}
-		Print("[4] Estus flask (" + std::to_string(myEstusAmount) + "available) - 30 gold\n[5] Learn skills\n[6] Back");
+		Print("[4] Estus flask (" + std::to_string(myEstusAmount) + " available) - 30 gold\n[5] Learn skills\n[6] Back");
 		int tempInput = 0;
 		bool tempInnerLoop = true;
 		switch (GetInput(tempInput))
@@ -48,6 +46,7 @@ void Shop::Enter()
 			if (30 <= myPlayerPtr->GetGold() && myEstusAmount > 0)
 			{
 				myPlayerPtr->AddGold(-30);
+				myPlayerPtr->AddHPPotion();
 				myEstusAmount -= 1;
 			}
 			break;
@@ -60,21 +59,22 @@ void Shop::Enter()
 
 				for (size_t i = 0; i < mySkills.size(); i++)
 				{
-					Print("[" + std::to_string(i + 1) + "] " + myPlayerPtr->AtkTypeToString(mySkills.at(i)) + " - 150 gold");
+					Print("[" + std::to_string(i + 1) + "] " + myPlayerPtr->AtkTypeToString(mySkills.at(i)) + " - 250 gold");
 				}
-				Print("[4] Back");
+				Print("[5] Back");
 
 				int tempInnerInput = 0;
 				switch (GetInput(tempInnerInput))
 				{
-				case 4:
+				case 5:
 					tempInnerLoop = false;
 					break;
 				default:
-					if (tempInnerInput > 0 && tempInnerInput <= mySkills.size() && myPlayerPtr->GetGold() >= 150)
+					if (tempInnerInput > 0 && tempInnerInput <= mySkills.size() && myPlayerPtr->GetGold() >= 250)
 					{
-						myPlayerPtr->AddGold(-150);
+						myPlayerPtr->AddGold(-250);
 						myPlayerPtr->AddAttackType(mySkills.at(tempInnerInput - 1));
+						mySkills.erase(mySkills.begin() + tempInnerInput - 1);
 					}
 					break;
 				}
@@ -87,19 +87,20 @@ void Shop::Enter()
 			if (tempInput > 0 && tempInput < 4)
 			{
 				tempInput--; // Compensate
-				if (40 * myItems.at(tempInput).GetLevel() >= myPlayerPtr->GetGold())
+				if (40 * myItems.at(tempInput).GetLevel() <= myPlayerPtr->GetGold())
 				{
 					myPlayerPtr->AddItem(myItems.at(tempInput));
 					myPlayerPtr->AddGold(-40 * myItems.at(tempInput).GetLevel());
+					Print("\nPurchase successful!");
+					std::this_thread::sleep_for(std::chrono::seconds(1));
 				}
 				else
 				{
-					Print("Insufficient funds!");
+					Print("\nInsufficient funds!");
 					std::this_thread::sleep_for(std::chrono::seconds(1));
 				}
 				break;
 			}
-			
 		}
 	}
 }

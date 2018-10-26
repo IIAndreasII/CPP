@@ -2,14 +2,14 @@
 #include "Item.h"
 #include "Util.h"
 
-Item::Item() : 
-	myLevel(1), 
+Item::Item() :
+	myLevel(1),
 	myIsEquipped(false)
 {
 }
 
-Item::Item(uint16_t aLevel) : 
-	myLevel(aLevel), 
+Item::Item(uint16_t aLevel) :
+	myLevel(aLevel),
 	myIsEquipped(false)
 {
 	myStat = RNG(5, 10) * aLevel;
@@ -52,17 +52,9 @@ Item::Item(uint16_t aLevel) :
 	myName = GetItemTypeToString() + tempNames.at(RNG(0, static_cast<int>(tempNames.size()) - 1));
 }
 
-Item::Item(std::string aName, uint16_t aStat, EItemType anItemType) : 
-	myName(aName), 
-	myStat(aStat), 
-	myItemType(anItemType), 
-	myLevel(1)
-{
-}
-
-Item::Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped) : 
+Item::Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped) :
 	myName(aName),
-	myStat(aStat), 
+	myStat(aStat),
 	myItemType(anItemType),
 	myIsEquipped(isEquipped), myLevel(1)
 {
@@ -160,12 +152,12 @@ void Item::SetIsEquipped(bool aValue)
 
 void Item::Combine(Item* anItem)
 {
-	myName = "Combined " + myName;
+	myName = myName + "+";
 	myStat += anItem->GetStat();
 	myLevel += 1;
 }
 
-Item* Item::ToNewPtr()
+Item* Item::ToPtr()
 {
 	return new Item(myLevel, myName, myStat, myItemType, myRingType, myIsEquipped);
 }
@@ -187,6 +179,8 @@ std::string Item::GetItemTypeToString() const
 		return "Armour";
 	case EItemType::RING:
 		return "Ring";
+	case EItemType::SPELLARMOUR:
+		return "Spellarmour";
 	}
 	return std::string();
 }

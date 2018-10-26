@@ -30,7 +30,6 @@ void Dungeon::Reset(uint16_t aLevel)
 bool Dungeon::Navigate(Player &aPlayer)
 {
 	Room tempRoom(aPlayer.GetLevel());
-
 	size_t tempPrevRoomIndex = myCurrentRoomIndex;
 
 	bool tempLoop = true;
@@ -38,7 +37,6 @@ bool Dungeon::Navigate(Player &aPlayer)
 	{
 		CLSSlow();
 		aPlayer.PrintUI();
-
 		Print("__| Select |__\n[1] Continue on journey\n[2] Inventory\n[3] Exit dungeon");
 
 		bool tempInnerLoop = true;
@@ -76,9 +74,7 @@ bool Dungeon::Navigate(Player &aPlayer)
 					break;
 				}
 			}
-
 			break;
-
 		case 2:
 			aPlayer.ShowInventory();
 			break;
@@ -86,7 +82,6 @@ bool Dungeon::Navigate(Player &aPlayer)
 			return !Confirm();
 		}
 	}
-
 	return true;
 }
 

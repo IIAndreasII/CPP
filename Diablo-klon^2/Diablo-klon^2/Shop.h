@@ -11,7 +11,6 @@ class Shop
 {
 public:
 	Shop();
-	Shop(Player* aPlayerPtr);
 	~Shop();
 
 	void Restock();

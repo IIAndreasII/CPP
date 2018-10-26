@@ -9,7 +9,6 @@ class Item
 public:
 	Item();
 	Item(uint16_t aLevel);
-	Item(std::string aName, uint16_t aStat, EItemType anItemType);
 	Item(std::string aName, uint16_t aStat, EItemType anItemType, bool isEquipped);
 	Item(uint16_t aLevel, std::string aName, uint16_t aStat, EItemType anItemType, ERingType aRingType, bool isEquipped);
 	~Item();
@@ -30,7 +29,7 @@ public:
 
 	void Combine(Item* anItem);
 
-	Item* ToNewPtr();
+	Item* ToPtr();
 
 private:
 
@@ -43,7 +42,6 @@ private:
 
 	EItemType myItemType;
 	ERingType myRingType;
-
 };
 
 #endif

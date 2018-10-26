@@ -28,13 +28,6 @@ Player::~Player()
 	SafeDelete(mySpellArmour);
 	SafeDelete(myRingLeft);
 	SafeDelete(myRingRight);
-	SafeDelete(myShopPtr);
-	
-	for (Item* it : *myItems)
-	{
-		SafeDelete(it);
-	}
-	myItems->clear();
 	SafeDelete(myItems);
 }
 
@@ -65,7 +58,7 @@ void Player::ShowInventory()
 	{
 		CLSSlow();
 		PrintUI();
-		Print("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Health Potions: " + std::to_string(myHPPotions) +
+		Print("__| Inventory |__\n[] Gold: " + std::to_string(myGold) + "\n[] Estus flasks: " + std::to_string(myHPPotions) + "\n[] Items: " + std::to_string(myItems->size() - 6) +
 			"\n\n___| Equipment |___\n[1] Sword: " + mySword->GetName() + " [Attack: " + std::to_string(mySword->GetStat()) + ", Level: " + std::to_string(mySword->GetLevel()) +
 			"]\n[2] Staff: " + myStaff->GetName() + " [Attack: " + std::to_string(myStaff->GetStat()) + ", Level: " + std::to_string(myStaff->GetLevel()) +
 			"]\n[3] Armour: " + myArmour->GetName() + " [Defence: " + std::to_string(GetArmour()) + ", Level: " + std::to_string(myArmour->GetLevel()) +
@@ -185,36 +178,31 @@ void Player::AddExp(int someExp)
 		Print("Level up!");
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
-
-			switch (myLevel)
-			{
-			case 3:
-				myShopPtr->AddAttackType(EAttackType::SWEEP);
-				myShopPtr->AddAttackType(EAttackType::COC);
+		switch (myLevel)
+		{
+		case 3:
+			myShopPtr->AddAttackType(EAttackType::SWEEP);
+			myShopPtr->AddAttackType(EAttackType::COC);
 			CLSSlow();
 			PrintUI();
 			Print("New skills available in the shop!");
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-				break;
-			case 5:
-				myShopPtr->AddAttackType(EAttackType::WHIRLWIND);
-				myShopPtr->AddAttackType(EAttackType::BLIZZARD);
-				CLSSlow();
-				PrintUI();
-				Print("New skills available in the shop!");
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-				break;
-			default:
-				break;
-			}
-
-		
+			break;
+		case 5:
+			myShopPtr->AddAttackType(EAttackType::WHIRLWIND);
+			myShopPtr->AddAttackType(EAttackType::BLIZZARD);
+			CLSSlow();
+			PrintUI();
+			Print("New skills available in the shop!");
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			break;
+		}
 	}
 }
 
 void Player::AddItem(Item anItem)
 {
-	myItems->push_back(anItem.ToNewPtr());
+	myItems->push_back(anItem.ToPtr());
 }
 
 uint16_t Player::GetLevel() const
@@ -294,7 +282,7 @@ void Player::Init()
 	myIntelligence = 0;
 	myLevel = 1;
 	myEXP = 0;
-	myEXPRequired = 20;
+	myEXPRequired = 30;
 	myGold = 50;
 	myHPPotions = 5;
 
@@ -317,7 +305,7 @@ void Player::Init()
 	myItems->push_back(new Item("Anti-spell thing", 2, EItemType::SPELLARMOUR, true));
 	myItems->push_back(new Item("Round thing", 1, EItemType::RING, true));
 	myItems->push_back(new Item("Circular thing", 1, EItemType::RING, true));
-	
+
 	mySword = myItems->at(0);
 	myStaff = myItems->at(1);
 	myArmour = myItems->at(2);
@@ -326,12 +314,6 @@ void Player::Init()
 	myRingLeft = myItems->at(5);
 	EquipRing(myRingRight);
 	EquipRing(myRingLeft);
-
-	/* Test dummies */
-	myItems->push_back(new Item("Sharp potato", 10, EItemType::SWORD, false));
-	myItems->push_back(new Item("Flat potato", 10, EItemType::ARMOUR, false));
-	myItems->push_back(new Item("Anti-spell potato", 3, EItemType::SPELLARMOUR, false));
-	myItems->push_back(new Item("Circular thing the second", 5, EItemType::RING, false));
 }
 
 uint16_t Player::GetPhysDmg() const
@@ -364,6 +346,11 @@ void Player::DrinkPotion()
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	Print("Health restored!");
 	std::this_thread::sleep_for(std::chrono::seconds(1));
+}
+
+void Player::AddHPPotion()
+{
+	myHPPotions += 1;
 }
 
 void Player::AddRandomItem()
@@ -412,7 +399,32 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 
 		while (GetInput(tempInput) > tempIndexes.size() && tempInput == 0);
 
-		Print("[1] Equip  [2] Throw away  [3] Combine w/ equipped (" + std::to_string(50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel()) + " gold) [4] Cancel");
+		Item* tempItemPtr = mySword;
+
+		switch (anItemType)
+		{
+		case EItemType::STAFF:
+			tempItemPtr = myStaff;
+			break;
+		case EItemType::ARMOUR:
+			tempItemPtr = myArmour;
+			break;
+		case EItemType::SPELLARMOUR:
+			tempItemPtr = mySpellArmour;
+			break;
+		case EItemType::RING:
+			if (isRight)
+			{
+				tempItemPtr = myRingRight;
+			}
+			else
+			{
+				tempItemPtr = myRingLeft;
+			}
+			break;
+		}
+
+		Print("[1] Equip  [2] Throw away  [3] Combine w/ equipped (" + std::to_string(50 * tempItemPtr->GetLevel()) + " gold) [4] Cancel");
 
 		while (GetInput(tempConfirmInput) > 2 && tempConfirmInput == 0);
 
@@ -466,7 +478,7 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 			myItems->erase(myItems->begin() + (tempIndexes.at(tempInput - 1)));
 			break;
 		case 3:
-			int tempAmountToSubtract = 50 * myItems->at(tempIndexes.at(tempInput - 1))->GetLevel();
+			int tempAmountToSubtract = 50 * tempItemPtr->GetLevel();
 			if (myGold - tempAmountToSubtract >= 0)
 			{
 				myGold -= tempAmountToSubtract;
@@ -509,6 +521,7 @@ void Player::ChangeEquipment(EItemType anItemType, bool &isRight)
 				}
 			}
 		}
+		tempItemPtr = nullptr;
 	}
 }
 

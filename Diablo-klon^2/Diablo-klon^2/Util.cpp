@@ -12,11 +12,6 @@ inline void Print(std::string tempValue)
 	std::cout << tempValue << std::endl;
 }
 
-/*inline void WriteLine(const std::string tempValue)
-{
-std::cout << tempValue << std::endl;
-}*/
-
 inline void CLS()
 {
 	std::cout << std::string(29, '\n');

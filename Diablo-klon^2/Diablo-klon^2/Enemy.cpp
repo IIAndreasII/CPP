@@ -7,7 +7,12 @@ Enemy::Enemy()
 {
 }
 
-Enemy::Enemy(int aLevel) : myHealth(aLevel * 15), myDamage(aLevel * 5), myArmour(aLevel * 3), myCanTakePhysDmg(true), myDamageType(EDamageType::PHYSICAL)
+Enemy::Enemy(int aLevel) :
+	myHealth(aLevel * 15),
+	myDamage(aLevel * 5),
+	myArmour(aLevel * 3),
+	myCanTakePhysDmg(true),
+	myDamageType(EDamageType::PHYSICAL)
 {
 	std::vector<std::string> tempNames = { "Skeleton", "Zombie", "Grunt", "Orc", "Cultist", "Cobold", "Darkelf", "Zerg", "Goblin", "Wraith", "Spectre", "Phaser", "Phantom", "Animated armour", "Ghast", "Shadow demon", "Shade", "Willow wisp" };
 
@@ -56,7 +61,7 @@ bool Enemy::GetCanTakePhysDmg() const
 
 void Enemy::TakeDamage(int &aDamageToTake, EDamageType &aDmgType)
 {
-	if (!myCanTakePhysDmg && aDmgType == EDamageType::PHYSICAL)
+	if ((!myCanTakePhysDmg && aDmgType == EDamageType::PHYSICAL) || (myCanTakePhysDmg && aDmgType == EDamageType::MAGICAL))
 	{
 		Print("The attack had no effect!");
 		std::this_thread::sleep_for(std::chrono::seconds(1));

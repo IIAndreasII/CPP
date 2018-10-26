@@ -17,6 +17,7 @@ public:
 	void PrintUI();
 	void LongRest();
 	void DrinkPotion();
+	void AddHPPotion();
 	void ShowInventory();
 	void AddRandomItem();
 	void AddExp(int someExp);
@@ -27,7 +28,6 @@ public:
 	void AddAttackType(EAttackType anAttack);
 	void TakeDamage(int& aDamageToTake);
 	void TakeDamage(int aDamageToTake, EDamageType aDmgType);
-
 
 	std::vector<EAttackType>& GetAttackTypes();
 	std::string AtkTypeToString(EAttackType &anAtkType);
@@ -64,6 +64,8 @@ private:
 	int myStrengthMod;
 	int myIntelligenceMod;
 
+	Shop* myShopPtr;
+
 	/* Equipped item-pointers */
 	Item* mySword;
 	Item* myStaff;
@@ -74,8 +76,6 @@ private:
 
 	std::vector<Item*>* myItems;
 	std::vector<EAttackType> myAttackTypes;
-
-	Shop* myShopPtr;
 };
 
 #endif

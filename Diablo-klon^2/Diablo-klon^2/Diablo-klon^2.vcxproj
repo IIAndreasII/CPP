@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Dungeon.h" />
-    <ClInclude Include="DungeonManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Game.h" />
@@ -164,7 +163,6 @@
   <ItemGroup>
     <ClCompile Include="Diablo-klon^2.cpp" />
     <ClCompile Include="Dungeon.cpp" />
-    <ClCompile Include="DungeonManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Item.cpp" />

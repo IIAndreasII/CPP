@@ -25,16 +25,17 @@ public:
 	void Reset();
 	void MainMenu();
 	void GameMenu();
+	void Instructions();
 
 private:
 
-	EGameState myGameState;
-
-	Dungeon myDungeon;
+	Shop* myShop;
 
 	Player* myPlayer;
 
-	Shop* myShop;
+	Dungeon myDungeon;
+
+	EGameState myGameState;
 };
 
 #endif
